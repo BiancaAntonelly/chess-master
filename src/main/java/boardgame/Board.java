@@ -74,17 +74,19 @@ public class Board {
         return pieces[pos.getRow()][pos.getCol()];
     }
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   requires piece != null;
       @   requires pos != null;
       @   requires pos.getRow() >= 0 && pos.getRow() < rows;
       @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   signals_only BoardException;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
         }
 
+        //@ nowarn PossiblyBadArrayAssignment;
         pieces[pos.getRow()][pos.getCol()] = piece;
         piece.position = pos;
     }
