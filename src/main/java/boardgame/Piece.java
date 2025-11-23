@@ -13,10 +13,10 @@ public abstract class Piece {
     //@ public model /*@ nullable */ Position modelPosition;
     //@ private represents modelPosition = position;
 
-    //@ invariant modelBoard != null;
-    //@ invariant position == null
-    //@        || (position.getRow() >= 0 && position.getRow() < 8
-    //@            && position.getCol() >= 0 && position.getCol() < 8);
+    //@ public invariant modelBoard != null;
+    //@ public invariant modelPosition == null
+    //@        || (modelPosition.getRow() >= 0 && modelPosition.getRow() < 8
+    //@            && modelPosition.getCol() >= 0 && modelPosition.getCol() < 8);
 
     /*@ public normal_behavior
       @   requires board != null;
@@ -32,20 +32,19 @@ public abstract class Piece {
     protected Board getBoard() { return board; }
 
     /*@ public normal_behavior
+      @   ensures \result != null;
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
-      @   ensures modelBoard == \old(modelBoard);
-      @   ensures modelPosition == \old(modelPosition);
+      @   assignable \nothing;
       @*/
-    public abstract /*@ pure @*/ boolean[][] possibleMoves();
+    public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires pos.getRow() >= 0 && pos.getRow() < 8;
       @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
-      @   ensures modelBoard == \old(modelBoard);
-      @   ensures modelPosition == \old(modelPosition);
+      @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean possibleMove(Position pos) {
         return possibleMoves()[pos.getRow()][pos.getCol()];
@@ -56,8 +55,7 @@ public abstract class Piece {
       @     (\exists int i; 0 <= i && i < 8;
       @       (\exists int j; 0 <= j && j < 8;
       @         possibleMoves()[i][j]));
-      @   ensures modelBoard == \old(modelBoard);
-      @   ensures modelPosition == \old(modelPosition);
+      @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
