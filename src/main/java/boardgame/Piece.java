@@ -36,8 +36,9 @@ public abstract class Piece {
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
       @   assignable \nothing;
+      @   pure;
       @*/
-    public abstract /*@ pure @*/ boolean[][] possibleMoves();
+    public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior
       @   requires pos != null;
@@ -45,8 +46,9 @@ public abstract class Piece {
       @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
+      @   pure;
       @*/
-    public /*@ pure @*/ boolean possibleMove(Position pos) {
+    public boolean possibleMove(Position pos) {
         return possibleMoves()[pos.getRow()][pos.getCol()];
     }
 
@@ -56,8 +58,9 @@ public abstract class Piece {
       @       (\exists int j; 0 <= j && j < 8;
       @         possibleMoves()[i][j]));
       @   assignable \nothing;
+      @   pure;
       @*/
-    public /*@ pure @*/ boolean isThereAnyPossibleMove() {
+    public boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
         for (boolean[] booleans : mat) {
             for (int j = 0; j < mat.length; j++) {
