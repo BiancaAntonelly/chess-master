@@ -46,7 +46,7 @@ public abstract class Piece {
       @   ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ boolean possibleMove(Position pos) {
+    public boolean possibleMove(Position pos) {
         return possibleMoves()[pos.getRow()][pos.getCol()];
     }
 
@@ -57,7 +57,7 @@ public abstract class Piece {
       @         possibleMoves()[i][j]));
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ boolean isThereAnyPossibleMove() {
+    public boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
         for (boolean[] booleans : mat) {
             for (int j = 0; j < mat.length; j++) {
