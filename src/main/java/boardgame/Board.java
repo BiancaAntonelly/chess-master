@@ -8,11 +8,6 @@ public class Board {
     //@ spec_public
     private final Piece[][] pieces;
 
-    //@ public invariant rows >= 1 && cols >= 1;
-    //@ public invariant pieces != null;
-    //@ public invariant (\forall int i; 0 <= i && i < rows;
-    //@                       pieces[i] != null && pieces[i].length == cols);
-
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
       @   ensures this.rows == rows;
@@ -83,6 +78,10 @@ public class Board {
       @   ensures piece.position == pos;
       @*/
     public void placePiece(Piece piece, Position pos) {
+        if (!positionExists(pos)) {
+            throw new BoardException("A posição solicitada não existe.");
+        }
+
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
         }
@@ -95,9 +94,11 @@ public class Board {
       @   requires pos != null;
       @   requires pos.getRow() >= 0 && pos.getRow() < rows;
       @   requires pos.getCol() >= 0 && pos.getCol() < cols;
-      @   ensures \result == \old(pieces[pos.getRow()][pos.getCol()]);
-      @   ensures pieces[pos.getRow()][pos.getCol()] == null;
-      @   assignable pieces[pos.getRow()][pos.getCol()], ((Piece)\result).position;
+      @   ensures (\result == null && \old(pieces[pos.getRow()][pos.getCol()]) == null)
+      @        || (\result != null
+      @            && \result == \old(pieces[pos.getRow()][pos.getCol()])
+      @            && \result.position == null
+      @            && pieces[pos.getRow()][pos.getCol()] == null);
       @*/
     public Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
@@ -107,6 +108,7 @@ public class Board {
         if (piece(pos) == null) {
             return null;
         }
+
         Piece aux = piece(pos);
         aux.position = null;
         pieces[pos.getRow()][pos.getCol()] = null;
