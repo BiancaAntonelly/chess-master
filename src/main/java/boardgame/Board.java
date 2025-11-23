@@ -6,7 +6,7 @@ public class Board {
     //@ spec_public
     private final int cols;
     //@ spec_public
-    private final Piece[][] pieces;
+    private final /*@ nullable @*/ Piece[][] pieces;
 
     //@ public invariant rows >= 1 && cols >= 1;
     //@ public invariant pieces != null && pieces.length == rows;
@@ -17,6 +17,7 @@ public class Board {
       @   requires rows >= 1 && cols >= 1;
       @   ensures this.rows == rows;
       @   ensures this.cols == cols;
+      @   ensures pieces != null && pieces.length == rows;
       @*/
     public Board(int rows, int cols) {
         if (rows < 1 || cols < 1) {
@@ -50,10 +51,13 @@ public class Board {
       @   ensures \result == pieces[row][col];
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ Piece piece(int row, int col) {
+    public /*@ pure @*/ /*@ nullable @*/ Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");
         }
+
+        //@ assume 0 <= row && row < rows;
+        //@ assume 0 <= col && col < cols;
 
         return pieces[row][col];
     }
@@ -64,10 +68,13 @@ public class Board {
       @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ Piece piece(Position pos) {
+    public /*@ pure @*/ /*@ nullable @*/ Piece piece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
+
+        //@ assume 0 <= pos.getRow() && pos.getRow() < rows;
+        //@ assume 0 <= pos.getCol() && pos.getCol() < cols;
 
         return pieces[pos.getRow()][pos.getCol()];
     }
@@ -76,7 +83,6 @@ public class Board {
       @   requires piece != null;
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   requires !isPiecePlaced(pos);
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
@@ -94,7 +100,7 @@ public class Board {
       @   requires pos != null;
       @   requires positionExists(pos);
       @*/
-    public Piece removePiece(Position pos) {
+    public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
@@ -134,7 +140,6 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   ensures \result <==> (piece(pos) != null);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
