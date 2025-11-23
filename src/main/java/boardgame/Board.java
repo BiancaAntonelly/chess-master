@@ -8,6 +8,12 @@ public class Board {
     //@ spec_public
     private final Piece[][] pieces;
 
+    /*@ public normal_behavior
+      @   requires rows >= 1 && cols >= 1;
+      @   ensures this.rows == rows;
+      @   ensures this.cols == cols;
+      @   assignable this.rows, this.cols, this.pieces[*][*];
+      @*/
     public Board(int rows, int cols) {
         if (rows < 1 || cols < 1) {
             throw new BoardException("O tabuleiro precisa de ao menos 1 linha e 1 coluna.");
@@ -18,11 +24,19 @@ public class Board {
         pieces = new Piece[rows][cols];
     }
 
-    public int getRows() {
+    /*@ public normal_behavior
+      @   ensures \result == rows;
+      @   assignable \nothing;
+      @*/
+    public /*@ pure @*/ int getRows() {
         return rows;
     }
 
-    public int getCols() {
+    /*@ public normal_behavior
+      @   ensures \result == cols;
+      @   assignable \nothing;
+      @*/
+    public /*@ pure @*/ int getCols() {
         return cols;
     }
 
@@ -31,7 +45,7 @@ public class Board {
       @   requires 0 <= col && col < cols;
       @   ensures \result == pieces[row][col];
       @   assignable \nothing;
-      @   pure
+      @   pure;
       @*/
     public Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
@@ -47,7 +61,7 @@ public class Board {
       @   requires pos.getCol() >= 0 && pos.getCol() < cols;
       @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
-      @   pure
+      @   pure;
       @*/
     public Piece piece(Position pos) {
         if (!positionExists(pos)) {
@@ -80,15 +94,29 @@ public class Board {
         return aux;
     }
 
-    private boolean positionExists(int row, int col) {
+    /*@ private normal_behavior
+      @   ensures \result <==> (row >= 0 && row < rows && col >= 0 && col < cols);
+      @   assignable \nothing;
+      @*/
+    private /*@ pure @*/ boolean positionExists(int row, int col) {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }
 
-    /*@ pure @*/
-    public boolean positionExists(Position pos) {
+    /*@ public normal_behavior
+      @   requires pos != null;
+      @   ensures \result <==> positionExists(pos.getRow(), pos.getCol());
+      @   assignable \nothing;
+      @*/
+    public /*@ pure @*/ boolean positionExists(Position pos) {
         return positionExists(pos.getRow(), pos.getCol());
     }
 
+    /*@ public normal_behavior
+      @   requires pos != null;
+      @   requires positionExists(pos);
+      @   ensures \result <==> (piece(pos) != null);
+      @   assignable \nothing;
+      @*/
     public boolean isPiecePlaced(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");

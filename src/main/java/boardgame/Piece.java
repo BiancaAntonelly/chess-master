@@ -37,7 +37,7 @@ public abstract class Piece {
       @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
       @   assignable \nothing;
       @*/
-    public abstract boolean[][] possibleMoves();
+    public abstract /*@ pure @*/ boolean[][] possibleMoves();
 
     /*@ public normal_behavior
       @   requires pos != null;
