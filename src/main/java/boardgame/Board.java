@@ -12,7 +12,7 @@ public class Board {
       @   requires rows >= 1 && cols >= 1;
       @   ensures this.rows == rows;
       @   ensures this.cols == cols;
-      @   assignable this.rows, this.cols, this.pieces[*][*];
+      @   assignable rows, cols, pieces[*][*];
       @*/
     public Board(int rows, int cols) {
         if (rows < 1 || cols < 1) {
@@ -46,7 +46,7 @@ public class Board {
       @   ensures \result == pieces[row][col];
       @   assignable \nothing;
       @*/
-    public Piece piece(int row, int col) {
+    public /*@ pure @*/ Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");
         }
@@ -61,7 +61,7 @@ public class Board {
       @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
-    public Piece piece(Position pos) {
+    public /*@ pure @*/ Piece piece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
@@ -102,7 +102,9 @@ public class Board {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   ensures \result <==> positionExists(pos.getRow(), pos.getCol());
+      @   ensures \result <==>
+      @           (pos.getRow() >= 0 && pos.getRow() < rows
+      @         && pos.getCol() >= 0 && pos.getCol() < cols);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean positionExists(Position pos) {
@@ -112,10 +114,10 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   ensures \result <==> (piece(pos) != null);
+      @   ensures \result <==> (pieces[pos.getRow()][pos.getCol()] != null);
       @   assignable \nothing;
       @*/
-    public boolean isPiecePlaced(Position pos) {
+    public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
