@@ -76,10 +76,11 @@ public class Board {
     /*@ public normal_behavior
       @   requires piece != null;
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
-      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
-      @   requires pieces[pos.getRow()][pos.getCol()] == null;
-      @   assignable \everything;
+      @   requires positionExists(pos);
+      @   requires !isPiecePlaced(pos);
+      @   assignable pieces[*][*], piece.position;
+      @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
+      @   ensures piece.position == pos;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
