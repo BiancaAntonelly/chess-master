@@ -1,5 +1,7 @@
 package boardgame;
 
+//@ nullable_by_default;
+
 public class Board {
     //@ spec_public
     private final int rows;
@@ -47,6 +49,7 @@ public class Board {
     /*@ public normal_behavior
       @   requires 0 <= row && row < rows;
       @   requires 0 <= col && col < cols;
+      @   ensures \result == pieces[row][col];
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ Piece piece(int row, int col) {
@@ -59,8 +62,8 @@ public class Board {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
-      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   requires positionExists(pos);
+      @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ Piece piece(Position pos) {
@@ -74,14 +77,16 @@ public class Board {
     /*@ public normal_behavior
       @   requires piece != null;
       @   requires pos != null;
-      @   requires 0 <= pos.getRow() && pos.getRow() < rows;
-      @   requires 0 <= pos.getCol() && pos.getCol() < cols;
-      @   requires pieces[pos.getRow()][pos.getCol()] == null;
+      @   requires positionExists(pos);
+      @   requires !isPiecePlaced(pos);
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
         }
+
+        //@ assume 0 <= pos.getRow() && pos.getRow() < rows;
+        //@ assume 0 <= pos.getCol() && pos.getCol() < cols;
 
         pieces[pos.getRow()][pos.getCol()] = piece;
         piece.position = pos;
@@ -89,8 +94,7 @@ public class Board {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires 0 <= pos.getRow() && pos.getRow() < rows;
-      @   requires 0 <= pos.getCol() && pos.getCol() < cols;
+      @   requires positionExists(pos);
       @*/
     public Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
@@ -102,6 +106,10 @@ public class Board {
         }
         Piece aux = piece(pos);
         aux.position = null;
+
+        //@ assume 0 <= pos.getRow() && pos.getRow() < rows;
+        //@ assume 0 <= pos.getCol() && pos.getCol() < cols;
+
         pieces[pos.getRow()][pos.getCol()] = null;
         return aux;
     }
@@ -128,7 +136,7 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   ensures \result <==> (pieces[pos.getRow()][pos.getCol()] != null);
+      @   ensures \result <==> (piece(pos) != null);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
