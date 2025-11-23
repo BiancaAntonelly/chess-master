@@ -78,7 +78,6 @@ public class Board {
       @   requires pos != null;
       @   requires positionExists(pos);
       @   requires !isPiecePlaced(pos);
-      @   assignable pieces[*][*], piece.position;
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
       @*/
