@@ -6,10 +6,22 @@ import chess.ChessPiece;
 import chess.Color;
 
 public class Bishop extends ChessPiece {
+
+    /*@ public normal_behavior
+      @   requires board != null;
+      @   requires color != null;
+      @*/
     public Bishop(Board board, Color color) {
         super(board, color);
     }
 
+    /*@ public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.length == getBoard().getRows();
+      @   ensures (\forall int i; 0 <= i && i < \result.length;
+      @                \result[i].length == getBoard().getCols());
+      @   pure
+      @*/
     @Override
     public boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
@@ -59,6 +71,9 @@ public class Bishop extends ChessPiece {
         return mat;
     }
 
+    /*@ also
+      @   ensures \result != null;
+      @*/
     @Override
     public String toString() {
         return "B";

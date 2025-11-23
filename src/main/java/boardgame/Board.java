@@ -1,8 +1,11 @@
 package boardgame;
 
 public class Board {
+    //@ spec_public
     private final int rows;
+    //@ spec_public
     private final int cols;
+    //@ spec_public
     private final Piece[][] pieces;
 
     public Board(int rows, int cols) {
@@ -23,6 +26,13 @@ public class Board {
         return cols;
     }
 
+    /*@ public normal_behavior
+      @   requires 0 <= row && row < rows;
+      @   requires 0 <= col && col < cols;
+      @   ensures \result == pieces[row][col];
+      @   assignable \nothing;
+      @   pure
+      @*/
     public Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");
@@ -31,6 +41,14 @@ public class Board {
         return pieces[row][col];
     }
 
+    /*@ public normal_behavior
+      @   requires pos != null;
+      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
+      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   ensures \result == pieces[pos.getRow()][pos.getCol()];
+      @   assignable \nothing;
+      @   pure
+      @*/
     public Piece piece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
@@ -66,6 +84,7 @@ public class Board {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }
 
+    /*@ pure @*/
     public boolean positionExists(Position pos) {
         return positionExists(pos.getRow(), pos.getCol());
     }
