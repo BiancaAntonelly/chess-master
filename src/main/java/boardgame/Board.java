@@ -54,7 +54,7 @@ public class Board {
       @   ensures \result == pieces[row][col];
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ Piece piece(int row, int col) {
+    public /*@ pure @*/ /*@ nullable @*/ Piece piece(int row, int col) {
         //@ assert 0 <= row && row < rows;
         //@ assert 0 <= col && col < cols;
 
@@ -72,7 +72,7 @@ public class Board {
       @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ Piece piece(Position pos) {
+    public /*@ pure @*/ /*@ nullable @*/ Piece piece(Position pos) {
         //@ assert pos != null;
         //@ assert 0 <= pos.getRow() && pos.getRow() < rows;
         //@ assert 0 <= pos.getCol() && pos.getCol() < cols;
@@ -87,8 +87,7 @@ public class Board {
     /*@ public normal_behavior
       @   requires piece != null;
       @   requires pos != null;
-      @   requires 0 <= pos.getRow() && pos.getRow() < rows;
-      @   requires 0 <= pos.getCol() && pos.getCol() < cols;
+      @   requires positionExists(pos);
       @   requires !isPiecePlaced(pos);
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
@@ -119,7 +118,7 @@ public class Board {
       @            && \result.position == null
       @            && pieces[pos.getRow()][pos.getCol()] == null);
       @*/
-    public Piece removePiece(Position pos) {
+    public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
@@ -159,7 +158,7 @@ public class Board {
       @   requires pos != null;
       @   requires 0 <= pos.getRow() && pos.getRow() < rows;
       @   requires 0 <= pos.getCol() && pos.getCol() < cols;
-      @   ensures \result <==> (pieces[pos.getRow()][pos.getCol()] != null);
+      @   ensures \result <==> (piece(pos) != null);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
@@ -170,6 +169,6 @@ public class Board {
             throw new BoardException("A posição solicitada não existe.");
         }
 
-        return pieces[pos.getRow()][pos.getCol()] != null;
+        return piece(pos) != null;
     }
 }
