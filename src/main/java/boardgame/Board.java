@@ -45,7 +45,6 @@ public class Board {
       @   requires 0 <= col && col < cols;
       @   ensures \result == pieces[row][col];
       @   assignable \nothing;
-      @   pure;
       @*/
     public Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
@@ -61,7 +60,6 @@ public class Board {
       @   requires pos.getCol() >= 0 && pos.getCol() < cols;
       @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
-      @   pure;
       @*/
     public Piece piece(Position pos) {
         if (!positionExists(pos)) {
