@@ -34,7 +34,8 @@ public abstract class Piece {
     /*@ public normal_behavior
       @   ensures \result != null;
       @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   ensures (\forall int i; 0 <= i && i < \result.length;
+      @               \result[i] != null && \result[i].length == \result.length);
       @   assignable \nothing;
       @*/
     public abstract /*@ pure @*/ boolean[][] possibleMoves();
@@ -55,8 +56,9 @@ public abstract class Piece {
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
         for (boolean[] booleans : mat) {
+            /*@ loop_invariant 0 <= j && j <= mat.length;
+              @*/
             for (int j = 0; j < mat.length; j++) {
-                //@ assume 0 <= j && j < booleans.length;
                 if (booleans[j]) {
                     return true;
                 }
