@@ -8,15 +8,20 @@ public abstract class Piece {
     private final Board board;                    //@ in modelBoard;
 
     //@ public model Board modelBoard;
-    //@ private represents modelBoard = this.board;
+    //@ private represents modelBoard = board;
 
     //@ public model /*@ nullable */ Position modelPosition;
-    //@ private represents modelPosition = this.position;
+    //@ private represents modelPosition = position;
+
+    //@ invariant modelBoard != null;
+    //@ invariant position == null
+    //@        || (position.getRow() >= 0 && position.getRow() < 8
+    //@            && position.getCol() >= 0 && position.getCol() < 8);
 
     /*@ public normal_behavior
-      @     ensures modelBoard == board;
-      @     ensures modelPosition == null;
-      @     pure
+      @   requires board != null;
+      @   ensures modelBoard == board;
+      @   ensures modelPosition == null;
       @*/
     public Piece(Board board) {
         this.board = board;
@@ -29,25 +34,32 @@ public abstract class Piece {
     /*@ public normal_behavior
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
-      @   pure
+      @   ensures modelBoard == \old(modelBoard);
+      @   ensures modelPosition == \old(modelPosition);
       @*/
-    public abstract boolean[][] possibleMoves();
+    public abstract /*@ pure @*/ boolean[][] possibleMoves();
 
-    /*@ requires pos != null;
-      @ requires pos.getRow() >= 0 && pos.getRow() < 8;
-      @ requires pos.getCol() >= 0 && pos.getCol() < 8;
-      @ ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
-      @ pure
+    /*@ public normal_behavior
+      @   requires pos != null;
+      @   requires pos.getRow() >= 0 && pos.getRow() < 8;
+      @   requires pos.getCol() >= 0 && pos.getCol() < 8;
+      @   ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
+      @   ensures modelBoard == \old(modelBoard);
+      @   ensures modelPosition == \old(modelPosition);
       @*/
-    public boolean possibleMove(Position pos) {
+    public /*@ pure @*/ boolean possibleMove(Position pos) {
         return possibleMoves()[pos.getRow()][pos.getCol()];
     }
 
     /*@ public normal_behavior
-      @   ensures true; // evita travamento do prover
-      @   pure
+      @   ensures \result <==>
+      @     (\exists int i; 0 <= i && i < 8;
+      @       (\exists int j; 0 <= j && j < 8;
+      @         possibleMoves()[i][j]));
+      @   ensures modelBoard == \old(modelBoard);
+      @   ensures modelPosition == \old(modelPosition);
       @*/
-    public boolean isThereAnyPossibleMove() {
+    public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
         for (boolean[] booleans : mat) {
             for (int j = 0; j < mat.length; j++) {
