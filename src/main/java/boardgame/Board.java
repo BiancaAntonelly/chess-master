@@ -12,7 +12,6 @@ public class Board {
       @   requires rows >= 1 && cols >= 1;
       @   ensures this.rows == rows;
       @   ensures this.cols == cols;
-      @   assignable rows, cols, pieces[*][*];
       @*/
     public Board(int rows, int cols) {
         if (rows < 1 || cols < 1) {

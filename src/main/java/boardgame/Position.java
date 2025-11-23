@@ -9,7 +9,6 @@ public class Position {
     /*@ public normal_behavior
       @   ensures this.row == row;
       @   ensures this.col == col;
-      @   assignable row, col;
       @*/
     public Position(int row, int col) {
         this.row = row;
