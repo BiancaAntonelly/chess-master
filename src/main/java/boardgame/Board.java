@@ -6,7 +6,7 @@ public class Board {
     //@ spec_public
     private final int cols;
     //@ spec_public
-    private final Piece[][] pieces;
+    private final /*@ nullable @*/ Piece[][] pieces;
 
     //@ public invariant rows >= 1 && cols >= 1;
     //@ public invariant pieces != null && pieces.length == rows;
@@ -76,8 +76,9 @@ public class Board {
     /*@ public normal_behavior
       @   requires piece != null;
       @   requires pos != null;
-      @   requires positionExists(pos);
-      @   requires !isPiecePlaced(pos);
+      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
+      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   requires pieces[pos.getRow()][pos.getCol()] == null;
       @   assignable \everything;
       @*/
     public void placePiece(Piece piece, Position pos) {
@@ -91,10 +92,11 @@ public class Board {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires positionExists(pos);
+      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
+      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
       @   assignable \everything;
       @*/
-    public Piece removePiece(Position pos) {
+    public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
@@ -129,8 +131,9 @@ public class Board {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires positionExists(pos);
-      @   ensures \result <==> (piece(pos) != null);
+      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
+      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   ensures \result <==> (pieces[pos.getRow()][pos.getCol()] != null);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
