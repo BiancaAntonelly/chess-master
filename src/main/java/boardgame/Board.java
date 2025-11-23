@@ -83,6 +83,7 @@ public class Board {
       @   requires piece != null;
       @   requires pos != null;
       @   requires positionExists(pos);
+      @   requires !isPiecePlaced(pos);
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
