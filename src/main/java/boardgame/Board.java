@@ -1,7 +1,5 @@
 package boardgame;
 
-//@ nullable_by_default;
-
 public class Board {
     //@ spec_public
     private final int rows;
