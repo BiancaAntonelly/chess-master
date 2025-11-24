@@ -6,15 +6,13 @@ public class Board {
     //@ spec_public
     private final int cols;
     //@ spec_public
-    private final Piece[][] pieces; // <-- removido /*@ nullable @*/
+    private final /*@ nullable @*/ Piece[][] pieces;
 
     //@ public invariant rows >= 1 && cols >= 1;
     //@ public invariant pieces != null && pieces.length == rows;
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
     //@ public invariant \typeof(pieces) == \type(Piece[][]);
-    //@ public invariant (\forall int i; 0 <= i && i < rows;
-    //@                       \typeof(pieces[i]) == \type(Piece[]));
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
