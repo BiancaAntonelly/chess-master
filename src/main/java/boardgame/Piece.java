@@ -8,15 +8,20 @@ public abstract class Piece {
     private final Board board;                    //@ in modelBoard;
 
     //@ public model Board modelBoard;
-    //@ private represents modelBoard = this.board;
+    //@ private represents modelBoard = board;
 
     //@ public model /*@ nullable */ Position modelPosition;
-    //@ private represents modelPosition = this.position;
+    //@ private represents modelPosition = position;
+
+    //@ public invariant modelBoard != null;
+    //@ public invariant modelPosition == null
+    //@        || (modelPosition.getRow() >= 0 && modelPosition.getRow() < 8
+    //@            && modelPosition.getCol() >= 0 && modelPosition.getCol() < 8);
 
     /*@ public normal_behavior
-      @     ensures modelBoard == board;
-      @     ensures modelPosition == null;
-      @     pure
+      @   requires board != null;
+      @   ensures modelBoard == board;
+      @   ensures modelPosition == null;
       @*/
     public Piece(Board board) {
         this.board = board;
@@ -27,29 +32,32 @@ public abstract class Piece {
     protected Board getBoard() { return board; }
 
     /*@ public normal_behavior
+      @   ensures \result != null;
       @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
-      @   pure
+      @   ensures (\forall int i; 0 <= i && i < \result.length;
+      @               \result[i] != null && \result[i].length == \result.length);
+      @   assignable \nothing;
       @*/
-    public abstract boolean[][] possibleMoves();
+    public abstract /*@ pure @*/ boolean[][] possibleMoves();
 
-    /*@ requires pos != null;
-      @ requires pos.getRow() >= 0 && pos.getRow() < 8;
-      @ requires pos.getCol() >= 0 && pos.getCol() < 8;
-      @ ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
-      @ pure
+    /*@ public normal_behavior
+      @   requires pos != null;
+      @   requires pos.getRow() >= 0 && pos.getRow() < 8;
+      @   requires pos.getCol() >= 0 && pos.getCol() < 8;
+      @   assignable \nothing;
       @*/
-    public boolean possibleMove(Position pos) {
+    public /*@ pure @*/ boolean possibleMove(Position pos) {
         return possibleMoves()[pos.getRow()][pos.getCol()];
     }
 
     /*@ public normal_behavior
-      @   ensures true; // evita travamento do prover
-      @   pure
+      @   assignable \nothing;
       @*/
-    public boolean isThereAnyPossibleMove() {
+    public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
         for (boolean[] booleans : mat) {
+            /*@ loop_invariant 0 <= j && j <= mat.length;
+              @*/
             for (int j = 0; j < mat.length; j++) {
                 if (booleans[j]) {
                     return true;

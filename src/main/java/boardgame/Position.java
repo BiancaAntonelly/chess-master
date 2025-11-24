@@ -7,9 +7,8 @@ public class Position {
     private int col;
 
     /*@ public normal_behavior
-      @     ensures this.row == row;
-      @     ensures this.col == col;
-      @ pure
+      @   ensures this.row == row;
+      @   ensures this.col == col;
       @*/
     public Position(int row, int col) {
         this.row = row;
@@ -17,16 +16,17 @@ public class Position {
     }
 
     /*@ public normal_behavior
-      @ ensures \result == this.row;
-      @ pure
+      @   ensures \result == row;
+      @   assignable \nothing;
       @*/
-    public int getRow() {
+    public /*@ pure @*/ int getRow() {
         return row;
     }
 
     /*@ public normal_behavior
       @   requires 0 <= row && row < 8;
       @   ensures this.row == row;
+      @   assignable this.row;
       @*/
     public void setRow(int row) {
         this.row = row;
@@ -34,24 +34,27 @@ public class Position {
 
     /*@ public normal_behavior
       @   ensures \result == col;
-      @   pure
+      @   assignable \nothing;
       @*/
-    public int getCol() {
+    public /*@ pure @*/ int getCol() {
         return col;
     }
 
     /*@ public normal_behavior
-      @     ensures this.col == col;
-      @     assignable this.col;
+      @   requires 0 <= col && col < 8;
+      @   ensures this.col == col;
+      @   assignable this.col;
       @*/
     public void setCol(int col) {
         this.col = col;
     }
 
     /*@ public normal_behavior
-      @     ensures this.row == row;
-      @     ensures this.col == col;
-      @     assignable this.col, this.row;
+      @   requires 0 <= row && row < 8;
+      @   requires 0 <= col && col < 8;
+      @   ensures this.row == row;
+      @   ensures this.col == col;
+      @   assignable this.row, this.col;
       @*/
     public void setValues(int row, int col) {
         this.row = row;
@@ -60,9 +63,9 @@ public class Position {
 
     /*@ public normal_behavior
       @   ensures \result != null;
-      @   pure
+      @   assignable \nothing;
       @*/
-    public String getString() {
+    public /*@ pure @*/ String getString() {
         return row + ", " + col;
     }
 
