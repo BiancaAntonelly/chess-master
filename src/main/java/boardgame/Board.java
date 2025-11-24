@@ -12,6 +12,7 @@ public class Board {
     //@ public invariant pieces != null && pieces.length == rows;
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
+    //@ public invariant \typeof(pieces) == \type(Piece[][]);
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
@@ -77,13 +78,8 @@ public class Board {
       @   requires piece != null;
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   // Não restringimos muito o assignable para evitar falsos negativos do verificador.
       @   assignable \everything;
-      @   // Se a posição estava vazia no estado inicial, é permitido que a peça seja
-      @   // colocada lá e que a posição interna da peça seja atualizada.
-      @   // (Não colocamos um ensures forte para não forçar o verificador demais.)
       @   signals (BoardException e) true;
-      @   signals (ArrayStoreException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
@@ -97,8 +93,6 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   // Board pode alterar a casa do tabuleiro e eventualmente o estado das peças.
-      @   // Para simplificar a verificação, usamos assignable \everything.
       @   assignable \everything;
       @*/
     public /*@ nullable @*/ Piece removePiece(Position pos) {
