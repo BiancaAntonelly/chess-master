@@ -76,15 +76,17 @@ public class Board {
         return pieces[pos.getRow()][pos.getCol()];
     }
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   requires piece != null;
       @   requires pos != null;
       @   requires positionExists(pos);
       @   requires !isPiecePlaced(pos);
-      @   requires \typeof(pieces) == \type(Piece[][]);
+      @   requires (\forall int i; 0 <= i && i < rows;
+      @                  \typeof(pieces[i]) == \type(Piece[]));
       @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
+      @   signals (BoardException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
