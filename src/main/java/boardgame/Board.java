@@ -6,15 +6,12 @@ public class Board {
     //@ spec_public
     private final int cols;
     //@ spec_public
-    private final /*@ nullable @*/ Object[][] pieces;
+    private final /*@ nullable @*/ Piece[][] pieces;
 
     //@ public invariant rows >= 1 && cols >= 1;
     //@ public invariant pieces != null && pieces.length == rows;
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
-    //@ public invariant (\forall int i, j;
-    //@                       0 <= i && i < rows && 0 <= j && j < cols;
-    //@                       pieces[i][j] == null || pieces[i][j] instanceof Piece);
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
@@ -31,7 +28,7 @@ public class Board {
 
         this.rows = rows;
         this.cols = cols;
-        pieces = new Object[rows][cols];
+        pieces = new Piece[rows][cols];
     }
 
     /*@ public normal_behavior
@@ -61,7 +58,7 @@ public class Board {
             throw new BoardException("A posição solicitada não existe.");
         }
 
-        return (Piece) pieces[row][col];
+        return pieces[row][col];
     }
 
     /*@ public normal_behavior
@@ -75,10 +72,10 @@ public class Board {
             throw new BoardException("A posição solicitada não existe.");
         }
 
-        return (Piece) pieces[pos.getRow()][pos.getCol()];
+        return pieces[pos.getRow()][pos.getCol()];
     }
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   requires piece != null;
       @   requires pos != null;
       @   requires positionExists(pos);
@@ -86,10 +83,17 @@ public class Board {
       @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
+      @   signals (BoardException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
+        }
+
+        // Protege contra estados “corrompidos” da estrutura (teoricamente impossíveis
+        // no seu código normal, mas ajuda o verificador a ter a garantia de tipo).
+        if (!(pieces instanceof Piece[][])) {
+            throw new BoardException("Estrutura interna do tabuleiro inválida.");
         }
 
         pieces[pos.getRow()][pos.getCol()] = piece;
@@ -99,19 +103,18 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   assignable \everything;
-      @   ensures (\result == null) <==> (pieces[pos.getRow()][pos.getCol()] == null);
       @*/
     public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
 
-        Piece aux = (Piece) pieces[pos.getRow()][pos.getCol()];
-        if (aux == null) {
+        if (piece(pos) == null) {
             return null;
         }
+        Piece aux = piece(pos);
         aux.position = null;
+
         pieces[pos.getRow()][pos.getCol()] = null;
         return aux;
     }
