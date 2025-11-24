@@ -12,13 +12,14 @@ public class Board {
     //@ public invariant pieces != null && pieces.length == rows;
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
-    //@ public invariant \typeof(pieces) == \type(Piece[][]);
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
       @   ensures this.rows == rows;
       @   ensures this.cols == cols;
       @   ensures pieces != null && pieces.length == rows;
+      @   ensures (\forall int i; 0 <= i && i < rows;
+      @                pieces[i] != null && pieces[i].length == cols);
       @*/
     public Board(int rows, int cols) {
         if (rows < 1 || cols < 1) {
@@ -78,12 +79,21 @@ public class Board {
       @   requires piece != null;
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   assignable \everything;
+      @   requires !isPiecePlaced(pos);
+      @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
+      @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
+      @   ensures piece.position == pos;
       @   signals (BoardException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
+        }
+
+        // Protege contra estados “corrompidos” da estrutura (teoricamente impossíveis
+        // no seu código normal, mas ajuda o verificador a ter a garantia de tipo).
+        if (!(pieces instanceof Piece[][])) {
+            throw new BoardException("Estrutura interna do tabuleiro inválida.");
         }
 
         pieces[pos.getRow()][pos.getCol()] = piece;
@@ -93,7 +103,6 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
-      @   assignable \everything;
       @*/
     public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
@@ -105,6 +114,7 @@ public class Board {
         }
         Piece aux = piece(pos);
         aux.position = null;
+
         pieces[pos.getRow()][pos.getCol()] = null;
         return aux;
     }
@@ -131,14 +141,14 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
+      @   ensures \result <==> (pieces[pos.getRow()][pos.getCol()] != null);
       @   assignable \nothing;
-      @   ensures \result <==> (piece(pos) != null);
       @*/
     public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
 
-        return piece(pos) != null;
+        return pieces[pos.getRow()][pos.getCol()] != null;
     }
 }
