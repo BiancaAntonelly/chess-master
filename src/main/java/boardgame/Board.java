@@ -12,6 +12,7 @@ public class Board {
     //@ public invariant pieces != null && pieces.length == rows;
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
+    //@ public invariant \typeof(pieces) == \type(Piece[][]);
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
@@ -80,6 +81,7 @@ public class Board {
       @   requires pos != null;
       @   requires positionExists(pos);
       @   requires !isPiecePlaced(pos);
+      @   requires \typeof(pieces) == \type(Piece[][]);
       @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
@@ -88,12 +90,6 @@ public class Board {
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
-        }
-
-        // Protege contra estados “corrompidos” da estrutura (teoricamente impossíveis
-        // no seu código normal, mas ajuda o verificador a ter a garantia de tipo).
-        if (!(pieces instanceof Piece[][])) {
-            throw new BoardException("Estrutura interna do tabuleiro inválida.");
         }
 
         pieces[pos.getRow()][pos.getCol()] = piece;
