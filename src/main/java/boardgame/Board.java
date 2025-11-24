@@ -55,14 +55,12 @@ public class Board {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");
         }
-
         return pieces[row][col];
     }
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
-      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   requires positionExists(pos);
       @   ensures \result == pieces[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
@@ -70,31 +68,36 @@ public class Board {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
-
         return pieces[pos.getRow()][pos.getCol()];
     }
 
     /*@ public behavior
       @   requires piece != null;
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
-      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
-      @   signals_only BoardException;
+      @   requires positionExists(pos);
+      @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
+      @   ensures \old(!isPiecePlaced(pos))
+      @            ==> (pieces[pos.getRow()][pos.getCol()] == piece
+      @                 && piece.position == pos);
+      @   signals (BoardException e) \old(isPiecePlaced(pos));
+      @   signals (ArrayStoreException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
         if (isPiecePlaced(pos)) {
             throw new BoardException("Uma peça já ocupa a posição " + pos);
         }
 
-        //@ nowarn PossiblyBadArrayAssignment;
         pieces[pos.getRow()][pos.getCol()] = piece;
         piece.position = pos;
     }
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
-      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   requires positionExists(pos);
+      @   assignable pieces[pos.getRow()][pos.getCol()], (\nullable piece.position);
+      @   ensures \result == \old(pieces[pos.getRow()][pos.getCol()]);
+      @   ensures pieces[pos.getRow()][pos.getCol()] == null;
+      @   ensures (\result != null) ==> (\result.position == null);
       @*/
     public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {
@@ -104,9 +107,9 @@ public class Board {
         if (piece(pos) == null) {
             return null;
         }
+
         Piece aux = piece(pos);
         aux.position = null;
-
         pieces[pos.getRow()][pos.getCol()] = null;
         return aux;
     }
@@ -132,15 +135,14 @@ public class Board {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < rows;
-      @   requires pos.getCol() >= 0 && pos.getCol() < cols;
+      @   requires positionExists(pos);
       @   assignable \nothing;
+      @   ensures \result <==> (piece(pos) != null);
       @*/
     public /*@ pure @*/ boolean isPiecePlaced(Position pos) {
         if (!positionExists(pos)) {
             throw new BoardException("A posição solicitada não existe.");
         }
-
         return piece(pos) != null;
     }
 }
