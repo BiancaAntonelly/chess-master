@@ -5,7 +5,8 @@ public abstract class Piece {
     //@ spec_public
     protected /*@ nullable @*/ Position position; //@ in modelPosition;
     //@ spec_public
-    private final Board board;                    //@ in modelBoard;
+    private final Board board;
+                    //@ in modelBoard;
 
     //@ public model Board modelBoard;
     //@ private represents modelBoard = board;
@@ -38,7 +39,7 @@ public abstract class Piece {
       @               \result[i] != null && \result[i].length == \result.length);
       @   assignable \nothing;
       @*/
-    public abstract /*@ pure @*/ boolean[][] possibleMoves();
+    public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior
       @   requires pos != null;
@@ -66,4 +67,13 @@ public abstract class Piece {
         }
         return false;
     }
+
+    /*@ public normal_behavior
+      @   ensures \result == modelPosition;
+      @   pure
+      @*/
+    public Position getPosition() {
+        return position;
+    }
+
 }
