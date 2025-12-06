@@ -34,8 +34,9 @@ public abstract class ChessPiece extends Piece {
     }
 
     /*@ public normal_behavior
-      @ ensures moveCount == \old(moveCount) + 1;
-      @ assignable moveCount;
+      @   requires moveCount < Integer.MAX_VALUE;
+      @   ensures moveCount == \old(moveCount) + 1;
+      @   assignable moveCount;
       @*/
     public void increaseMoveCount() {
         moveCount++;
@@ -51,10 +52,9 @@ public abstract class ChessPiece extends Piece {
     }
 
     /*@ public normal_behavior
-      @ requires position != null;
-      @ ensures \result.getRow() == 8 - position.getRow();
-      @ ensures \result.getCol() == (char)('a' + position.getCol());
-      @ pure
+      @   requires getPosition() != null;
+      @   ensures \result.getRow() == 8 - getPosition().getRow();
+      @   ensures \result.getCol() == (char)('a' + getPosition().getCol());
       @*/
     public ChessPosition getChessPosition() {
         return ChessPosition.fromPosition(position);
@@ -71,4 +71,5 @@ public abstract class ChessPiece extends Piece {
         ChessPiece p = (ChessPiece) getBoard().piece(pos);
         return p != null && p.getColor() != color;
     }
+
 }

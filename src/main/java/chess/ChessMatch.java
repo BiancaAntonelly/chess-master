@@ -9,17 +9,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChessMatch {
-    private final Board board;
+    //@ spec_public
+    protected Board board;
+    //@ spec_public
     private int turn;
+    //@ spec_public
     private Color currentPlayer;
+    //@ spec_public
     private boolean check;
+    //@ spec_public
     private boolean checkMate;
+    //@ spec_public
     private ChessPiece enPassantVulnerable;
+    //@ spec_public
     private ChessPiece promoted;
-
+    //@ spec_public
     private final List<Piece> piecesOnTheBoard = new ArrayList<>();
+    //@ spec_public
     private final List<Piece> capturedPieces = new ArrayList<>();
 
+    /*@
+      @ ensures board != null;
+      @ ensures turn == 1;
+      @ ensures currentPlayer == Color.WHITE;
+      @*/
     public ChessMatch() {
         board = new Board(8, 8);
         turn = 1;
@@ -27,6 +40,7 @@ public class ChessMatch {
         initialSetup();
     }
 
+    /*@ ensures \result != null; @*/
     public ChessPiece[][] getPieces() {
         ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getCols()];
         for (int i = 0; i < board.getRows(); i++) {
@@ -37,36 +51,50 @@ public class ChessMatch {
         return mat;
     }
 
+    /*@ ensures \result == turn; @*/
     public int getTurn() {
         return turn;
     }
 
+    /*@ ensures \result == currentPlayer; @*/
     public Color getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /*@ ensures \result == check; @*/
     public boolean getCheck() {
         return check;
     }
 
+    /*@ ensures \result == !checkMate; @*/
     public boolean getNotCheckMate() {
         return !checkMate;
     }
 
+    /*@ ensures true; @*/
     public ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
     }
 
+    /*@ ensures true; @*/
     public ChessPiece getPromoted() {
         return promoted;
     }
 
+    /*@
+      @   requires sourcePos != null;
+      @   ensures \result != null;
+      @*/
     public boolean[][] possibleMoves(ChessPosition sourcePos) {
         Position position = sourcePos.toPosition();
         validateSourcePosition(position);
         return board.piece(position).possibleMoves();
     }
 
+    /*@
+      @   requires sourcePos != null && targetPos != null;
+      @   ensures \result == null || \result instanceof ChessPiece;
+      @*/
     public ChessPiece performChessMove(ChessPosition sourcePos, ChessPosition targetPos) {
         Position source = sourcePos.toPosition();
         Position target = targetPos.toPosition();
@@ -106,6 +134,11 @@ public class ChessMatch {
         return (ChessPiece) captured;
     }
 
+    /*@
+      @   requires type != null;
+      @   requires promoted != null;
+      @   ensures \result != null;
+      @*/
     public ChessPiece replacePromotedPiece(String type) {
         if (promoted == null) {
             throw new IllegalStateException("Não há peça para ser promovida");
@@ -232,10 +265,18 @@ public class ChessMatch {
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 
+    /*@
+      @ requires color != null;
+      @ ensures \result != color;
+      @*/
     private Color opponent(Color color) {
         return color == Color.WHITE ? Color.BLACK : Color.WHITE;
     }
 
+    /*@
+      @ requires color != null;
+      @ ensures \result != null;
+      @*/
     private ChessPiece king(Color color) {
         List<Piece> list = piecesOnTheBoard.stream().filter(x -> x != null && ((ChessPiece) x).getColor() == color).toList();
         for (Piece p : list) {
@@ -246,6 +287,10 @@ public class ChessMatch {
         throw new IllegalStateException("Não existe um rei " + color + " no tabuleiro.");
     }
 
+    /*@
+      @ requires color != null;
+      @ ensures \result == true || \result == false;
+      @*/
     private boolean testCheck(Color color) {
         Position kingPos = king(color).getChessPosition().toPosition();
         List<Piece> opponentPieces = piecesOnTheBoard.stream().filter(x -> x != null && ((ChessPiece) x).getColor() == opponent(color)).toList();
@@ -258,6 +303,10 @@ public class ChessMatch {
         return false;
     }
 
+    /*@
+      @ requires color != null;
+      @ ensures \result == true || \result == false;
+      @*/
     private boolean testCheckMate(Color color) {
         if (!testCheck(color)) return false;
 
@@ -288,6 +337,7 @@ public class ChessMatch {
         piecesOnTheBoard.add(piece);
     }
 
+    /*@ ensures true; @*/
     private void initialSetup() {
         placeNewPiece('a', 1, new Rook(board, Color.WHITE));
         placeNewPiece('b', 1, new Knight(board, Color.WHITE));

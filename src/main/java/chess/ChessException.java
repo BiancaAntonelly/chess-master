@@ -4,7 +4,9 @@ import boardgame.BoardException;
 
 public class ChessException extends BoardException {
 
-    //@ assigns \nothing;
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @*/
     public ChessException(String message) {
         super(message);
     }
