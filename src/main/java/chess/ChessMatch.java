@@ -62,6 +62,9 @@ public class ChessMatch {
     public ChessPiece[][] getPieces() {
         final int rows = board.getRows();
         final int cols = board.getCols();
+
+        //@ assert rows == 8 && cols == 8;
+
         ChessPiece[][] mat = new ChessPiece[rows][cols];
 
         /*@ loop_invariant 0 <= i && i <= rows;
@@ -74,12 +77,10 @@ public class ChessMatch {
               @*/
             for (int j = 0; j < cols; j++) {
 
-                if (0 <= i && i < rows && 0 <= j && j < cols) {
-                    /*@ nullable @*/ Piece p = board.piece(i, j);
+                /*@ nullable @*/ Piece p = board.piece(i, j);
 
-                    if (p instanceof ChessPiece) {
-                        mat[i][j] = (ChessPiece) p;
-                    }
+                if (p instanceof ChessPiece) {
+                    mat[i][j] = (ChessPiece) p;
                 }
             }
         }
