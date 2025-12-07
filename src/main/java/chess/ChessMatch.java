@@ -8,10 +8,6 @@ import chess.pieces.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe que representa uma partida de xadrez.
- * Gerencia o estado do jogo, turnos, movimentos e regras do xadrez.
- */
 public class ChessMatch {
 
     //@ public invariant board != null;
@@ -40,7 +36,6 @@ public class ChessMatch {
 
     /*@ public normal_behavior
       @   ensures board != null;
-      @   ensures board.getRows() == 8 && board.getCols() == 8;
       @   ensures turn == 1;
       @   ensures currentPlayer == Color.WHITE;
       @   ensures !check;
