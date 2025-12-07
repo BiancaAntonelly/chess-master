@@ -66,12 +66,20 @@ public class UI {
 
     /*@ public normal_behavior
       @   requires pieces != null;
+      @   requires 0 < pieces.length && pieces.length <= 8;
       @   requires (\forall int i; 0 <= i && i < pieces.length; pieces[i] != null);
       @   assignable \everything;
       @*/
     public static void printBoard(ChessPiece[][] pieces) {
+        /*@ loop_invariant 0 <= i && i <= pieces.length;
+          @ loop_invariant pieces.length <= 8;
+          @ decreases pieces.length - i;
+          @*/
         for (int i = 0; i < pieces.length; i++) {
             System.out.print((8 - i) + " ");
+            /*@ loop_invariant 0 <= j && j <= pieces[i].length;
+              @ decreases pieces[i].length - j;
+              @*/
             for (int j = 0; j < pieces[i].length; j++) {
                 printPiece(pieces[i][j], false);
             }
@@ -82,15 +90,23 @@ public class UI {
 
     /*@ public normal_behavior
       @   requires pieces != null && possibleMoves != null;
+      @   requires 0 < pieces.length && pieces.length <= 8;
       @   requires pieces.length == possibleMoves.length;
       @   requires (\forall int i; 0 <= i && i < pieces.length;
-      @               pieces[i] != null && possibleMoves[i] != null
-      @               && pieces[i].length == possibleMoves[i].length);
+      @               pieces[i] != null && possibleMoves[i] != null &&
+      @               pieces[i].length == possibleMoves[i].length);
       @   assignable \everything;
       @*/
     public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
+        /*@ loop_invariant 0 <= i && i <= pieces.length;
+          @ loop_invariant pieces.length <= 8;
+          @ decreases pieces.length - i;
+          @*/
         for (int i = 0; i < pieces.length; i++) {
             System.out.print((8 - i) + " ");
+            /*@ loop_invariant 0 <= j && j <= pieces[i].length;
+              @ decreases pieces[i].length - j;
+              @*/
             for (int j = 0; j < pieces[i].length; j++) {
                 printPiece(pieces[i][j], possibleMoves[i][j]);
             }
@@ -102,7 +118,7 @@ public class UI {
     /*@ private normal_behavior
       @   assignable \everything;
       @*/
-    private static void printPiece(ChessPiece piece, boolean background) {
+    private static void printPiece(/*@ nullable @*/ ChessPiece piece, boolean background) {
         if (background) {
             System.out.print(ANSI_BLUE_BACKGROUND);
         }
