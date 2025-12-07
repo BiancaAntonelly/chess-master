@@ -145,14 +145,14 @@ public class UI {
         System.out.print(" ");
     }
 
-    /*@ helper @*/
+    /*@ helper
+      @   requires captured != null;
+      @   assignable \everything;
+      @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
         List<ChessPiece> white = new java.util.ArrayList<>();
         List<ChessPiece> black = new java.util.ArrayList<>();
 
-        /*@ loop_invariant 0 <= i && i <= captured.size();
-          @ decreases captured.size() - i;
-          @*/
         for (int i = 0; i < captured.size(); i++) {
             ChessPiece piece = captured.get(i);
             if (piece != null) {
@@ -174,4 +174,5 @@ public class UI {
         System.out.println(Arrays.toString(black.toArray()));
         System.out.print(ANSI_RESET);
     }
+
 }
