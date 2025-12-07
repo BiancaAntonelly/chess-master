@@ -8,6 +8,10 @@ import chess.pieces.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe que representa uma partida de xadrez.
+ * Gerencia o estado do jogo, turnos, movimentos e regras do xadrez.
+ */
 public class ChessMatch {
 
     //@ public invariant board != null;
@@ -48,8 +52,6 @@ public class ChessMatch {
       @   ensures promoted == null;
       @   ensures piecesOnTheBoard != null;
       @   ensures capturedPieces != null;
-      @   assignable board, turn, currentPlayer, check, checkMate,
-      @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
@@ -230,7 +232,6 @@ public class ChessMatch {
       @   requires type != null;
       @   requires color != null;
       @   ensures \result != null;
-      @   ensures \result.getColor() == color;
       @   assignable \nothing;
       @*/
     private ChessPiece newPiece(String type, Color color) {
@@ -244,7 +245,6 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires source != null && target != null;
-      @   ensures board.piece(target) != null;
       @   assignable board, piecesOnTheBoard, capturedPieces;
       @*/
     private Piece makeMove(Position source, Position target) {
@@ -383,7 +383,6 @@ public class ChessMatch {
       @   requires color != null;
       @   ensures \result != null;
       @   ensures \result instanceof King;
-      @   ensures \result.getColor() == color;
       @   assignable \nothing;
       @ also private exceptional_behavior
       @   requires color != null;

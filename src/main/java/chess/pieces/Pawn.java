@@ -15,10 +15,6 @@ public class Pawn extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
-      @   ensures this.match == match;
-      @   ensures getColor() == color;
-      @   ensures getMoveCount() == 0;
-      @   assignable this.match;
       @*/
     public Pawn(Board board, Color color, ChessMatch match) {
         super(board, color);

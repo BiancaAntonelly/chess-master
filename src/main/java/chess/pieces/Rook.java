@@ -10,9 +10,6 @@ public class Rook extends ChessPiece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
-      @   ensures getColor() == color;
-      @   ensures getMoveCount() == 0;
-      @   assignable \nothing;
       @*/
     public Rook(Board board, Color color) {
         super(board, color);

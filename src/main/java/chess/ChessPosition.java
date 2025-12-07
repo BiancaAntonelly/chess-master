@@ -55,7 +55,7 @@ public class ChessPosition {
       @   requires pos.getCol() >= 0 && pos.getCol() <= 7;
       @   ensures \result != null;
       @   ensures \result.getRow() == 8 - pos.getRow();
-      @   ensures \result.getColumn() == (char)('a' + pos.getCol());
+      @   ensures \result.getCol() == (char)('a' + pos.getCol());
       @   assignable \nothing;
       @ also
       @ normal_behavior
