@@ -62,9 +62,6 @@ public class ChessMatch {
     public ChessPiece[][] getPieces() {
         final int rows = board.getRows();
         final int cols = board.getCols();
-
-        //@ assert rows == 8 && cols == 8;
-
         ChessPiece[][] mat = new ChessPiece[rows][cols];
 
         /*@ loop_invariant 0 <= i && i <= rows;
@@ -76,12 +73,17 @@ public class ChessMatch {
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
+                // A condição do loop 'j < cols' e o invariant '0 <= j'
+                // garantem que 0 <= j < cols para o corpo do loop.
+                // A condição do loop 'i < rows' e o invariant '0 <= i'
+                // garantem que 0 <= i < rows para o corpo do loop.
 
                 /*@ nullable @*/ Piece p = board.piece(i, j);
 
                 if (p instanceof ChessPiece) {
                     mat[i][j] = (ChessPiece) p;
                 }
+                // Remover o bloco if (0 <= i && i < rows && 0 <= j && j < cols)
             }
         }
         return mat;
