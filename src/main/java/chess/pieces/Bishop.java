@@ -10,7 +10,6 @@ public class Bishop extends ChessPiece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
-      @   assignable this.*;
       @*/
     public Bishop(Board board, Color color) {
         super(board, color);

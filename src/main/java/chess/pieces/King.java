@@ -15,7 +15,6 @@ public class King extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
-      @   assignable this.*;
       @*/
     public King(Board board, Color color, ChessMatch match) {
         super(board, color);

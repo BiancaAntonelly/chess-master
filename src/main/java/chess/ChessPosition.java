@@ -18,7 +18,6 @@ public class ChessPosition {
       @   requires row >= 1 && row <= 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
-      @   assignable this.*;
       @*/
     public ChessPosition(int row, char col) {
         if (col < 'a'|| col > 'h' || row < 1 || row > 8) {

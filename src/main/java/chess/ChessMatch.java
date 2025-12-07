@@ -52,7 +52,6 @@ public class ChessMatch {
       @   ensures promoted == null;
       @   ensures piecesOnTheBoard != null;
       @   ensures capturedPieces != null;
-      @   assignable this.*;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);

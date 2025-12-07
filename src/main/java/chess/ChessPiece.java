@@ -20,7 +20,6 @@ public abstract class ChessPiece extends Piece {
       @   requires color != null;
       @   ensures this.color == color;
       @   ensures moveCount == 0;
-      @   assignable this.*;
       @*/
     public ChessPiece(Board board, Color color) {
         super(board);

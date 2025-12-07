@@ -15,7 +15,6 @@ public class Pawn extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
-      @   assignable this.*;
       @*/
     public Pawn(Board board, Color color, ChessMatch match) {
         super(board, color);
