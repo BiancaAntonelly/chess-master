@@ -68,23 +68,12 @@ public class ChessMatch {
         final int cols = board.getCols();
         ChessPiece[][] mat = new ChessPiece[rows][cols];
 
-        //@ assert mat.length == rows;
-
         /*@ loop_invariant 0 <= i && i <= mat.length;
-          @ loop_invariant (\forall int r; 0 <= r && r < i;
-          @                     (\forall int c; 0 <= c && c < mat[r].length;
-          @                         mat[r][c] == null
-          @                          || mat[r][c] instanceof ChessPiece));
           @ decreases mat.length - i;
           @*/
         for (int i = 0; i < mat.length; i++) {
 
-            //@ assert mat[i].length == cols;
-
             /*@ loop_invariant 0 <= j && j <= mat[i].length;
-              @ loop_invariant (\forall int c; 0 <= c && c < j;
-              @                     mat[i][c] == null
-              @                      || mat[i][c] instanceof ChessPiece);
               @ decreases mat[i].length - j;
               @*/
             for (int j = 0; j < mat[i].length; j++) {
