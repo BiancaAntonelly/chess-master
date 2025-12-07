@@ -49,9 +49,8 @@ public class Board {
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= row && row < rows;
-      @   requires 0 <= col && col < cols;
-      @   ensures \result == pieces[row][col];
+      @   ensures (0 <= row && row < rows && 0 <= col && col < cols)
+      @            ==> \result == pieces[row][col];
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ /*@ nullable @*/ Piece piece(int row, int col) {

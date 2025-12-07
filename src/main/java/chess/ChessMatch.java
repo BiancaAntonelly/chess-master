@@ -62,30 +62,34 @@ public class ChessMatch {
     public ChessPiece[][] getPieces() {
         final int rows = board.getRows();
         final int cols = board.getCols();
-        ChessPiece[][] mat = new ChessPiece[rows][cols];
+
+        // cria só o array de linhas
+        ChessPiece[][] mat = new ChessPiece[rows][];
 
         /*@ loop_invariant 0 <= i && i <= rows;
+          @ loop_invariant mat.length == rows;
           @ decreases rows - i;
           @*/
         for (int i = 0; i < rows; i++) {
 
+            // para cada linha, cria um array 1D separado
+            ChessPiece[] rowArray = new ChessPiece[cols];
+            mat[i] = rowArray;
+
             /*@ loop_invariant 0 <= j && j <= cols;
+              @ loop_invariant rowArray.length == cols;
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
-                // A condição do loop 'j < cols' e o invariant '0 <= j'
-                // garantem que 0 <= j < cols para o corpo do loop.
-                // A condição do loop 'i < rows' e o invariant '0 <= i'
-                // garantem que 0 <= i < rows para o corpo do loop.
-
                 /*@ nullable @*/ Piece p = board.piece(i, j);
 
                 if (p instanceof ChessPiece) {
-                    mat[i][j] = (ChessPiece) p;
+                    rowArray[j] = (ChessPiece) p;
                 }
-                // Remover o bloco if (0 <= i && i < rows && 0 <= j && j < cols)
+                // se não for ChessPiece, continua null (já é null por padrão)
             }
         }
+
         return mat;
     }
 
