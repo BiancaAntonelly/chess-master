@@ -7,14 +7,6 @@ import chess.Color;
 
 public class Rook extends ChessPiece {
 
-    /*@ public normal_behavior
-      @   requires board != null;
-      @   requires color != null;
-      @   ensures getBoard() == board;
-      @   ensures getColor() == color;
-      @   ensures getMoveCount() == 0;
-      @   assignable this.board, this.position, this.moveCount;
-      @*/
     public Rook(Board board, Color color) {
         super(board, color);
     }
