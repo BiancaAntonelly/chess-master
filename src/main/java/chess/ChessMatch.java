@@ -32,10 +32,8 @@ public class ChessMatch {
     private boolean check;
     //@ spec_public
     private boolean checkMate;
-    //@ spec_public
-    private ChessPiece enPassantVulnerable;
-    //@ spec_public
-    private ChessPiece promoted;
+    /*@ spec_public @*/ /*@ nullable @*/ private ChessPiece enPassantVulnerable;
+    /*@ spec_public @*/ /*@ nullable @*/ private ChessPiece promoted;
     //@ spec_public
     private final List<Piece> piecesOnTheBoard = new ArrayList<>();
     //@ spec_public
@@ -65,11 +63,12 @@ public class ChessMatch {
     }
 
     /*@ public normal_behavior
-  @   ensures \result != null;
-  @   ensures \result.length == board.getRows();
-  @   ensures (\forall int i; 0 <= i && i < board.getRows();
-  @               \result[i] != null && \result[i].length == board.getCols());
-  @*/
+      @   ensures \result != null;
+      @   ensures \result.length == board.getRows();
+      @   ensures (\forall int i; 0 <= i && i < board.getRows();
+      @               \result[i] != null && \result[i].length == board.getCols());
+      @   assignable \nothing;
+      @*/
     public ChessPiece[][] getPieces() {
         final int rows = board.getRows();
         final int cols = board.getCols();
@@ -91,11 +90,15 @@ public class ChessMatch {
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
-                Piece p = board.piece(i, j); // preconditions: 0 <= i < rows, 0 <= j < cols
+                //@ assert 0 <= i && i < rows;
+                //@ assert 0 <= j && j < cols;
 
-                if (p != null) {
-                    //@ assert p instanceof ChessPiece;
+                /*@ nullable @*/ Piece p = board.piece(i, j);
+
+                if (p instanceof ChessPiece) {
                     mat[i][j] = (ChessPiece) p;
+                } else {
+                    mat[i][j] = null;
                 }
             }
         }
@@ -145,7 +148,7 @@ public class ChessMatch {
       @   assignable \nothing;
       @   pure
       @*/
-    public ChessPiece getEnPassantVulnerable() {
+    public /*@ nullable @*/ ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
     }
 
@@ -154,7 +157,7 @@ public class ChessMatch {
       @   assignable \nothing;
       @   pure
       @*/
-    public ChessPiece getPromoted() {
+    public /*@ nullable @*/ ChessPiece getPromoted() {
         return promoted;
     }
 
@@ -162,7 +165,8 @@ public class ChessMatch {
       @   requires sourcePos != null;
       @   ensures \result != null;
       @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   ensures (\forall int i; 0 <= i && i < 8;
+      @               \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @ also public exceptional_behavior
       @   requires sourcePos != null;
