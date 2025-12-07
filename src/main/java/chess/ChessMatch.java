@@ -65,21 +65,40 @@ public class ChessMatch {
     }
 
     /*@ public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8;
-      @               \result[i] != null && \result[i].length == 8);
-      @   assignable \nothing;
-      @*/
+  @   ensures \result != null;
+  @   ensures \result.length == board.getRows();
+  @   ensures (\forall int i; 0 <= i && i < board.getRows();
+  @               \result[i] != null && \result[i].length == board.getCols());
+  @   assignable \nothing;
+  @*/
     public ChessPiece[][] getPieces() {
-        ChessPiece[][] mat = new ChessPiece[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece p = board.piece(i, j);
-                if (p instanceof ChessPiece) {
+        final int rows = board.getRows();
+        final int cols = board.getCols();
+        ChessPiece[][] mat = new ChessPiece[rows][cols];
+
+        /*@ loop_invariant 0 <= i && i <= rows;
+          @ loop_invariant (\forall int r; 0 <= r && r < i;
+          @                     (\forall int c; 0 <= c && c < cols;
+          @                         mat[r][c] == null
+          @                          || mat[r][c] instanceof ChessPiece));
+          @ decreases rows - i;
+          @ assignable \nothing;
+          @*/
+        for (int i = 0; i < rows; i++) {
+
+            /*@ loop_invariant 0 <= j && j <= cols;
+              @ loop_invariant (\forall int c; 0 <= c && c < j;
+              @                     mat[i][c] == null
+              @                      || mat[i][c] instanceof ChessPiece);
+              @ decreases cols - j;
+              @ assignable \nothing;
+              @*/
+            for (int j = 0; j < cols; j++) {
+                Piece p = board.piece(i, j); // preconditions: 0 <= i < rows, 0 <= j < cols
+
+                if (p != null) {
+                    //@ assert p instanceof ChessPiece;
                     mat[i][j] = (ChessPiece) p;
-                } else {
-                    mat[i][j] = null;
                 }
             }
         }
