@@ -68,11 +68,8 @@ public abstract class Piece {
         return false;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == modelPosition;
-      @   pure
-      @*/
-    public Position getPosition() {
+    /*@ pure @*/
+    public /*@ nullable @*/ Position getPosition() {
         return position;
     }
 

@@ -6,15 +6,34 @@ import chess.ChessPiece;
 import chess.Color;
 
 public class Rook extends ChessPiece {
+
+    /*@ public normal_behavior
+      @   requires board != null;
+      @   requires color != null;
+      @   pure
+      @*/
     public Rook(Board board, Color color) {
         super(board, color);
     }
 
+    /*@ also
+      @ public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.equals("R");
+      @   pure
+      @*/
     @Override
     public String toString() {
         return "R";
     }
 
+    /*@ also
+      @   public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   assignable \nothing;
+      @*/
     @Override
     public boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];

@@ -7,7 +7,7 @@ import chess.Color;
 
 public class Bishop extends ChessPiece {
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
       @*/
@@ -16,11 +16,10 @@ public class Bishop extends ChessPiece {
     }
 
     /*@ also
-      @   normal_behavior
+      @   public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length == getBoard().getRows();
-      @   ensures (\forall int i; 0 <= i && i < \result.length;
-      @                \result[i].length == getBoard().getCols());
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @*/
     @Override

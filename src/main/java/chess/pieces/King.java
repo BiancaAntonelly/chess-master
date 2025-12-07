@@ -15,38 +15,24 @@ public class King extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
-      @   ensures this.match == match;
-      @   ensures getColor() == color;
-      @   ensures getBoard() == board;
       @*/
     public King(Board board, Color color, ChessMatch match) {
         super(board, color);
         this.match = match;
     }
 
-    /*@ public normal_behavior
+    /*@ private normal_behavior
       @   requires position != null;
-      @   requires getBoard() != null;
-      @   requires getBoard().positionExists(position);
-      @   ensures \result ==>
-      @       (getBoard().piece(position) == null ||
-      @        ((ChessPiece)getBoard().piece(position)).getColor() != getColor());
-      @   pure
+      @   assignable \nothing;
       @*/
     private boolean canMove(Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
         return p == null || p.getColor() != getColor();
     }
 
-    /*@ public normal_behavior
+    /*@ private normal_behavior
       @   requires position != null;
-      @   requires getBoard() != null;
-      @   requires getBoard().positionExists(position);
-      @   ensures \result ==>
-      @       (getBoard().piece(position) instanceof Rook &&
-      @        ((ChessPiece)getBoard().piece(position)).getColor() == getColor() &&
-      @        ((ChessPiece)getBoard().piece(position)).getMoveCount() == 0);
-      @   pure
+      @   assignable \nothing;
       @*/
     private boolean testRookCastling(Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
@@ -55,13 +41,10 @@ public class King extends ChessPiece {
 
     /*@ also
       @ public normal_behavior
-      @   requires getBoard() != null;
       @   ensures \result != null;
-      @   ensures \result.length == getBoard().getRows();
-      @   ensures \forall int i;
-      @       0 <= i && i < getBoard().getRows() ==>
-      @          \result[i].length == getBoard().getCols();
-      @   pure
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {

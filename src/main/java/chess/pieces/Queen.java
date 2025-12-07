@@ -6,10 +6,22 @@ import chess.ChessPiece;
 import chess.Color;
 
 public class Queen extends ChessPiece {
+
+    /*@ public normal_behavior
+      @   requires board != null;
+      @   requires color != null;
+      @*/
     public Queen(Board board, Color color) {
         super(board, color);
     }
 
+    /*@ also
+      @   public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   assignable \nothing;
+      @*/
     @Override
     public boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
@@ -99,6 +111,12 @@ public class Queen extends ChessPiece {
         return mat;
     }
 
+    /*@ also
+      @ public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.equals("Q");
+      @   pure
+      @*/
     @Override
     public String toString() {
         return "Q";
