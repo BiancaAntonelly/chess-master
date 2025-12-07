@@ -117,10 +117,7 @@ public class UI {
         System.out.println("  a b c d e f g h");
     }
 
-    /*@ helper
-      @ private normal_behavior
-      @   assignable \everything;
-      @*/
+    /*@ helper @*/
     private static void printPiece(/*@ nullable @*/ ChessPiece piece, boolean background) {
         if (background) {
             System.out.print(ANSI_BLUE_BACKGROUND);
@@ -137,14 +134,15 @@ public class UI {
         System.out.print(" ");
     }
 
-    /*@ helper
-      @ private normal_behavior
-      @   requires captured != null;
-      @   assignable \everything;
-      @*/
+    /*@ helper @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
-        List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE).toList();
-        List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK).toList();
+        List<ChessPiece> white = captured.stream()
+                .filter(x -> x.getColor() == Color.WHITE)
+                .toList();
+        List<ChessPiece> black = captured.stream()
+                .filter(x -> x.getColor() == Color.BLACK)
+                .toList();
+
         System.out.println("Peças capturadas:");
         System.out.print("Brancas: ");
         System.out.print(ANSI_WHITE);
