@@ -41,10 +41,8 @@ public class ChessPosition {
 
     /*@ normal_behavior
       @   ensures \result != null;
-      @   pure
       @*/
     protected Position toPosition() {
-        // comportamento original
         return new Position(8 - row, col - 'a');
     }
 
@@ -53,7 +51,6 @@ public class ChessPosition {
       @   requires 0 <= pos.getRow() && pos.getRow() < 8;
       @   requires 0 <= pos.getCol() && pos.getCol() < 8;
       @   ensures \result != null;
-      @   pure
       @*/
     protected static ChessPosition fromPosition(Position pos) {
         int rowCalc = 8 - pos.getRow();

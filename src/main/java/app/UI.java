@@ -45,7 +45,6 @@ public class UI {
     /*@ public normal_behavior
       @   requires chessMatch != null;
       @   requires captured != null;
-      @   // cada peça capturada é um ChessPiece bem formado (invariantes de Piece/ChessPiece)
       @   requires (\forall int i; 0 <= i && i < captured.size();
       @                captured.get(i) != null
       @             && captured.get(i).modelBoard != null
@@ -77,7 +76,6 @@ public class UI {
 
     /*@ public behavior
       @   requires pieces != null;
-      @   // tabuleiro de xadrez: no máximo 8 linhas
       @   requires 0 < pieces.length && pieces.length <= 8;
       @   requires (\forall int i; 0 <= i && i < pieces.length; pieces[i] != null);
       @   assignable \everything;
@@ -102,7 +100,6 @@ public class UI {
 
     /*@ public behavior
       @   requires pieces != null && possibleMoves != null;
-      @   // tabuleiro de xadrez: no máximo 8 linhas
       @   requires 0 < pieces.length && pieces.length <= 8;
       @   requires pieces.length == possibleMoves.length;
       @   requires (\forall int i; 0 <= i && i < pieces.length;
@@ -146,8 +143,8 @@ public class UI {
     }
 
     /*@ requires captured != null;
-  @ assignable \everything;
-  @*/
+      @ assignable \everything;
+      @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
         List<ChessPiece> white = new java.util.ArrayList<>();
         List<ChessPiece> black = new java.util.ArrayList<>();
