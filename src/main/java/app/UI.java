@@ -145,10 +145,9 @@ public class UI {
         System.out.print(" ");
     }
 
-    //@ pure
     /*@ requires captured != null;
-      @ assignable \nothing;
-      @*/
+  @ assignable \everything;
+  @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
         List<ChessPiece> white = new java.util.ArrayList<>();
         List<ChessPiece> black = new java.util.ArrayList<>();
@@ -164,15 +163,19 @@ public class UI {
             }
         }
 
-        System.out.println("Peças capturadas:");
+        System.out.print("Peças capturadas:\n");
+
         System.out.print("Brancas: ");
         System.out.print(ANSI_WHITE);
-        System.out.println(Arrays.toString(white.toArray()));
+        System.out.print(Arrays.toString(white.toArray()));
         System.out.print(ANSI_RESET);
+        System.out.print("\n");
+
         System.out.print("Pretas: ");
         System.out.print(ANSI_YELLOW);
-        System.out.println(Arrays.toString(black.toArray()));
+        System.out.print(Arrays.toString(black.toArray()));
         System.out.print(ANSI_RESET);
+        System.out.print("\n");
     }
 
 }
