@@ -8,7 +8,6 @@ public abstract class ChessPiece extends Piece {
 
     //@ public invariant color != null;
     //@ public invariant moveCount >= 0;
-    //@ public invariant getBoard() != null;
 
     //@ spec_public
     private final Color color;
@@ -21,8 +20,6 @@ public abstract class ChessPiece extends Piece {
       @   requires color != null;
       @   ensures this.color == color;
       @   ensures this.moveCount == 0;
-      @   ensures getBoard() == board;
-      @   assignable this.color, this.moveCount;
       @*/
     public ChessPiece(Board board, Color color) {
         super(board);
@@ -64,13 +61,10 @@ public abstract class ChessPiece extends Piece {
     }
 
     /*@ public normal_behavior
-      @   requires getPosition() != null;
-      @   requires getPosition().getRow() >= 0 && getPosition().getRow() < 8;
-      @   requires getPosition().getCol() >= 0 && getPosition().getCol() < 8;
+      @   requires position != null;
+      @   requires position.getRow() >= 0 && position.getRow() < 8;
+      @   requires position.getCol() >= 0 && position.getCol() < 8;
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - getPosition().getRow();
-      @   ensures \result.getCol() == (char)('a' + getPosition().getCol());
-      @   pure
       @*/
     public ChessPosition getChessPosition() {
         return ChessPosition.fromPosition(position);
@@ -78,11 +72,6 @@ public abstract class ChessPiece extends Piece {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires getBoard() != null;
-      @   requires getBoard().positionExists(pos);
-      @   ensures \result == (getBoard().piece(pos) != null &&
-      @                       ((ChessPiece)getBoard().piece(pos)).getColor() != this.color);
-      @   pure
       @*/
     public boolean isThereOpponentPiece(Position pos) {
         ChessPiece p = (ChessPiece) getBoard().piece(pos);

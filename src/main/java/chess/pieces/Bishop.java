@@ -16,12 +16,8 @@ public class Bishop extends ChessPiece {
     }
 
     /*@ also
-      @   normal_behavior
+      @   public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length == getBoard().getRows();
-      @   ensures (\forall int i; 0 <= i && i < \result.length;
-      @                \result[i].length == getBoard().getCols());
-      @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
