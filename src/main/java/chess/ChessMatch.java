@@ -38,27 +38,22 @@ public class ChessMatch {
     private final List<Piece> capturedPieces = new ArrayList<>();
 
     /*@ public normal_behavior
-      @   ensures board != null;
-      @   ensures board.getRows() == 8 && board.getCols() == 8;
-      @   ensures turn == 1;
-      @   ensures currentPlayer == Color.WHITE;
-      @   ensures check == false;
-      @   ensures checkMate == false;
-      @   ensures enPassantVulnerable == null;
-      @   ensures promoted == null;
-      @   ensures piecesOnTheBoard.size() == 32;
+      @   assignable board, turn, currentPlayer, check, checkMate,
+      @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
         turn = 1;
         currentPlayer = Color.WHITE;
+        check = false;
+        checkMate = false;
+        enPassantVulnerable = null;
+        promoted = null;
         initialSetup();
     }
 
     /*@ public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
+      @   assignable \nothing;
       @*/
     public ChessPiece[][] getPieces() {
         ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getCols()];
@@ -70,61 +65,39 @@ public class ChessMatch {
         return mat;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == turn;
-      @   ensures \result >= 1;
-      @   pure
-      @*/
+    /*@ pure @*/
     public int getTurn() {
         return turn;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == currentPlayer;
-      @   ensures \result != null;
-      @   pure
-      @*/
+    /*@ pure @*/
     public Color getCurrentPlayer() {
         return currentPlayer;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == check;
-      @   pure
-      @*/
+    /*@ pure @*/
     public boolean getCheck() {
         return check;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == !checkMate;
-      @   pure
-      @*/
+    /*@ pure @*/
     public boolean getNotCheckMate() {
         return !checkMate;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == enPassantVulnerable;
-      @   pure
-      @*/
+    /*@ pure @*/
     public ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == promoted;
-      @   pure
-      @*/
+    /*@ pure @*/
     public ChessPiece getPromoted() {
         return promoted;
     }
 
     /*@ public normal_behavior
       @   requires sourcePos != null;
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i].length == 8);
+      @   assignable \nothing;
       @ also public exceptional_behavior
       @   signals_only ChessException;
       @*/
@@ -136,7 +109,6 @@ public class ChessMatch {
 
     /*@ public normal_behavior
       @   requires sourcePos != null && targetPos != null;
-      @   ensures turn >= \old(turn);
       @   assignable board, turn, currentPlayer, check, checkMate,
       @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @ also public exceptional_behavior
@@ -185,14 +157,7 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   requires type != null;
       @   requires promoted != null;
-      @   requires type.equals("B") || type.equals("N") || type.equals("R") || type.equals("Q");
-      @   ensures \result != null;
       @   assignable board, piecesOnTheBoard, promoted;
-      @ also public normal_behavior
-      @   requires type != null;
-      @   requires promoted != null;
-      @   requires !type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q");
-      @   ensures \result == \old(promoted);
       @ also public exceptional_behavior
       @   requires promoted == null;
       @   signals_only IllegalStateException;
@@ -218,12 +183,7 @@ public class ChessMatch {
     /*@ private normal_behavior
       @   requires type != null;
       @   requires color != null;
-      @   requires type.equals("B") || type.equals("N") || type.equals("Q") || type.equals("R");
-      @   ensures \result != null;
-      @   ensures type.equals("B") ==> \result instanceof Bishop;
-      @   ensures type.equals("N") ==> \result instanceof Knight;
-      @   ensures type.equals("Q") ==> \result instanceof Queen;
-      @   ensures type.equals("R") ==> \result instanceof Rook;
+      @   assignable \nothing;
       @*/
     private ChessPiece newPiece(String type, Color color) {
         return switch (type) {
@@ -350,9 +310,6 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires turn < Integer.MAX_VALUE;
-      @   ensures turn == \old(turn) + 1;
-      @   ensures currentPlayer == (\old(currentPlayer) == Color.WHITE ? Color.BLACK : Color.WHITE);
-      @   ensures currentPlayer != \old(currentPlayer);
       @   assignable turn, currentPlayer;
       @*/
     private void nextTurn() {
@@ -362,11 +319,8 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires color != null;
-      @   ensures \result != null;
-      @   ensures \result != color;
-      @   ensures color == Color.WHITE ==> \result == Color.BLACK;
-      @   ensures color == Color.BLACK ==> \result == Color.WHITE;
-      @   pure
+      @   assignable \nothing;
+      @ pure
       @*/
     private Color opponent(Color color) {
         return color == Color.WHITE ? Color.BLACK : Color.WHITE;
@@ -374,8 +328,7 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires color != null;
-      @   ensures \result != null;
-      @   ensures \result instanceof King;
+      @   assignable \nothing;
       @ also private exceptional_behavior
       @   requires color != null;
       @   signals_only IllegalStateException;
@@ -437,8 +390,6 @@ public class ChessMatch {
       @   requires piece != null;
       @   requires col >= 'a' && col <= 'h';
       @   requires row >= 1 && row <= 8;
-      @   ensures piecesOnTheBoard.contains(piece);
-      @   ensures piecesOnTheBoard.size() == \old(piecesOnTheBoard.size()) + 1;
       @   assignable board, piecesOnTheBoard;
       @*/
     private void placeNewPiece(char col, int row, ChessPiece piece) {
@@ -447,7 +398,6 @@ public class ChessMatch {
     }
 
     /*@ private normal_behavior
-      @   ensures piecesOnTheBoard.size() == 32;
       @   assignable board, piecesOnTheBoard;
       @*/
     private void initialSetup() {

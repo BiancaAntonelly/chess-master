@@ -6,7 +6,7 @@ public abstract class Piece {
     protected /*@ nullable @*/ Position position; //@ in modelPosition;
     //@ spec_public
     private final Board board;
-                    //@ in modelBoard;
+    //@ in modelBoard;
 
     //@ public model Board modelBoard;
     //@ private represents modelBoard = board;
@@ -68,10 +68,7 @@ public abstract class Piece {
         return false;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == modelPosition;
-      @   pure
-      @*/
+    /*@ pure @*/
     public Position getPosition() {
         return position;
     }

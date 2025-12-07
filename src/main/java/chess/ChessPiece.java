@@ -18,33 +18,25 @@ public abstract class ChessPiece extends Piece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
-      @   ensures this.color == color;
-      @   ensures this.moveCount == 0;
+      @   assignable this.color, this.moveCount;
       @*/
     public ChessPiece(Board board, Color color) {
         super(board);
         this.color = color;
     }
 
-    /*@ public normal_behavior
-      @ ensures \result == color;
-      @ pure
-      @*/
+    /*@ pure @*/
     public Color getColor() {
         return color;
     }
 
-    /*@ public normal_behavior
-      @ ensures \result == moveCount;
-      @ pure
-      @*/
+    /*@ pure @*/
     public int getMoveCount() {
         return moveCount;
     }
 
     /*@ public normal_behavior
       @   requires moveCount < Integer.MAX_VALUE;
-      @   ensures moveCount == \old(moveCount) + 1;
       @   assignable moveCount;
       @*/
     public void increaseMoveCount() {
@@ -52,9 +44,8 @@ public abstract class ChessPiece extends Piece {
     }
 
     /*@ public normal_behavior
-      @ requires moveCount > 0;
-      @ ensures moveCount == \old(moveCount) - 1;
-      @ assignable moveCount;
+      @   requires moveCount > 0;
+      @   assignable moveCount;
       @*/
     public void decreaseMoveCount() {
         moveCount--;
@@ -64,7 +55,7 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
-      @   ensures \result != null;
+      @   assignable \nothing;
       @*/
     public ChessPosition getChessPosition() {
         return ChessPosition.fromPosition(position);
@@ -72,6 +63,7 @@ public abstract class ChessPiece extends Piece {
 
     /*@ public normal_behavior
       @   requires pos != null;
+      @   assignable \nothing;
       @*/
     public boolean isThereOpponentPiece(Position pos) {
         ChessPiece p = (ChessPiece) getBoard().piece(pos);

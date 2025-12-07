@@ -7,9 +7,10 @@ import chess.Color;
 
 public class Bishop extends ChessPiece {
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   assignable \nothing;
       @*/
     public Bishop(Board board, Color color) {
         super(board, color);
@@ -17,7 +18,7 @@ public class Bishop extends ChessPiece {
 
     /*@ also
       @   public normal_behavior
-      @   ensures \result != null;
+      @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {

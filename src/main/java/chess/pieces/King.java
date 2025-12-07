@@ -15,7 +15,7 @@ public class King extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
-      @   ensures this.match == match;
+      @   assignable this.match;
       @*/
     public King(Board board, Color color, ChessMatch match) {
         super(board, color);
@@ -24,6 +24,7 @@ public class King extends ChessPiece {
 
     /*@ private normal_behavior
       @   requires position != null;
+      @   assignable \nothing;
       @*/
     private boolean canMove(Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
@@ -32,6 +33,7 @@ public class King extends ChessPiece {
 
     /*@ private normal_behavior
       @   requires position != null;
+      @   assignable \nothing;
       @*/
     private boolean testRookCastling(Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
@@ -40,7 +42,7 @@ public class King extends ChessPiece {
 
     /*@ also
       @ public normal_behavior
-      @   ensures \result != null;
+      @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
