@@ -38,8 +38,6 @@ public class ChessMatch {
     private final List<Piece> capturedPieces = new ArrayList<>();
 
     /*@ public normal_behavior
-      @   assignable board, turn, currentPlayer, check, checkMate,
-      @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
