@@ -89,7 +89,6 @@ public class ChessMatch {
               @                     mat[i][c] == null
               @                      || mat[i][c] instanceof ChessPiece);
               @ decreases cols - j;
-              @ assignable \nothing;
               @*/
             for (int j = 0; j < cols; j++) {
                 Piece p = board.piece(i, j); // preconditions: 0 <= i < rows, 0 <= j < cols
