@@ -27,7 +27,6 @@ public abstract class ChessPiece extends Piece {
         this.moveCount = 0;
     }
 
-    /*@ helper @*/
     /*@ public normal_behavior
       @   ensures \result == color;
       @   ensures \result != null;
