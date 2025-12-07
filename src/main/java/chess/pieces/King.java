@@ -15,6 +15,8 @@ public class King extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
+      @   ensures this.match == match;
+      @   assignable this.match;
       @*/
     public King(Board board, Color color, ChessMatch match) {
         super(board, color);
@@ -41,6 +43,9 @@ public class King extends ChessPiece {
 
     /*@ also
       @ public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @*/
     @Override

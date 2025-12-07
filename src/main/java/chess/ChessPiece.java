@@ -18,24 +18,38 @@ public abstract class ChessPiece extends Piece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   ensures this.color == color;
+      @   ensures this.moveCount == 0;
+      @   assignable this.color, this.moveCount;
       @*/
     public ChessPiece(Board board, Color color) {
         super(board);
         this.color = color;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == color;
+      @   ensures \result != null;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public Color getColor() {
         return color;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == moveCount;
+      @   ensures \result >= 0;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public int getMoveCount() {
         return moveCount;
     }
 
     /*@ public normal_behavior
       @   requires moveCount < Integer.MAX_VALUE;
+      @   ensures moveCount == \old(moveCount) + 1;
       @   assignable moveCount;
       @*/
     public void increaseMoveCount() {
@@ -44,6 +58,7 @@ public abstract class ChessPiece extends Piece {
 
     /*@ public normal_behavior
       @   requires moveCount > 0;
+      @   ensures moveCount == \old(moveCount) - 1;
       @   assignable moveCount;
       @*/
     public void decreaseMoveCount() {
@@ -54,6 +69,9 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @   ensures \result != null;
+      @   ensures \result.getRow() == position.getRow();
+      @   ensures \result.getColumn() == position.getCol();
       @   assignable \nothing;
       @*/
     public ChessPosition getChessPosition() {
@@ -62,6 +80,8 @@ public abstract class ChessPiece extends Piece {
 
     /*@ public normal_behavior
       @   requires pos != null;
+      @   ensures \result == (getBoard().piece(pos) != null &&
+      @                       ((ChessPiece)getBoard().piece(pos)).getColor() != color);
       @   assignable \nothing;
       @*/
     public boolean isThereOpponentPiece(Position pos) {

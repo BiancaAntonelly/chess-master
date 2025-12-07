@@ -10,6 +10,8 @@ public class Bishop extends ChessPiece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   ensures getColor() == color;
+      @   ensures getMoveCount() == 0;
       @   assignable \nothing;
       @*/
     public Bishop(Board board, Color color) {
@@ -18,6 +20,9 @@ public class Bishop extends ChessPiece {
 
     /*@ also
       @   public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @*/
     @Override

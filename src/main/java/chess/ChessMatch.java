@@ -38,6 +38,18 @@ public class ChessMatch {
     private final List<Piece> capturedPieces = new ArrayList<>();
 
     /*@ public normal_behavior
+      @   ensures board != null;
+      @   ensures board.getRows() == 8 && board.getCols() == 8;
+      @   ensures turn == 1;
+      @   ensures currentPlayer == Color.WHITE;
+      @   ensures check == false;
+      @   ensures checkMate == false;
+      @   ensures enPassantVulnerable == null;
+      @   ensures promoted == null;
+      @   ensures piecesOnTheBoard != null;
+      @   ensures capturedPieces != null;
+      @   assignable board, turn, currentPlayer, check, checkMate,
+      @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
@@ -52,71 +64,85 @@ public class ChessMatch {
 
     /*@ public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length == board.getRows();
-      @   ensures (\forall int i; 0 <= i && i < board.getRows();
-      @               \result[i] != null && \result[i].length == board.getCols());
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @*/
     public ChessPiece[][] getPieces() {
         ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getCols()];
-        /*@ loop_invariant 0 <= i && i <= board.getRows();
-          @ loop_invariant mat.length == board.getRows();
-          @ decreases board.getRows() - i;
-          @*/
         for (int i = 0; i < board.getRows(); i++) {
-            /*@ loop_invariant 0 <= j && j <= board.getCols();
-              @ loop_invariant mat[i].length == board.getCols();
-              @ decreases board.getCols() - j;
-              @*/
             for (int j = 0; j < board.getCols(); j++) {
-                Piece piece = board.piece(i, j);
-                if (piece instanceof ChessPiece) {
-                    mat[i][j] = (ChessPiece) piece;
-                } else {
-                    mat[i][j] = null;
-                }
+                mat[i][j] = (ChessPiece) board.piece(i, j);
             }
         }
         return mat;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == turn;
+      @   ensures \result >= 1;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public int getTurn() {
         return turn;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == currentPlayer;
+      @   ensures \result != null;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public Color getCurrentPlayer() {
         return currentPlayer;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == check;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public boolean getCheck() {
         return check;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == !checkMate;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public boolean getNotCheckMate() {
         return !checkMate;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == enPassantVulnerable;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
     }
 
-    /*@ pure @*/
+    /*@ public normal_behavior
+      @   ensures \result == promoted;
+      @   assignable \nothing;
+      @ pure
+      @*/
     public ChessPiece getPromoted() {
         return promoted;
     }
 
     /*@ public normal_behavior
       @   requires sourcePos != null;
+      @   ensures \result != null;
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @ also public exceptional_behavior
       @   requires sourcePos != null;
       @   signals_only ChessException;
-      @   assignable \nothing;
       @*/
     public boolean[][] possibleMoves(ChessPosition sourcePos) {
         Position position = sourcePos.toPosition();
@@ -126,12 +152,13 @@ public class ChessMatch {
 
     /*@ public normal_behavior
       @   requires sourcePos != null && targetPos != null;
+      @   ensures turn >= \old(turn);
+      @   ensures currentPlayer != null;
       @   assignable board, turn, currentPlayer, check, checkMate,
       @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @ also public exceptional_behavior
       @   requires sourcePos != null && targetPos != null;
       @   signals_only ChessException;
-      @   assignable \nothing;
       @*/
     public ChessPiece performChessMove(ChessPosition sourcePos, ChessPosition targetPos) {
         Position source = sourcePos.toPosition();
@@ -149,8 +176,7 @@ public class ChessMatch {
         // Promoção
         promoted = null;
         if (moved instanceof Pawn) {
-            if (moved.getColor() == Color.WHITE && target.getRow() == 0
-                    || moved.getColor() == Color.BLACK && target.getRow() == 7) {
+            if (moved.getColor() == Color.WHITE && target.getRow() == 0 || moved.getColor() == Color.BLACK && target.getRow() == 7) {
                 promoted = (ChessPiece) board.piece(target);
                 promoted = replacePromotedPiece("Q");
             }
@@ -176,10 +202,10 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   requires type != null;
       @   requires promoted != null;
+      @   ensures \result != null;
       @   assignable board, piecesOnTheBoard, promoted;
       @ also public exceptional_behavior
       @   requires promoted == null;
-      @   assignable \nothing;
       @   signals_only IllegalStateException;
       @*/
     public ChessPiece replacePromotedPiece(String type) {
@@ -203,6 +229,8 @@ public class ChessMatch {
     /*@ private normal_behavior
       @   requires type != null;
       @   requires color != null;
+      @   ensures \result != null;
+      @   ensures \result.getColor() == color;
       @   assignable \nothing;
       @*/
     private ChessPiece newPiece(String type, Color color) {
@@ -216,6 +244,7 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires source != null && target != null;
+      @   ensures board.piece(target) != null;
       @   assignable board, piecesOnTheBoard, capturedPieces;
       @*/
     private Piece makeMove(Position source, Position target) {
@@ -247,9 +276,7 @@ public class ChessMatch {
         // En Passant
         if (p instanceof Pawn) {
             if (source.getCol() != target.getCol() && captured == null) {
-                Position pawnPosition = new Position(
-                        p.getColor() == Color.WHITE ? target.getRow() + 1 : target.getRow() - 1,
-                        target.getCol());
+                Position pawnPosition = new Position(p.getColor() == Color.WHITE ? target.getRow() + 1 : target.getRow() - 1, target.getCol());
                 captured = board.removePiece(pawnPosition);
                 capturedPieces.add(captured);
                 piecesOnTheBoard.remove(captured);
@@ -291,9 +318,7 @@ public class ChessMatch {
         if (p instanceof Pawn) {
             if (source.getCol() != target.getCol() && captured == enPassantVulnerable) {
                 ChessPiece pawn = (ChessPiece) board.removePiece(target);
-                Position pawnPosition = new Position(
-                        p.getColor() == Color.WHITE ? 3 : 4,
-                        target.getCol());
+                Position pawnPosition = new Position(p.getColor() == Color.WHITE ? 3 : 4, target.getCol());
                 board.placePiece(pawn, pawnPosition);
             }
         }
@@ -304,10 +329,8 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires pos != null;
-      @   assignable \nothing;
       @ also private exceptional_behavior
       @   requires pos != null;
-      @   assignable \nothing;
       @   signals_only ChessException;
       @*/
     private void validateSourcePosition(Position pos) {
@@ -324,10 +347,8 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires source != null && target != null;
-      @   assignable \nothing;
       @ also private exceptional_behavior
       @   requires source != null && target != null;
-      @   assignable \nothing;
       @   signals_only ChessException;
       @*/
     private void validateTargetPosition(Position source, Position target) {
@@ -338,6 +359,8 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires turn < Integer.MAX_VALUE;
+      @   ensures turn == \old(turn) + 1;
+      @   ensures currentPlayer == (\old(currentPlayer) == Color.WHITE ? Color.BLACK : Color.WHITE);
       @   assignable turn, currentPlayer;
       @*/
     private void nextTurn() {
@@ -347,6 +370,8 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires color != null;
+      @   ensures \result != null;
+      @   ensures \result == (color == Color.WHITE ? Color.BLACK : Color.WHITE);
       @   assignable \nothing;
       @ pure
       @*/
@@ -356,16 +381,16 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires color != null;
+      @   ensures \result != null;
+      @   ensures \result instanceof King;
+      @   ensures \result.getColor() == color;
       @   assignable \nothing;
       @ also private exceptional_behavior
       @   requires color != null;
-      @   assignable \nothing;
       @   signals_only IllegalStateException;
       @*/
     private ChessPiece king(Color color) {
-        List<Piece> list = piecesOnTheBoard.stream()
-                .filter(x -> x != null && ((ChessPiece) x).getColor() == color)
-                .toList();
+        List<Piece> list = piecesOnTheBoard.stream().filter(x -> x != null && ((ChessPiece) x).getColor() == color).toList();
         for (Piece p : list) {
             if (p instanceof King) {
                 return (ChessPiece) p;
@@ -376,13 +401,10 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires color != null;
-      @   assignable \nothing;
       @*/
     private boolean testCheck(Color color) {
         Position kingPos = king(color).getChessPosition().toPosition();
-        List<Piece> opponentPieces = piecesOnTheBoard.stream()
-                .filter(x -> x != null && ((ChessPiece) x).getColor() == opponent(color))
-                .toList();
+        List<Piece> opponentPieces = piecesOnTheBoard.stream().filter(x -> x != null && ((ChessPiece) x).getColor() == opponent(color)).toList();
         for (Piece p : opponentPieces) {
             boolean[][] mat = p.possibleMoves();
             if (mat[kingPos.getRow()][kingPos.getCol()]) {
@@ -394,14 +416,11 @@ public class ChessMatch {
 
     /*@ private normal_behavior
       @   requires color != null;
-      @   assignable board, piecesOnTheBoard, capturedPieces;
       @*/
     private boolean testCheckMate(Color color) {
         if (!testCheck(color)) return false;
 
-        List<Piece> list = piecesOnTheBoard.stream()
-                .filter(x -> x != null && ((ChessPiece) x).getColor() == color)
-                .toList();
+        List<Piece> list = piecesOnTheBoard.stream().filter(x -> x != null && ((ChessPiece) x).getColor() == color).toList();
         for (Piece p : list) {
             boolean[][] mat = p.possibleMoves();
             for (int i = 0; i < board.getRows(); i++) {

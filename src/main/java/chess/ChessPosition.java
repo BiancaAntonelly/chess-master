@@ -40,13 +40,29 @@ public class ChessPosition {
     public char getCol() { return col; }
 
     /*@ normal_behavior
+      @   ensures \result != null;
       @   ensures \result.getRow() == 8 - row;
       @   ensures \result.getCol() == col - 'a';
+      @   assignable \nothing;
       @*/
     protected Position toPosition() {
         return new Position(8 - row, col - 'a');
     }
 
+    /*@ normal_behavior
+      @   requires pos != null;
+      @   requires pos.getRow() >= 0 && pos.getRow() <= 7;
+      @   requires pos.getCol() >= 0 && pos.getCol() <= 7;
+      @   ensures \result != null;
+      @   ensures \result.getRow() == 8 - pos.getRow();
+      @   ensures \result.getColumn() == (char)('a' + pos.getCol());
+      @   assignable \nothing;
+      @ also
+      @ normal_behavior
+      @   requires pos == null || pos.getRow() < 0 || pos.getRow() > 7 || pos.getCol() < 0 || pos.getCol() > 7;
+      @   ensures \result == null;
+      @   assignable \nothing;
+      @*/
     protected static /*@ nullable */ ChessPosition fromPosition(/*@ nullable */ Position pos) {
 
         if (pos == null) {

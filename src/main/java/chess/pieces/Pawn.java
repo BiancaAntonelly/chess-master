@@ -7,13 +7,31 @@ import chess.ChessPiece;
 import chess.Color;
 
 public class Pawn extends ChessPiece {
+
+    //@ spec_public
     private final ChessMatch match;
 
+    /*@ public normal_behavior
+      @   requires board != null;
+      @   requires color != null;
+      @   requires match != null;
+      @   ensures this.match == match;
+      @   ensures getColor() == color;
+      @   ensures getMoveCount() == 0;
+      @   assignable this.match;
+      @*/
     public Pawn(Board board, Color color, ChessMatch match) {
         super(board, color);
         this.match = match;
     }
 
+    /*@ also
+      @   public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.length == 8;
+      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   assignable \nothing;
+      @*/
     @Override
     public boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
@@ -82,6 +100,12 @@ public class Pawn extends ChessPiece {
         return mat;
     }
 
+    /*@ also
+      @ public normal_behavior
+      @   ensures \result != null;
+      @   ensures \result.equals("P");
+      @   pure
+      @*/
     @Override
     public String toString() {
         return "P";
