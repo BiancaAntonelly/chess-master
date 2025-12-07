@@ -69,7 +69,6 @@ public class ChessMatch {
   @   ensures \result.length == board.getRows();
   @   ensures (\forall int i; 0 <= i && i < board.getRows();
   @               \result[i] != null && \result[i].length == board.getCols());
-  @   assignable \nothing;
   @*/
     public ChessPiece[][] getPieces() {
         final int rows = board.getRows();
@@ -82,7 +81,6 @@ public class ChessMatch {
           @                         mat[r][c] == null
           @                          || mat[r][c] instanceof ChessPiece));
           @ decreases rows - i;
-          @ assignable \nothing;
           @*/
         for (int i = 0; i < rows; i++) {
 
