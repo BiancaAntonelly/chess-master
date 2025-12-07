@@ -58,31 +58,32 @@ public class ChessMatch {
 
     /*@ public normal_behavior
       @   assignable \nothing;
+      @ also
+      @ public exceptional_behavior
+      @   assignable \nothing;
       @*/
     public ChessPiece[][] getPieces() {
         final int rows = board.getRows();
         final int cols = board.getCols();
-
         ChessPiece[][] mat = new ChessPiece[rows][];
 
-        /*@ loop_invariant 0 <= i && i <= rows;
-          @ loop_invariant mat.length == rows;
-          @ decreases rows - i;
-          @*/
+    /*@ loop_invariant 0 <= i && i <= rows;
+      @ loop_invariant mat.length == rows;
+      @ decreases rows - i;
+      @*/
         for (int i = 0; i < rows; i++) {
-
             ChessPiece[] rowArray = new ChessPiece[cols];
             mat[i] = rowArray;
 
-            /*@ loop_invariant 0 <= j && j <= cols;
-              @ loop_invariant rowArray.length == cols;
-              @ decreases cols - j;
-              @*/
+        /*@ loop_invariant 0 <= j && j <= cols;
+          @ loop_invariant rowArray.length == cols;
+          @ decreases cols - j;
+          @*/
             for (int j = 0; j < cols; j++) {
                 /*@ nullable @*/ Piece p = board.piece(i, j);
 
-                if (p instanceof ChessPiece) {
-                    rowArray[j] = (ChessPiece) p;
+                if (p != null && p instanceof ChessPiece c) {
+                    rowArray[j] = c;
                 }
             }
         }
