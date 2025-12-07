@@ -66,6 +66,7 @@ public class UI {
 
     /*@ public normal_behavior
       @   requires pieces != null;
+      @   // tabuleiro de xadrez: no máximo 8 linhas
       @   requires 0 < pieces.length && pieces.length <= 8;
       @   requires (\forall int i; 0 <= i && i < pieces.length; pieces[i] != null);
       @   assignable \everything;
@@ -90,6 +91,7 @@ public class UI {
 
     /*@ public normal_behavior
       @   requires pieces != null && possibleMoves != null;
+      @   // tabuleiro de xadrez: no máximo 8 linhas
       @   requires 0 < pieces.length && pieces.length <= 8;
       @   requires pieces.length == possibleMoves.length;
       @   requires (\forall int i; 0 <= i && i < pieces.length;
@@ -115,7 +117,8 @@ public class UI {
         System.out.println("  a b c d e f g h");
     }
 
-    /*@ private normal_behavior
+    /*@ helper
+      @ private normal_behavior
       @   assignable \everything;
       @*/
     private static void printPiece(/*@ nullable @*/ ChessPiece piece, boolean background) {
@@ -134,7 +137,8 @@ public class UI {
         System.out.print(" ");
     }
 
-    /*@ private normal_behavior
+    /*@ helper
+      @ private normal_behavior
       @   requires captured != null;
       @   assignable \everything;
       @*/
