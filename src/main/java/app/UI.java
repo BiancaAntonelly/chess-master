@@ -45,6 +45,17 @@ public class UI {
     /*@ public normal_behavior
       @   requires chessMatch != null;
       @   requires captured != null;
+      @   // cada peça capturada é um ChessPiece bem formado (invariantes de Piece/ChessPiece)
+      @   requires (\forall int i; 0 <= i && i < captured.size();
+      @                captured.get(i) != null
+      @             && captured.get(i).modelBoard != null
+      @             && (captured.get(i).modelPosition == null
+      @                 || (captured.get(i).modelPosition.getRow() >= 0
+      @                     && captured.get(i).modelPosition.getRow() < 8
+      @                     && captured.get(i).modelPosition.getCol() >= 0
+      @                     && captured.get(i).modelPosition.getCol() < 8))
+      @             && captured.get(i).color != null
+      @             && captured.get(i).moveCount >= 0);
       @   assignable \everything;
       @*/
     public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
@@ -134,7 +145,21 @@ public class UI {
         System.out.print(" ");
     }
 
-    /*@ helper @*/
+    /*@ public normal_behavior
+      @   requires captured != null;
+      @   // mesma condição de bem-formação das peças capturadas
+      @   requires (\forall int i; 0 <= i && i < captured.size();
+      @                captured.get(i) != null
+      @             && captured.get(i).modelBoard != null
+      @             && (captured.get(i).modelPosition == null
+      @                 || (captured.get(i).modelPosition.getRow() >= 0
+      @                     && captured.get(i).modelPosition.getRow() < 8
+      @                     && captured.get(i).modelPosition.getCol() >= 0
+      @                     && captured.get(i).modelPosition.getCol() < 8))
+      @             && captured.get(i).color != null
+      @             && captured.get(i).moveCount >= 0);
+      @   assignable \everything;
+      @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
         List<ChessPiece> white = captured.stream()
                 .filter(x -> x.getColor() == Color.WHITE)
