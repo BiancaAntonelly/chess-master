@@ -41,10 +41,6 @@ public class ChessPosition {
 
     /*@ normal_behavior
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - row;
-      @   ensures \result.getCol() == col - 'a';
-      @   assignable \nothing;
-      @   pure
       @*/
     protected Position toPosition() {
         return new Position(8 - row, col - 'a');
@@ -52,13 +48,9 @@ public class ChessPosition {
 
     /*@ normal_behavior
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() <= 7;
-      @   requires pos.getCol() >= 0 && pos.getCol() <= 7;
+      @   requires 0 <= pos.getRow() && pos.getRow() < 8;
+      @   requires 0 <= pos.getCol() && pos.getCol() < 8;
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - pos.getRow();
-      @   ensures \result.getCol() == (char)('a' + pos.getCol());
-      @   assignable \nothing;
-      @   pure
       @*/
     protected static ChessPosition fromPosition(Position pos) {
         int rowCalc = 8 - pos.getRow();
