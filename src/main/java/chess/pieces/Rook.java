@@ -7,6 +7,11 @@ import chess.Color;
 
 public class Rook extends ChessPiece {
 
+    /*@ public normal_behavior
+      @   requires board != null;
+      @   requires color != null;
+      @   pure
+      @*/
     public Rook(Board board, Color color) {
         super(board, color);
     }
