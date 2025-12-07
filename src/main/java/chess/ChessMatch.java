@@ -493,6 +493,7 @@ public class ChessMatch {
       @   assignable board, piecesOnTheBoard;
       @*/
     private void initialSetup() {
+        //@ assume true;
         placeNewPiece('a', 1, new Rook(board, Color.WHITE));
         placeNewPiece('b', 1, new Knight(board, Color.WHITE));
         placeNewPiece('c', 1, new Bishop(board, Color.WHITE));
