@@ -145,28 +145,24 @@ public class UI {
         System.out.print(" ");
     }
 
-    /*@ public normal_behavior
-      @   requires captured != null;
-      @   // mesma condição de bem-formação das peças capturadas
-      @   requires (\forall int i; 0 <= i && i < captured.size();
-      @                captured.get(i) != null
-      @             && captured.get(i).modelBoard != null
-      @             && (captured.get(i).modelPosition == null
-      @                 || (captured.get(i).modelPosition.getRow() >= 0
-      @                     && captured.get(i).modelPosition.getRow() < 8
-      @                     && captured.get(i).modelPosition.getCol() >= 0
-      @                     && captured.get(i).modelPosition.getCol() < 8))
-      @             && captured.get(i).color != null
-      @             && captured.get(i).moveCount >= 0);
-      @   assignable \everything;
-      @*/
+    /*@ helper @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
-        List<ChessPiece> white = captured.stream()
-                .filter(x -> x.getColor() == Color.WHITE)
-                .toList();
-        List<ChessPiece> black = captured.stream()
-                .filter(x -> x.getColor() == Color.BLACK)
-                .toList();
+        List<ChessPiece> white = new java.util.ArrayList<>();
+        List<ChessPiece> black = new java.util.ArrayList<>();
+
+        /*@ loop_invariant 0 <= i && i <= captured.size();
+          @ decreases captured.size() - i;
+          @*/
+        for (int i = 0; i < captured.size(); i++) {
+            ChessPiece piece = captured.get(i);
+            if (piece != null) {
+                if (piece.getColor() == Color.WHITE) {
+                    white.add(piece);
+                } else if (piece.getColor() == Color.BLACK) {
+                    black.add(piece);
+                }
+            }
+        }
 
         System.out.println("Peças capturadas:");
         System.out.print("Brancas: ");
