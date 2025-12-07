@@ -57,10 +57,6 @@ public class ChessMatch {
     }
 
     /*@ public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result.length > 0;
-      @   ensures (\forall int i; 0 <= i && i < \result.length;
-      @               \result[i] != null && \result[i].length > 0);
       @   assignable \nothing;
       @*/
     public ChessPiece[][] getPieces() {
@@ -77,15 +73,13 @@ public class ChessMatch {
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
-                //@ assert 0 <= i && i < rows;
-                //@ assert 0 <= j && j < cols;
 
-                /*@ nullable @*/ Piece p = board.piece(i, j);
+                if (0 <= i && i < rows && 0 <= j && j < cols) {
+                    /*@ nullable @*/ Piece p = board.piece(i, j);
 
-                if (p instanceof ChessPiece) {
-                    mat[i][j] = (ChessPiece) p;
-                } else {
-                    mat[i][j] = null;
+                    if (p instanceof ChessPiece) {
+                        mat[i][j] = (ChessPiece) p;
+                    }
                 }
             }
         }
