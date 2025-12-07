@@ -64,7 +64,7 @@ public class UI {
         }
     }
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   requires pieces != null;
       @   // tabuleiro de xadrez: no máximo 8 linhas
       @   requires 0 < pieces.length && pieces.length <= 8;
@@ -89,7 +89,7 @@ public class UI {
         System.out.println("  a b c d e f g h");
     }
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   requires pieces != null && possibleMoves != null;
       @   // tabuleiro de xadrez: no máximo 8 linhas
       @   requires 0 < pieces.length && pieces.length <= 8;
