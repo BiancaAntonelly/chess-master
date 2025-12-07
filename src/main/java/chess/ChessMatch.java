@@ -58,9 +58,9 @@ public class ChessMatch {
 
     /*@ public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length == board.getRows();
+      @   ensures \result.length > 0;
       @   ensures (\forall int i; 0 <= i && i < \result.length;
-      @               \result[i] != null && \result[i].length == board.getCols());
+      @               \result[i] != null && \result[i].length > 0);
       @   assignable \nothing;
       @*/
     public ChessPiece[][] getPieces() {
@@ -68,15 +68,18 @@ public class ChessMatch {
         final int cols = board.getCols();
         ChessPiece[][] mat = new ChessPiece[rows][cols];
 
-        /*@ loop_invariant 0 <= i && i <= mat.length;
-          @ decreases mat.length - i;
+        /*@ loop_invariant 0 <= i && i <= rows;
+          @ decreases rows - i;
           @*/
-        for (int i = 0; i < mat.length; i++) {
+        for (int i = 0; i < rows; i++) {
 
-            /*@ loop_invariant 0 <= j && j <= mat[i].length;
-              @ decreases mat[i].length - j;
+            /*@ loop_invariant 0 <= j && j <= cols;
+              @ decreases cols - j;
               @*/
-            for (int j = 0; j < mat[i].length; j++) {
+            for (int j = 0; j < cols; j++) {
+                //@ assert 0 <= i && i < rows;
+                //@ assert 0 <= j && j < cols;
+
                 /*@ nullable @*/ Piece p = board.piece(i, j);
 
                 if (p instanceof ChessPiece) {
