@@ -59,7 +59,7 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   ensures \result != null;
       @   ensures \result.length == board.getRows();
-      @   ensures (\forall int i; 0 <= i && i < board.getRows();
+      @   ensures (\forall int i; 0 <= i && i < \result.length;
       @               \result[i] != null && \result[i].length == board.getCols());
       @   assignable \nothing;
       @*/
@@ -68,25 +68,26 @@ public class ChessMatch {
         final int cols = board.getCols();
         ChessPiece[][] mat = new ChessPiece[rows][cols];
 
-        /*@ loop_invariant 0 <= i && i <= rows;
+        //@ assert mat.length == rows;
+
+        /*@ loop_invariant 0 <= i && i <= mat.length;
           @ loop_invariant (\forall int r; 0 <= r && r < i;
-          @                     (\forall int c; 0 <= c && c < cols;
+          @                     (\forall int c; 0 <= c && c < mat[r].length;
           @                         mat[r][c] == null
           @                          || mat[r][c] instanceof ChessPiece));
-          @ decreases rows - i;
+          @ decreases mat.length - i;
           @*/
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < mat.length; i++) {
 
-            /*@ loop_invariant 0 <= j && j <= cols;
+            //@ assert mat[i].length == cols;
+
+            /*@ loop_invariant 0 <= j && j <= mat[i].length;
               @ loop_invariant (\forall int c; 0 <= c && c < j;
               @                     mat[i][c] == null
               @                      || mat[i][c] instanceof ChessPiece);
-              @ decreases cols - j;
+              @ decreases mat[i].length - j;
               @*/
-            for (int j = 0; j < cols; j++) {
-                //@ assert 0 <= i && i < rows;
-                //@ assert 0 <= j && j < cols;
-
+            for (int j = 0; j < mat[i].length; j++) {
                 /*@ nullable @*/ Piece p = board.piece(i, j);
 
                 if (p instanceof ChessPiece) {
