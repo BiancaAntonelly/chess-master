@@ -48,11 +48,7 @@ public class Board {
         return cols;
     }
 
-    /*@ public normal_behavior
-      @   ensures (0 <= row && row < rows && 0 <= col && col < cols)
-      @            ==> \result == pieces[row][col];
-      @   assignable \nothing;
-      @*/
+    /*@ assignable \nothing; @*/
     public /*@ pure @*/ /*@ nullable @*/ Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");

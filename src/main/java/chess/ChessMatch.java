@@ -63,7 +63,6 @@ public class ChessMatch {
         final int rows = board.getRows();
         final int cols = board.getCols();
 
-        // cria só o array de linhas
         ChessPiece[][] mat = new ChessPiece[rows][];
 
         /*@ loop_invariant 0 <= i && i <= rows;
@@ -72,7 +71,6 @@ public class ChessMatch {
           @*/
         for (int i = 0; i < rows; i++) {
 
-            // para cada linha, cria um array 1D separado
             ChessPiece[] rowArray = new ChessPiece[cols];
             mat[i] = rowArray;
 
@@ -86,7 +84,6 @@ public class ChessMatch {
                 if (p instanceof ChessPiece) {
                     rowArray[j] = (ChessPiece) p;
                 }
-                // se não for ChessPiece, continua null (já é null por padrão)
             }
         }
 
