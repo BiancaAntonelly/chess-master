@@ -145,8 +145,9 @@ public class UI {
         System.out.print(" ");
     }
 
+    //@ pure
     /*@ requires captured != null;
-      @ assignable \everything;
+      @ assignable \nothing;
       @*/
     private static void printCapturedPieces(List<ChessPiece> captured) {
         List<ChessPiece> white = new java.util.ArrayList<>();
