@@ -41,7 +41,6 @@ public class ChessPosition {
 
     /*@ normal_behavior
       @   ensures \result != null;
-      @   assignable \nothing;
       @   pure
       @*/
     protected Position toPosition() {
@@ -54,7 +53,6 @@ public class ChessPosition {
       @   requires 0 <= pos.getRow() && pos.getRow() < 8;
       @   requires 0 <= pos.getCol() && pos.getCol() < 8;
       @   ensures \result != null;
-      @   assignable \nothing;
       @   pure
       @*/
     protected static ChessPosition fromPosition(Position pos) {
