@@ -6,7 +6,7 @@ public abstract class Piece {
     protected /*@ nullable @*/ Position position; //@ in modelPosition;
     //@ spec_public
     private final Board board;
-    //@ in modelBoard;
+                    //@ in modelBoard;
 
     //@ public model Board modelBoard;
     //@ private represents modelBoard = board;
@@ -69,7 +69,7 @@ public abstract class Piece {
     }
 
     /*@ pure @*/
-    public Position getPosition() {
+    public /*@ nullable @*/ Position getPosition() {
         return position;
     }
 
