@@ -10,6 +10,7 @@ public class Knight extends ChessPiece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   assignable this.*;
       @*/
     public Knight(Board board, Color color) {
         super(board, color);

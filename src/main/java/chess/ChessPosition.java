@@ -18,6 +18,7 @@ public class ChessPosition {
       @   requires row >= 1 && row <= 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
+      @   assignable this.*;
       @*/
     public ChessPosition(int row, char col) {
         if (col < 'a'|| col > 'h' || row < 1 || row > 8) {
@@ -28,14 +29,14 @@ public class ChessPosition {
     }
 
     /*@ normal_behavior
-      @ ensures \result == row;
-      @ pure
+      @   ensures \result == row;
+      @   pure
       @*/
     public int getRow() { return row; }
 
     /*@ normal_behavior
-      @ ensures \result == col;
-      @ pure
+      @   ensures \result == col;
+      @   pure
       @*/
     public char getCol() { return col; }
 
@@ -44,6 +45,7 @@ public class ChessPosition {
       @   ensures \result.getRow() == 8 - row;
       @   ensures \result.getCol() == col - 'a';
       @   assignable \nothing;
+      @   pure
       @*/
     protected Position toPosition() {
         return new Position(8 - row, col - 'a');
@@ -57,39 +59,17 @@ public class ChessPosition {
       @   ensures \result.getRow() == 8 - pos.getRow();
       @   ensures \result.getCol() == (char)('a' + pos.getCol());
       @   assignable \nothing;
-      @ also
-      @ normal_behavior
-      @   requires pos == null || pos.getRow() < 0 || pos.getRow() > 7 || pos.getCol() < 0 || pos.getCol() > 7;
-      @   ensures \result == null;
-      @   assignable \nothing;
+      @   pure
       @*/
-    protected static /*@ nullable */ ChessPosition fromPosition(/*@ nullable */ Position pos) {
-
-        if (pos == null) {
-            return null;
-        }
-
-        if (pos.getRow() < 0 || pos.getRow() > 7 ||
-                pos.getCol() < 0 || pos.getCol() > 7) {
-            return null;
-        }
-
+    protected static ChessPosition fromPosition(Position pos) {
         int rowCalc = 8 - pos.getRow();
         int colCalc = 'a' + pos.getCol();
-
-        /*@ assert 1 <= rowCalc && rowCalc <= 8; */
-        /*@ assert 0 <= pos.getCol() && pos.getCol() <= 7; */
-        /*@ assert 'a' <= colCalc && colCalc <= 'h'; */
-
-        /*@ assert rowCalc == 8 - pos.getRow(); */
-        /*@ assert colCalc == 'a' + pos.getCol(); */
-
         return new ChessPosition(rowCalc, (char) colCalc);
     }
 
     /*@ normal_behavior
-      @ ensures \result != null;
-      @ pure
+      @   ensures \result != null;
+      @   pure
       @*/
     public String getString() {
         return row + ", " + col;

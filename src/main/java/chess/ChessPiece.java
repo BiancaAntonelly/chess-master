@@ -4,10 +4,6 @@ import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
 
-/**
- * Classe abstrata que representa uma peça de xadrez genérica.
- * Estende a classe Piece do pacote boardgame e adiciona funcionalidades específicas de xadrez.
- */
 public abstract class ChessPiece extends Piece {
 
     //@ public invariant color != null;
@@ -22,19 +18,21 @@ public abstract class ChessPiece extends Piece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
-      @   ensures getColor() == color;
-      @   ensures getMoveCount() == 0;
+      @   ensures this.color == color;
+      @   ensures moveCount == 0;
+      @   assignable this.*;
       @*/
     public ChessPiece(Board board, Color color) {
         super(board);
         this.color = color;
+        this.moveCount = 0;
     }
 
     /*@ public normal_behavior
       @   ensures \result == color;
       @   ensures \result != null;
       @   assignable \nothing;
-      @ pure
+      @   pure
       @*/
     public Color getColor() {
         return color;
@@ -44,7 +42,7 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result == moveCount;
       @   ensures \result >= 0;
       @   assignable \nothing;
-      @ pure
+      @   pure
       @*/
     public int getMoveCount() {
         return moveCount;
@@ -76,6 +74,7 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result.getRow() == 8 - position.getRow();
       @   ensures \result.getCol() == (char)('a' + position.getCol());
       @   assignable \nothing;
+      @   pure
       @*/
     public ChessPosition getChessPosition() {
         return ChessPosition.fromPosition(position);
