@@ -34,13 +34,6 @@ public abstract class Piece {
       @*/
     public /*@ pure non_null @*/ Board getBoard() { return board; }
 
-    /*@ public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8;
-      @               \result[i] != null && \result[i].length == 8);
-      @   assignable \nothing;
-      @*/
     public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior

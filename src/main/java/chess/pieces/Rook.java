@@ -28,6 +28,10 @@ public class Rook extends ChessPiece {
         return "R";
     }
 
+    /*@ also
+      @ public normal_behavior
+      @   ensures \result != null;
+      @*/
     @Override
     public boolean[][] possibleMoves() {
         if (position == null || getBoard() == null) {
@@ -46,7 +50,6 @@ public class Rook extends ChessPiece {
         // PARA CIMA
         if (currentPos.getRow() > 0) {
             p.setValues(currentPos.getRow() - 1, currentPos.getCol());
-            p.setValues(position.getRow() - 1, position.getCol());
 
             while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
