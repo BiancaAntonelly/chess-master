@@ -71,7 +71,7 @@ public class Bishop extends ChessPiece {
       @   assignable \nothing;
       @*/
     @Override
-    public /*@ non_null @*/ boolean[][] possibleMoves() {
+    public boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
 
         Position p = new Position(0, 0);
