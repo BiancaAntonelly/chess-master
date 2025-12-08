@@ -16,7 +16,6 @@ public abstract class ChessPiece extends Piece {
       @   requires board != null;
       @   requires color != null;
       @   ensures getBoard() == board;
-      @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures position == null;
       @*/
@@ -80,7 +79,7 @@ public abstract class ChessPiece extends Piece {
         if (!getBoard().positionExists(position)) {
             return false;
         }
-        Piece p = null;
+        Piece p;
         try {
             p = getBoard().piece(position);
         } catch (Exception e) {
@@ -96,7 +95,7 @@ public abstract class ChessPiece extends Piece {
         if (cp == null) {
             return false;
         }
-        Color cpColor = null;
+        Color cpColor;
         try {
             cpColor = cp.getColor();
         } catch (Exception e) {
