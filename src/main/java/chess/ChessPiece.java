@@ -70,7 +70,11 @@ public abstract class ChessPiece extends Piece {
       @   requires this.position != null;
       @   requires this.position.getRow() >= 0 && this.position.getRow() < 8;
       @   requires this.position.getCol() >= 0 && this.position.getCol() < 8;
+      @   requires this.color != null;
+      @   requires this.moveCount >= 0 && this.moveCount <= Integer.MAX_VALUE;
+      @   requires getBoard() != null;
       @   ensures \result != null;
+      @   assignable \nothing;
       @*/
     public /*@ non_null @*/ ChessPosition getChessPosition() {
         if (position == null) {
