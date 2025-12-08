@@ -19,7 +19,6 @@ public class Queen extends ChessPiece {
       @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures getBoard() == board;
-      @   assignable color, moveCount;
       @*/
     public Queen(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
