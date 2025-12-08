@@ -6,7 +6,7 @@ public abstract class Piece {
     protected /*@ nullable @*/ Position position; //@ in modelPosition;
     //@ spec_public
     private final Board board;
-                    //@ in modelBoard;
+    //@ in modelBoard;
 
     //@ public model Board modelBoard;
     //@ private represents modelBoard = board;
@@ -35,9 +35,11 @@ public abstract class Piece {
     /*@ public normal_behavior
       @   ensures \result != null;
       @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < \result.length;
-      @               \result[i] != null && \result[i].length == \result.length);
-      @   assignable \nothing;
+      @   ensures (\forall int i; 0 <= i && i < 8;
+      @               \result[i] != null && \result[i].length == 8);
+      @
+      @   // Permite criação de arrays e objetos
+      @   assignable \everything;
       @*/
     public abstract boolean[][] possibleMoves();
 
