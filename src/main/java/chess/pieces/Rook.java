@@ -19,7 +19,7 @@ public class Rook extends ChessPiece {
       @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures getBoard() == board;
-      @   assignable this.color, this.moveCount;
+      @   assignable color, moveCount;
       @*/
     public Rook(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
@@ -30,7 +30,6 @@ public class Rook extends ChessPiece {
       @   ensures \result != null;
       @   ensures \result.equals("R");
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ pure non_null @*/ String toString() {
@@ -54,33 +53,16 @@ public class Rook extends ChessPiece {
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
       @               r == position.getRow() || c == position.getCol());
       @
-      @   ensures (\forall int r, c;
-      @               \result[r][c] && r < position.getRow();
-      @               c == position.getCol());
-      @
-      @   ensures (\forall int r, c;
-      @               \result[r][c] && r > position.getRow();
-      @               c == position.getCol());
-      @
-      @   ensures (\forall int r, c;
-      @               \result[r][c] && c < position.getCol();
-      @               r == position.getRow());
-      @
-      @   ensures (\forall int r, c;
-      @               \result[r][c] && c > position.getCol();
-      @               r == position.getRow());
-      @
       @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
 
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
+
         Position p = new Position(0, 0);
 
-        // ============================
         // PARA CIMA (Norte)
-        // ============================
         if (position.getRow() > 0) {
             p.setValues(position.getRow() - 1, position.getCol());
 
@@ -101,9 +83,7 @@ public class Rook extends ChessPiece {
             }
         }
 
-        // ============================
         // PARA ESQUERDA (Oeste)
-        // ============================
         if (position.getCol() > 0) {
             p.setValues(position.getRow(), position.getCol() - 1);
 
@@ -124,9 +104,7 @@ public class Rook extends ChessPiece {
             }
         }
 
-        // ============================
         // PARA DIREITA (Leste)
-        // ============================
         if (position.getCol() < 7) {
             p.setValues(position.getRow(), position.getCol() + 1);
 
@@ -147,9 +125,7 @@ public class Rook extends ChessPiece {
             }
         }
 
-        // ============================
         // PARA BAIXO (Sul)
-        // ============================
         if (position.getRow() < 7) {
             p.setValues(position.getRow() + 1, position.getCol());
 

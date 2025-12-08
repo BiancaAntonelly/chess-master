@@ -27,7 +27,7 @@ public abstract class ChessPiece extends Piece {
       @   ensures this.color == color;
       @   ensures this.moveCount == 0;
       @   ensures getBoard() == board;
-      @   assignable this.color, this.moveCount;
+      @   assignable color, moveCount;
       @*/
     public ChessPiece(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board);
@@ -131,7 +131,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result != null;
       @   ensures \result.length() >= 1;
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public abstract /*@ pure non_null @*/ String toString();

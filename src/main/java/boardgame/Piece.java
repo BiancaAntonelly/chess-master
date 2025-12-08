@@ -29,8 +29,8 @@ public abstract class Piece {
         this.position = null;
     }
 
-    /*@ pure @*/
-    protected Board getBoard() { return board; }
+    /*@ public pure @*/
+    public Board getBoard() { return board; }
 
     /*@ public normal_behavior
       @   ensures \result != null;
