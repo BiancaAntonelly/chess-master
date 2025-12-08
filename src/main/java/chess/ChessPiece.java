@@ -39,7 +39,6 @@ public abstract class ChessPiece extends Piece {
 
     /*@ public normal_behavior
       @   ensures \result == moveCount;
-      @   ensures \result >= 0;
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ int getMoveCount() {
@@ -65,8 +64,8 @@ public abstract class ChessPiece extends Piece {
     }
 
     public ChessPosition getChessPosition() {
-        if (position == null) {
-            throw new IllegalStateException("Position is null");
+        if (position == null || color == null) {
+            throw new IllegalStateException("Invalid state");
         }
         if (position.getRow() < 0 || position.getRow() >= 8 || 
             position.getCol() < 0 || position.getCol() >= 8) {
@@ -79,7 +78,7 @@ public abstract class ChessPiece extends Piece {
     }
 
     protected boolean isThereOpponentPiece(Position position) {
-        if (position == null || getBoard() == null) {
+        if (position == null || getBoard() == null || this.color == null) {
             return false;
         }
         if (!getBoard().positionExists(position)) {
@@ -94,7 +93,7 @@ public abstract class ChessPiece extends Piece {
         }
         ChessPiece cp = (ChessPiece) p;
         Color cpColor = cp.getColor();
-        if (cpColor == null || this.color == null) {
+        if (cpColor == null) {
             return false;
         }
         return cpColor != this.color;
