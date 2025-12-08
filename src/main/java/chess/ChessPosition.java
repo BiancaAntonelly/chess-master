@@ -51,18 +51,18 @@ public class ChessPosition {
 
     /*@ public normal_behavior
       @   ensures \result != null;
-      @   assignable \nothing;
       @*/
-    protected /*@ pure non_null @*/ Position toPosition() {
+    protected /*@ non_null @*/ Position toPosition() {
         return new Position(8 - row, col - 'a');
     }
 
     /*@ public normal_behavior
       @   requires pos != null;
+      @   requires pos.getRow() >= 0 && pos.getRow() < 8;
+      @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   ensures \result != null;
-      @   assignable \nothing;
       @*/
-    protected static /*@ pure non_null @*/ ChessPosition fromPosition(/*@ non_null @*/ Position pos) {
+    protected static /*@ non_null @*/ ChessPosition fromPosition(/*@ non_null @*/ Position pos) {
         if (pos == null) {
             throw new IllegalArgumentException("Position cannot be null");
         }
@@ -83,10 +83,9 @@ public class ChessPosition {
 
     /*@ also public normal_behavior
       @   ensures \result != null;
-      @   assignable \nothing;
       @*/
     @Override
-    public /*@ pure non_null @*/ String toString() {
+    public /*@ non_null @*/ String toString() {
         return "" + col + row;
     }
 
@@ -106,10 +105,9 @@ public class ChessPosition {
     }
 
     /*@ also public normal_behavior
-      @   assignable \nothing;
       @*/
     @Override
-    public /*@ pure @*/ int hashCode() {
+    public int hashCode() {
         return 31 * row + col;
     }
 }
