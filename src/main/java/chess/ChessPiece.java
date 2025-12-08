@@ -94,7 +94,6 @@ public abstract class ChessPiece extends Piece {
         return cpColor != this.color;
     }
 
-    // Método abstrato - especificações estão nas implementações concretas
     public abstract boolean[][] possibleMoves();
 
     /*@ also
