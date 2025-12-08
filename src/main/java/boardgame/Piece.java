@@ -60,7 +60,8 @@ public abstract class Piece {
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean possibleMove(Position pos) {
-        return possibleMoves()[pos.getRow()][pos.getCol()];
+        boolean[][] moves = possibleMoves();
+        return moves[pos.getRow()][pos.getCol()];
     }
 
     /*@ public normal_behavior
