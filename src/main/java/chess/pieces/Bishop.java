@@ -5,31 +5,87 @@ import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
+/**
+ * Classe que representa um Bispo no jogo de xadrez.
+ * O bispo move-se diagonalmente em qualquer direção,
+ * quantas casas quiser, desde que não haja peças bloqueando.
+ */
 public class Bishop extends ChessPiece {
 
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   ensures getColor() == color;
+      @   ensures getMoveCount() == 0;
+      @   ensures getBoard() == board;
+      @   assignable this.color, this.moveCount;
       @*/
-    public Bishop(Board board, Color color) {
+    public Bishop(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
     }
 
     /*@ also
-      @   public normal_behavior
+      @ public normal_behavior
+      @   requires position != null;
+      @   requires position.getRow() >= 0 && position.getRow() < 8;
+      @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @
       @   ensures \result != null;
       @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   ensures (\forall int i; 0 <= i && i < 8;
+      @               \result[i] != null && \result[i].length == 8);
+      @
+      @   // A posição atual do bispo não é um movimento válido
+      @   ensures !\result[position.getRow()][position.getCol()];
+      @
+      @   // Movimentos apenas em diagonais (diferença absoluta de linhas == diferença absoluta de colunas)
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
+      @               Math.abs(r - position.getRow()) == Math.abs(c - position.getCol()));
+      @
+      @   // Direção Noroeste: r < position.getRow() && c < position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
+      @               \result[r][c] && r < position.getRow() && c < position.getCol();
+      @               r - position.getRow() == c - position.getCol());
+      @
+      @   // Direção Nordeste: r < position.getRow() && c > position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
+      @               \result[r][c] && r < position.getRow() && c > position.getCol();
+      @               position.getRow() - r == c - position.getCol());
+      @
+      @   // Direção Sudeste: r > position.getRow() && c > position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
+      @               \result[r][c] && r > position.getRow() && c > position.getCol();
+      @               r - position.getRow() == c - position.getCol());
+      @
+      @   // Direção Sudoeste: r > position.getRow() && c < position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
+      @               \result[r][c] && r > position.getRow() && c < position.getCol();
+      @               r - position.getRow() == position.getCol() - c);
+      @
       @   assignable \nothing;
+      @   pure
       @*/
     @Override
-    public boolean[][] possibleMoves() {
+    public /*@ pure non_null @*/ boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
 
         Position p = new Position(0, 0);
 
-        // nw
+        // Noroeste (NW) - diagonal superior esquerda
         p.setValues(position.getRow() - 1, position.getCol() - 1);
+
+        /*@ loop_invariant p.getRow() >= -1 && p.getCol() >= -1;
+          @ loop_invariant (\forall int r, c;
+          @                     0 <= r && r < 8 && 0 <= c && c < 8 && mat[r][c] &&
+          @                     r < position.getRow() && c < position.getCol();
+          @                     r - position.getRow() == c - position.getCol());
+          @ decreases p.getRow() + p.getCol() + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() - 1, p.getCol() - 1);
@@ -38,8 +94,16 @@ public class Bishop extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // ne
+        // Nordeste (NE) - diagonal superior direita
         p.setValues(position.getRow() - 1, position.getCol() + 1);
+
+        /*@ loop_invariant p.getRow() >= -1 && p.getCol() <= 8;
+          @ loop_invariant (\forall int r, c;
+          @                     0 <= r && r < 8 && 0 <= c && c < 8 && mat[r][c] &&
+          @                     r < position.getRow() && c > position.getCol();
+          @                     position.getRow() - r == c - position.getCol());
+          @ decreases p.getRow() + (8 - p.getCol()) + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() - 1, p.getCol() + 1);
@@ -48,8 +112,16 @@ public class Bishop extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // se
+        // Sudeste (SE) - diagonal inferior direita
         p.setValues(position.getRow() + 1, position.getCol() + 1);
+
+        /*@ loop_invariant p.getRow() <= 8 && p.getCol() <= 8;
+          @ loop_invariant (\forall int r, c;
+          @                     0 <= r && r < 8 && 0 <= c && c < 8 && mat[r][c] &&
+          @                     r > position.getRow() && c > position.getCol();
+          @                     r - position.getRow() == c - position.getCol());
+          @ decreases (8 - p.getRow()) + (8 - p.getCol()) + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() + 1, p.getCol() + 1);
@@ -58,8 +130,16 @@ public class Bishop extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // sw
+        // Sudoeste (SW) - diagonal inferior esquerda
         p.setValues(position.getRow() + 1, position.getCol() - 1);
+
+        /*@ loop_invariant p.getRow() <= 8 && p.getCol() >= -1;
+          @ loop_invariant (\forall int r, c;
+          @                     0 <= r && r < 8 && 0 <= c && c < 8 && mat[r][c] &&
+          @                     r > position.getRow() && c < position.getCol();
+          @                     r - position.getRow() == position.getCol() - c);
+          @ decreases (8 - p.getRow()) + p.getCol() + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() + 1, p.getCol() - 1);
@@ -72,10 +152,14 @@ public class Bishop extends ChessPiece {
     }
 
     /*@ also
+      @ public normal_behavior
       @   ensures \result != null;
+      @   ensures \result.equals("B");
+      @   assignable \nothing;
+      @   pure
       @*/
     @Override
-    public String toString() {
+    public /*@ pure non_null @*/ String toString() {
         return "B";
     }
 }
