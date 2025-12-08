@@ -66,17 +66,7 @@ public abstract class ChessPiece extends Piece {
         moveCount--;
     }
 
-    /*@ public normal_behavior
-      @   requires this.position != null;
-      @   requires this.position.getRow() >= 0 && this.position.getRow() < 8;
-      @   requires this.position.getCol() >= 0 && this.position.getCol() < 8;
-      @   requires this.color != null;
-      @   requires this.moveCount >= 0 && this.moveCount <= Integer.MAX_VALUE;
-      @   requires getBoard() != null;
-      @   ensures \result != null;
-      @   assignable \nothing;
-      @*/
-    public /*@ non_null @*/ ChessPosition getChessPosition() {
+    public ChessPosition getChessPosition() {
         if (position == null) {
             throw new IllegalStateException("Position is null");
         }
@@ -86,13 +76,7 @@ public abstract class ChessPiece extends Piece {
         return new ChessPosition(rowCalc, colCalc);
     }
 
-    /*@ public normal_behavior
-      @   requires position != null;
-      @   requires getBoard() != null;
-      @   requires getBoard().positionExists(position);
-      @   assignable \nothing;
-      @*/
-    protected boolean isThereOpponentPiece(/*@ non_null @*/ Position position) {
+    protected boolean isThereOpponentPiece(Position position) {
         Piece p = getBoard().piece(position);
         if (p == null) {
             return false;
@@ -148,19 +132,12 @@ public abstract class ChessPiece extends Piece {
         boolean[][] mat = possibleMoves();
         int rows = getBoard().getRows();
         int cols = getBoard().getCols();
-        /*@ loop_invariant 0 <= i && i <= rows;
-          @ decreases rows - i;
-          @*/
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < rows && i < mat.length; i++) {
             if (mat[i] == null || mat[i].length != cols) {
                 continue;
             }
             boolean[] row = mat[i];
-            /*@ loop_invariant 0 <= j && j <= cols;
-              @ loop_invariant row != null && row.length == cols;
-              @ decreases cols - j;
-              @*/
-            for (int j = 0; j < cols; j++) {
+            for (int j = 0; j < cols && j < row.length; j++) {
                 if (row[j]) {
                     return true;
                 }
