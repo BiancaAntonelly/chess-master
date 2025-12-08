@@ -18,7 +18,6 @@ public class Bishop extends ChessPiece {
       @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures getBoard() == board;
-      @   assignable this.color, this.moveCount;
       @*/
     public Bishop(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
@@ -156,7 +155,6 @@ public class Bishop extends ChessPiece {
       @   ensures \result != null;
       @   ensures \result.equals("B");
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ pure non_null @*/ String toString() {
