@@ -58,18 +58,28 @@ public class Rook extends ChessPiece {
       @               \result[r][c] && c > position.getCol()
       @               ==> r == position.getRow());
       @
-      @   // a própria casa da torre nunca é marcada como movimento
       @   ensures !\result[position.getRow()][position.getCol()];
       @
       @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
+
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
         Position p = new Position(0, 0);
 
-        // Para cima
+        // ============================
+        // PARA CIMA
+        // ============================
         p.setValues(position.getRow() - 1, position.getCol());
+
+        /*@ loop_invariant getBoard().positionExists(p) ==> p.getCol() == position.getCol();
+          @ loop_invariant p.getRow() <= position.getRow() - 1;
+          @ loop_invariant (\forall int rr, cc;
+          @        rr <= position.getRow() - 1 && rr > p.getRow() && cc == position.getCol();
+          @        mat[rr][cc] == true);
+          @ decreases p.getRow();
+         @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setRow(p.getRow() - 1);
@@ -78,8 +88,19 @@ public class Rook extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Para a esquerda
+
+        // ============================
+        // PARA ESQUERDA
+        // ============================
         p.setValues(position.getRow(), position.getCol() - 1);
+
+        /*@ loop_invariant getBoard().positionExists(p) ==> p.getRow() == position.getRow();
+          @ loop_invariant p.getCol() <= position.getCol() - 1;
+          @ loop_invariant (\forall int rr, cc;
+          @        rr == position.getRow() && cc < position.getCol() && cc > p.getCol();
+          @        mat[rr][cc] == true);
+          @ decreases p.getCol();
+         @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setCol(p.getCol() - 1);
@@ -88,8 +109,19 @@ public class Rook extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Para a direita
+
+        // ============================
+        // PARA DIREITA
+        // ============================
         p.setValues(position.getRow(), position.getCol() + 1);
+
+        /*@ loop_invariant getBoard().positionExists(p) ==> p.getRow() == position.getRow();
+          @ loop_invariant p.getCol() >= position.getCol() + 1;
+          @ loop_invariant (\forall int rr, cc;
+          @        rr == position.getRow() && cc > position.getCol() && cc < p.getCol();
+          @        mat[rr][cc] == true);
+          @ decreases (8 - p.getCol());
+         @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setCol(p.getCol() + 1);
@@ -98,8 +130,19 @@ public class Rook extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Para baixo
+
+        // ============================
+        // PARA BAIXO
+        // ============================
         p.setValues(position.getRow() + 1, position.getCol());
+
+        /*@ loop_invariant getBoard().positionExists(p) ==> p.getCol() == position.getCol();
+          @ loop_invariant p.getRow() >= position.getRow() + 1;
+          @ loop_invariant (\forall int rr, cc;
+          @        rr > position.getRow() && rr < p.getRow() && cc == position.getCol();
+          @        mat[rr][cc] == true);
+          @ decreases (8 - p.getRow());
+         @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setRow(p.getRow() + 1);
