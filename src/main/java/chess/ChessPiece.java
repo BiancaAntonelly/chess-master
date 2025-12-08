@@ -79,8 +79,7 @@ public abstract class ChessPiece extends Piece {
         if (!getBoard().positionExists(position)) {
             return false;
         }
-        Piece p;
-        p = getBoard().piece(position);
+        /*@ nullable @*/ Piece p = getBoard().piece(position);
         if (p == null) {
             return false;
         }
