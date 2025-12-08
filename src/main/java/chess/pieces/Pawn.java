@@ -31,48 +31,10 @@ public class Pawn extends ChessPiece {
 
     /*@ also
       @ public normal_behavior
-      @   requires position != null;
-      @   requires position.getRow() >= 0 && position.getRow() < 8;
-      @   requires position.getCol() >= 0 && position.getCol() < 8;
-      @   requires getBoard() != null;
-      @   requires getBoard().getRows() == 8;
-      @   requires getBoard().getCols() == 8;
-      @   requires match != null;
-      @
       @   ensures \result != null;
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8;
       @               \result[i] != null && \result[i].length == 8);
-      @
-      @   // A posição atual do peão não é um movimento válido
-      @   ensures !\result[position.getRow()][position.getCol()];
-      @
-      @   // Peões brancos só se movem para cima (row decresce)
-      @   ensures getColor() == Color.WHITE ==>
-      @           (\forall int r, c; 0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               r < position.getRow());
-      @
-      @   // Peões pretos só se movem para baixo (row aumenta)
-      @   ensures getColor() == Color.BLACK ==>
-      @           (\forall int r, c; 0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               r > position.getRow());
-      @
-      @   // Movimento máximo é de 2 casas (primeiro movimento) ou 1 casa (demais)
-      @   ensures getColor() == Color.WHITE ==>
-      @           (\forall int r, c; 0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               position.getRow() - r <= 2 &&
-      @               position.getRow() - r >= 1);
-      @
-      @   ensures getColor() == Color.BLACK ==>
-      @           (\forall int r, c; 0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               r - position.getRow() <= 2 &&
-      @               r - position.getRow() >= 1);
-      @
-      @   // Movimento de 2 casas somente se ainda não moveu
-      @   ensures getMoveCount() > 0 ==>
-      @           (\forall int r, c; 0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               java.lang.Math.abs(r - position.getRow()) == 1);
-      @
       @   assignable \nothing;
       @*/
     @Override

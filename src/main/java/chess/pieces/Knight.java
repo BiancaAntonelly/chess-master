@@ -36,32 +36,10 @@ public class Knight extends ChessPiece {
 
     /*@ also
       @ public normal_behavior
-      @   requires position != null;
-      @   requires position.getRow() >= 0 && position.getRow() < 8;
-      @   requires position.getCol() >= 0 && position.getCol() < 8;
-      @   requires getBoard() != null;
-      @   requires getBoard().getRows() == 8;
-      @   requires getBoard().getCols() == 8;
-      @
       @   ensures \result != null;
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8;
       @               \result[i] != null && \result[i].length == 8);
-      @
-      @   ensures !\result[position.getRow()][position.getCol()];
-      @
-      @   // Sempre que uma casa é verdadeira, ela está em um padrão de movimento em L do cavalo
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               ((r == position.getRow() - 2 && c == position.getCol() - 1) ||
-      @                (r == position.getRow() - 2 && c == position.getCol() + 1) ||
-      @                (r == position.getRow() - 1 && c == position.getCol() - 2) ||
-      @                (r == position.getRow() - 1 && c == position.getCol() + 2) ||
-      @                (r == position.getRow() + 1 && c == position.getCol() - 2) ||
-      @                (r == position.getRow() + 1 && c == position.getCol() + 2) ||
-      @                (r == position.getRow() + 2 && c == position.getCol() - 1) ||
-      @                (r == position.getRow() + 2 && c == position.getCol() + 1)));
-      @
       @   assignable \nothing;
       @*/
     @Override

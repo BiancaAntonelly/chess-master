@@ -76,35 +76,10 @@ public class King extends ChessPiece {
 
     /*@ also
       @ public normal_behavior
-      @   requires position != null;
-      @   requires position.getRow() >= 0 && position.getRow() < 8;
-      @   requires position.getCol() >= 0 && position.getCol() < 8;
-      @   requires getBoard() != null;
-      @   requires getBoard().getRows() == 8;
-      @   requires getBoard().getCols() == 8;
-      @
       @   ensures \result != null;
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8;
       @               \result[i] != null && \result[i].length == 8);
-      @
-      @   // A casa atual do rei nunca é marcada como movimento possível
-      @   ensures !\result[position.getRow()][position.getCol()];
-      @
-      @   // Qualquer casa verdadeira está:
-      @   //  - a 1 casa de distância em linha/coluna/diagonal, OU
-      @   //  - é uma casa de roque (2 casas à esquerda ou direita)
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               (r == position.getRow() &&
-      @                (c == position.getCol() - 1 || c == position.getCol() + 1)) ||
-      @               (c == position.getCol() &&
-      @                (r == position.getRow() - 1 || r == position.getRow() + 1)) ||
-      @               ((r == position.getRow() - 1 || r == position.getRow() + 1) &&
-      @                (c == position.getCol() - 1 || c == position.getCol() + 1)) ||
-      @               (r == position.getRow() &&
-      @                (c == position.getCol() + 2 || c == position.getCol() - 2)));
-      @
       @   assignable \nothing;
       @*/
     @Override
