@@ -28,10 +28,6 @@ public class Rook extends ChessPiece {
         return "R";
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   ensures \result != null;
-      @*/
     @Override
     public boolean[][] possibleMoves() {
         if (position == null || getBoard() == null) {
@@ -46,7 +42,10 @@ public class Rook extends ChessPiece {
 
         int rows = board.getRows();
         int cols = board.getCols();
+        //@ assert rows > 0 && cols > 0;
         boolean[][] mat = new boolean[rows][cols];
+        //@ assert mat != null;
+        //@ assert mat.length == rows;
         Position p = new Position(0, 0);
 
         // PARA CIMA
@@ -58,8 +57,13 @@ public class Rook extends ChessPiece {
                 while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                     if (p.getRow() <= 0) break;
                     int newRow = p.getRow() - 1;
@@ -69,8 +73,13 @@ public class Rook extends ChessPiece {
                 if (board.positionExists(p) && isThereOpponentPiece(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                 }
             }
@@ -85,8 +94,13 @@ public class Rook extends ChessPiece {
                 while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                     if (p.getCol() <= 0) break;
                     int newCol = p.getCol() - 1;
@@ -96,8 +110,13 @@ public class Rook extends ChessPiece {
                 if (board.positionExists(p) && isThereOpponentPiece(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                 }
             }
@@ -112,8 +131,13 @@ public class Rook extends ChessPiece {
                 while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                     if (p.getCol() >= 7) break;
                     int newCol = p.getCol() + 1;
@@ -123,8 +147,13 @@ public class Rook extends ChessPiece {
                 if (board.positionExists(p) && isThereOpponentPiece(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                 }
             }
@@ -139,8 +168,13 @@ public class Rook extends ChessPiece {
                 while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                     if (p.getRow() >= 7) break;
                     int newRow = p.getRow() + 1;
@@ -150,8 +184,13 @@ public class Rook extends ChessPiece {
                 if (board.positionExists(p) && isThereOpponentPiece(p)) {
                     int r = p.getRow();
                     int c = p.getCol();
-                    if (r >= 0 && r < rows && c >= 0 && c < cols && mat[r] != null) {
-                        mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
                     }
                 }
             }
