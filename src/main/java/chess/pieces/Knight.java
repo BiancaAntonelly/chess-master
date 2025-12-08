@@ -59,8 +59,10 @@ public class Knight extends ChessPiece {
       @   // Movimentos em "L": (2,1) ou (1,2) de distância
       @   ensures (\forall int r, c;
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               (Math.abs(r - position.getRow()) == 2 && Math.abs(c - position.getCol()) == 1) ||
-      @               (Math.abs(r - position.getRow()) == 1 && Math.abs(c - position.getCol()) == 2));
+      @               (java.lang.Math.abs(r - position.getRow()) == 2
+      @                    && java.lang.Math.abs(c - position.getCol()) == 1)
+      @            || (java.lang.Math.abs(r - position.getRow()) == 1
+      @                    && java.lang.Math.abs(c - position.getCol()) == 2));
       @
       @   // Movimento 1: (-1, -2) - uma acima, duas esquerda
       @   ensures position.getRow() >= 1 && position.getCol() >= 2 &&
@@ -103,10 +105,9 @@ public class Knight extends ChessPiece {
       @               ==> \result[position.getRow() + 1][position.getCol() - 2];
       @
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
-    public /*@ pure non_null @*/ boolean[][] possibleMoves() {
+    public boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
 
         Position p = new Position(0, 0);

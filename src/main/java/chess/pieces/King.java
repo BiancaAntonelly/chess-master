@@ -88,30 +88,35 @@ public class King extends ChessPiece {
       @   // Movimentos normais: máximo de 1 casa de distância (exceto roque)
       @   ensures (\forall int r, c;
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               !(r == position.getRow() && Math.abs(c - position.getCol()) == 2);
-      @               Math.abs(r - position.getRow()) <= 1 &&
-      @               Math.abs(c - position.getCol()) <= 1);
+      @               !(r == position.getRow() &&
+      @                 java.lang.Math.abs(c - position.getCol()) == 2);
+      @               java.lang.Math.abs(r - position.getRow()) <= 1 &&
+      @               java.lang.Math.abs(c - position.getCol()) <= 1);
       @
       @   // Roque: se houver movimento de 2 casas horizontalmente, é roque
       @   ensures (\forall int r, c;
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               Math.abs(c - position.getCol()) == 2;
+      @               java.lang.Math.abs(c - position.getCol()) == 2;
       @               r == position.getRow());
       @
       @   // Movimento para cima (norte)
-      @   ensures position.getRow() > 0 && canMove(new Position(position.getRow() - 1, position.getCol()))
+      @   ensures position.getRow() > 0 &&
+      @           canMove(new Position(position.getRow() - 1, position.getCol()))
       @               ==> \result[position.getRow() - 1][position.getCol()];
       @
       @   // Movimento para baixo (sul)
-      @   ensures position.getRow() < 7 && canMove(new Position(position.getRow() + 1, position.getCol()))
+      @   ensures position.getRow() < 7 &&
+      @           canMove(new Position(position.getRow() + 1, position.getCol()))
       @               ==> \result[position.getRow() + 1][position.getCol()];
       @
       @   // Movimento para esquerda (oeste)
-      @   ensures position.getCol() > 0 && canMove(new Position(position.getRow(), position.getCol() - 1))
+      @   ensures position.getCol() > 0 &&
+      @           canMove(new Position(position.getRow(), position.getCol() - 1))
       @               ==> \result[position.getRow()][position.getCol() - 1];
       @
       @   // Movimento para direita (leste)
-      @   ensures position.getCol() < 7 && canMove(new Position(position.getRow(), position.getCol() + 1))
+      @   ensures position.getCol() < 7 &&
+      @           canMove(new Position(position.getRow(), position.getCol() + 1))
       @               ==> \result[position.getRow()][position.getCol() + 1];
       @
       @   // Movimento diagonal noroeste
@@ -135,10 +140,9 @@ public class King extends ChessPiece {
       @               ==> \result[position.getRow() + 1][position.getCol() + 1];
       @
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
-    public /*@ pure non_null @*/ boolean[][] possibleMoves() {
+    public boolean[][] possibleMoves() {
 
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
 
@@ -168,50 +172,52 @@ public class King extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Noroeste (diagonal superior esquerda)
+        // Noroeste
         p.setValues(position.getRow() - 1, position.getCol() - 1);
         if (getBoard().positionExists(p) && canMove(p)) {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Nordeste (diagonal superior direita)
+        // Nordeste
         p.setValues(position.getRow() - 1, position.getCol() + 1);
         if (getBoard().positionExists(p) && canMove(p)) {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Sudoeste (diagonal inferior esquerda)
+        // Sudoeste
         p.setValues(position.getRow() + 1, position.getCol() - 1);
         if (getBoard().positionExists(p) && canMove(p)) {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Sudeste (diagonal inferior direita)
+        // Sudeste
         p.setValues(position.getRow() + 1, position.getCol() + 1);
         if (getBoard().positionExists(p) && canMove(p)) {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // Roque (castling) - movimento especial
-        // Condições: rei não moveu, não está em xeque
+        // Roque (castling)
         if (getMoveCount() == 0 && !match.getCheck()) {
-            // Roque menor (kingside) - para a direita
+            // Roque menor (kingside)
             Position posT1 = new Position(position.getRow(), position.getCol() + 3);
-            if (testRookCastling(posT1)) {
+            if (getBoard().positionExists(posT1) && testRookCastling(posT1)) {
                 Position p1 = new Position(position.getRow(), position.getCol() + 1);
                 Position p2 = new Position(position.getRow(), position.getCol() + 2);
-                if (getBoard().piece(p1) == null && getBoard().piece(p2) == null) {
+                if (getBoard().positionExists(p1) && getBoard().positionExists(p2) &&
+                        getBoard().piece(p1) == null && getBoard().piece(p2) == null) {
                     mat[position.getRow()][position.getCol() + 2] = true;
                 }
             }
 
-            // Roque maior (queenside) - para a esquerda
+            // Roque maior (queenside)
             Position posT2 = new Position(position.getRow(), position.getCol() - 4);
-            if (testRookCastling(posT2)) {
+            if (getBoard().positionExists(posT2) && testRookCastling(posT2)) {
                 Position p1 = new Position(position.getRow(), position.getCol() - 1);
                 Position p2 = new Position(position.getRow(), position.getCol() - 2);
                 Position p3 = new Position(position.getRow(), position.getCol() - 3);
-                if (getBoard().piece(p1) == null &&
+                if (getBoard().positionExists(p1) && getBoard().positionExists(p2) &&
+                        getBoard().positionExists(p3) &&
+                        getBoard().piece(p1) == null &&
                         getBoard().piece(p2) == null &&
                         getBoard().piece(p3) == null) {
                     mat[position.getRow()][position.getCol() - 2] = true;

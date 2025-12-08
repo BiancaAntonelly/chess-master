@@ -41,7 +41,8 @@ public class Bishop extends ChessPiece {
       @   // Movimentos apenas em diagonais (diferença absoluta de linhas == diferença absoluta de colunas)
       @   ensures (\forall int r, c;
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               Math.abs(r - position.getRow()) == Math.abs(c - position.getCol()));
+      @               java.lang.Math.abs(r - position.getRow()) ==
+      @               java.lang.Math.abs(c - position.getCol()));
       @
       @   // Direção Noroeste: r < position.getRow() && c < position.getCol()
       @   ensures (\forall int r, c;
@@ -68,10 +69,9 @@ public class Bishop extends ChessPiece {
       @               r - position.getRow() == position.getCol() - c);
       @
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
-    public /*@ pure non_null @*/ boolean[][] possibleMoves() {
+    public /*@ non_null @*/ boolean[][] possibleMoves() {
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
 
         Position p = new Position(0, 0);
