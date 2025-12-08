@@ -20,7 +20,6 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessPosition.java \
     src/main/java/chess/ChessException.java \
     src/main/java/chess/ChessPiece.java \
-    src/main/java/chess/ChessMatch.java \
     src/main/java/chess/pieces/Bishop.java \
     src/main/java/chess/pieces/King.java \
     src/main/java/chess/pieces/Knight.java \

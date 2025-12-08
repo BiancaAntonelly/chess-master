@@ -21,7 +21,6 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessException.java \
     src/main/java/chess/ChessPiece.java \
     src/main/java/chess/pieces/Rook.java \
-    src/main/java/chess/ChessMatch.java \
     src/main/java/chess/pieces/King.java 2>&1 | \
     bash "$SCRIPT_DIR/filter_output.sh" "${CLASS_NAME}" || true
 
