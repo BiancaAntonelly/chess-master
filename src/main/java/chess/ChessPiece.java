@@ -70,12 +70,12 @@ public abstract class ChessPiece extends Piece {
     }
 
     /*@ public normal_behavior
-      @   requires getPosition() != null;
-      @   requires getPosition().getRow() >= 0 && getPosition().getRow() < 8;
-      @   requires getPosition().getCol() >= 0 && getPosition().getCol() < 8;
+      @   requires position != null;
+      @   requires position.getRow() >= 0 && position.getRow() < 8;
+      @   requires position.getCol() >= 0 && position.getCol() < 8;
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - getPosition().getRow();
-      @   ensures \result.getCol() == (char)('a' + getPosition().getCol());
+      @   ensures \result.getRow() == 8 - position.getRow();
+      @   ensures \result.getCol() == (char)('a' + position.getCol());
       @   ensures \result.getRow() >= 1 && \result.getRow() <= 8;
       @   ensures \result.getCol() >= 'a' && \result.getCol() <= 'h';
       @   assignable \nothing;
@@ -107,11 +107,12 @@ public abstract class ChessPiece extends Piece {
     // Método abstrato - especificações estão nas implementações concretas
     public abstract boolean[][] possibleMoves();
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < getBoard().getRows();
       @   requires position.getCol() >= 0 && position.getCol() < getBoard().getCols();
-      @   requires getPosition() != null;
+      @   requires this.position != null;
       @   requires possibleMoves() != null;
       @   requires possibleMoves().length > position.getRow();
       @   requires possibleMoves()[position.getRow()] != null;
@@ -123,8 +124,9 @@ public abstract class ChessPiece extends Piece {
         return possibleMoves()[position.getRow()][position.getCol()];
     }
 
-    /*@ public normal_behavior
-      @   requires getPosition() != null;
+    /*@ also
+      @ public normal_behavior
+      @   requires position != null;
       @   requires possibleMoves() != null;
       @   requires possibleMoves().length == getBoard().getRows();
       @   requires (\forall int i; 0 <= i && i < getBoard().getRows(); possibleMoves()[i] != null && possibleMoves()[i].length == getBoard().getCols());

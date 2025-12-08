@@ -11,10 +11,12 @@ if [ -z "$CLASS_NAME" ]; then
 fi
 
 # Mantém linhas de progresso (contendo %, Progress, Proving, [n/m]) e
-# linhas relevantes da classe (arquivo, verify, error, warning).
-# Indenta a saída para melhor leitura.
+# linhas relevantes da classe (arquivo, verify, error).
+# OCULTA warnings - mostra apenas erros e verificações
 awk -v cls="$CLASS_NAME" '
     /Progress|Proving|[0-9]+%|\[[0-9]+\/[0-9]+\]/ { print "  " $0; next }
-    index($0, cls ".java") > 0 || /verify:|error:|warning:/ { print "  " $0; next }
+    /error:/ { print "  " $0; next }
+    /verify:/ && index($0, cls ".java") > 0 { print "  " $0; next }
+    index($0, cls ".java") > 0 && /verify:/ { print "  " $0; next }
 '
 

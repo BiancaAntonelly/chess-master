@@ -23,6 +23,7 @@ public class ChessPosition {
       @   requires row >= 1 && row <= 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
+      @   assignable this.row, this.col;
       @ also public exceptional_behavior
       @   requires col < 'a' || col > 'h' || row < 1 || row > 8;
       @   signals_only ChessException;
@@ -100,7 +101,8 @@ public class ChessPosition {
         return "" + col + row;
     }
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   requires obj != null;
       @   ensures \result <==> (obj instanceof ChessPosition &&
       @           ((ChessPosition)obj).row == this.row &&
@@ -118,7 +120,8 @@ public class ChessPosition {
         return row == that.row && col == that.col;
     }
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   ensures \result == 31 * row + col;
       @   assignable \nothing;
       @*/
