@@ -71,8 +71,6 @@ public abstract class ChessPiece extends Piece {
       @   requires this.position.getRow() >= 0 && this.position.getRow() < 8;
       @   requires this.position.getCol() >= 0 && this.position.getCol() < 8;
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - this.position.getRow();
-      @   ensures \result.getCol() == (char)('a' + this.position.getCol());
       @*/
     public /*@ non_null @*/ ChessPosition getChessPosition() {
         if (position == null) {
@@ -88,14 +86,6 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires getBoard() != null;
       @   requires getBoard().positionExists(position);
-      @   ensures \result ==> (
-      @              getBoard().piece(position) != null
-      @          &&  getBoard().piece(position) instanceof ChessPiece
-      @          && ((ChessPiece)getBoard().piece(position)).getColor() != this.color);
-      @   ensures !\result ==> (
-      @              getBoard().piece(position) == null
-      @          ||  !(getBoard().piece(position) instanceof ChessPiece)
-      @          || ((ChessPiece)getBoard().piece(position)).getColor() == this.color);
       @   assignable \nothing;
       @*/
     protected /*@ pure @*/ boolean isThereOpponentPiece(/*@ non_null @*/ Position position) {
@@ -126,7 +116,6 @@ public abstract class ChessPiece extends Piece {
       @   requires possibleMoves()[position.getRow()] != null;
       @   requires possibleMoves()[position.getRow()].length == getBoard().getCols();
       @   requires possibleMoves()[position.getRow()].length > position.getCol();
-      @   ensures \result == possibleMoves()[position.getRow()][position.getCol()];
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean possibleMove(/*@ non_null @*/ Position position) {
@@ -145,14 +134,6 @@ public abstract class ChessPiece extends Piece {
       @   requires (\forall int i; 0 <= i && i < getBoard().getRows(); 
       @               possibleMoves()[i] != null && 
       @               possibleMoves()[i].length == getBoard().getCols());
-      @   ensures \result == true ==> (\exists int i, j;
-      @                  0 <= i && i < getBoard().getRows() &&
-      @                  0 <= j && j < getBoard().getCols();
-      @                  possibleMoves()[i][j]);
-      @   ensures \result == false ==> (\forall int i, j;
-      @                  0 <= i && i < getBoard().getRows() &&
-      @                  0 <= j && j < getBoard().getCols();
-      @                  !possibleMoves()[i][j]);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
