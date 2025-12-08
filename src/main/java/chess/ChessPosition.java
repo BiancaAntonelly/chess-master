@@ -23,7 +23,6 @@ public class ChessPosition {
       @   requires row >= 1 && row <= 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
-      @   assignable row, col;
       @ also public exceptional_behavior
       @   requires col < 'a' || col > 'h' || row < 1 || row > 8;
       @   signals_only ChessException;
