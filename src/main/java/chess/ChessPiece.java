@@ -25,7 +25,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures getBoard() == board;
       @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
-      @   assignable modelBoard, this.color, moveCount, position;
       @*/
     public ChessPiece(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board);
