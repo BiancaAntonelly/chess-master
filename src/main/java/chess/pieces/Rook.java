@@ -88,7 +88,7 @@ public class Rook extends ChessPiece {
       @   pure
       @*/
     @Override
-    public /*@ pure non_null @*/ boolean[][] possibleMoves() {
+    public /*@ pure @*/ /*@ non_null @*/ boolean[][] possibleMoves() {
 
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
         Position p = new Position(0, 0);
