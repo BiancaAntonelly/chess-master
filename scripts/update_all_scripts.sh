@@ -1,103 +1,76 @@
 #!/bin/bash
-# Script para atualizar todos os scripts de verificação com indicadores visuais
+# Script para atualizar todos os scripts de verificação com caminhos corretos
 
-# Lista de classes e suas dependências
-declare -A classes=(
-    ["Position"]="src/main/java/boardgame/Position.java"
-    ["BoardException"]="src/main/java/boardgame/BoardException.java"
-    ["Board"]="src/main/java/boardgame/Position.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Board.java"
-    ["Piece"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java"
-    ["Color"]="src/main/java/chess/Color.java"
-    ["ChessException"]="src/main/java/boardgame/BoardException.java src/main/java/chess/ChessException.java"
-    ["ChessPosition"]="src/main/java/boardgame/Position.java src/main/java/chess/ChessException.java src/main/java/boardgame/BoardException.java src/main/java/chess/ChessPosition.java"
-    ["ChessPiece"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java"
-    ["Bishop"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/pieces/Bishop.java"
-    ["Queen"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/pieces/Queen.java"
-    ["Knight"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/pieces/Knight.java"
-    ["Rook"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/pieces/Rook.java"
-    ["King"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/pieces/Rook.java src/main/java/chess/ChessMatch.java src/main/java/chess/pieces/King.java"
-    ["Pawn"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/ChessMatch.java src/main/java/chess/pieces/Pawn.java"
-    ["ChessMatch"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/pieces/Bishop.java src/main/java/chess/pieces/King.java src/main/java/chess/pieces/Knight.java src/main/java/chess/pieces/Pawn.java src/main/java/chess/pieces/Queen.java src/main/java/chess/pieces/Rook.java src/main/java/chess/ChessMatch.java"
-    ["UI"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/ChessMatch.java src/main/java/chess/pieces/Bishop.java src/main/java/chess/pieces/King.java src/main/java/chess/pieces/Knight.java src/main/java/chess/pieces/Pawn.java src/main/java/chess/pieces/Queen.java src/main/java/chess/pieces/Rook.java src/main/java/app/UI.java"
-    ["Main"]="src/main/java/boardgame/Position.java src/main/java/boardgame/Board.java src/main/java/boardgame/BoardException.java src/main/java/boardgame/Piece.java src/main/java/chess/Color.java src/main/java/chess/ChessPosition.java src/main/java/chess/ChessException.java src/main/java/chess/ChessPiece.java src/main/java/chess/ChessMatch.java src/main/java/chess/pieces/Bishop.java src/main/java/chess/pieces/King.java src/main/java/chess/pieces/Knight.java src/main/java/chess/pieces/Pawn.java src/main/java/chess/pieces/Queen.java src/main/java/chess/pieces/Rook.java src/main/java/app/UI.java src/main/java/app/Main.java"
-)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Template para o script
-generate_script() {
-    local class_name=$1
-    local dependencies=$2
-    local file_path="scripts/verify_${class_name}.sh"
+# Função para atualizar um script
+update_script() {
+    local script_file="$1"
+    local class_name="$2"
     
-    cat > "$file_path" << EOF
-#!/bin/bash
-# Script para verificar ${class_name}.java com OpenJML
-
-CLASS_NAME="${class_name}"
-echo "=========================================="
-echo "🔍 Verificando \${CLASS_NAME}.java"
-echo "=========================================="
-echo ""
-
-STEP=1
-TOTAL_STEPS=3
-
-echo "[\$STEP/\$TOTAL_STEPS] 📦 Carregando dependências..."
-STEP=\$((STEP + 1))
-
-echo "[\$STEP/\$TOTAL_STEPS] ⚙️  Executando OpenJML..."
-STEP=\$((STEP + 1))
-
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "📊 Resultados da Verificação:"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-
-openjml --esc --progress -classpath src/main/java \\
-    ${dependencies} 2>&1 | \\
-    tee /tmp/jml_output_\${CLASS_NAME}.log | \\
-    grep --line-buffered -E "(\${CLASS_NAME}\\.java|verify:|error:|warning:)" | \\
-    grep -E "(\${CLASS_NAME}\\.java|verify:|error:|warning:)" | \\
-    sed 's/^/  │ /' || true
-
-echo ""
-echo "[\$STEP/\$TOTAL_STEPS] ✅ Verificação concluída!"
-echo ""
-
-ERRORS=\$(grep -c "error:" /tmp/jml_output_\${CLASS_NAME}.log 2>/dev/null || echo "0")
-WARNINGS=\$(grep -c "warning:" /tmp/jml_output_\${CLASS_NAME}.log 2>/dev/null || echo "0")
-VERIFY_ISSUES=\$(grep -c "verify:" /tmp/jml_output_\${CLASS_NAME}.log 2>/dev/null || echo "0")
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "📈 Estatísticas:"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  🔴 Erros:     \$ERRORS"
-echo "  🟡 Avisos:    \$WARNINGS"
-echo "  🔵 Verificações: \$VERIFY_ISSUES"
-echo ""
-
-if [ "\$ERRORS" -eq "0" ] && [ "\$VERIFY_ISSUES" -eq "0" ]; then
-    echo "✨ \${CLASS_NAME}.java: VERIFICAÇÃO BEM-SUCEDIDA!"
-else
-    echo "⚠️  \${CLASS_NAME}.java: Encontrados problemas (veja acima)"
-fi
-
-echo ""
-echo "=========================================="
-echo "🏁 Fim da verificação de \${CLASS_NAME}.java"
-echo "=========================================="
-echo ""
-EOF
-
-    chmod +x "$file_path"
-    echo "✅ Atualizado: $file_path"
+    # Adiciona cabeçalho com caminhos corretos se não existir
+    if ! grep -q "SCRIPT_DIR=" "$script_file"; then
+        # Insere após a linha do shebang
+        sed -i '2a\
+# Obtém o diretório do script\
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"\
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"' "$script_file"
+    fi
+    
+    # Substitui caminhos relativos por absolutos
+    sed -i "s|bash scripts/filter_output.sh|bash \"\$SCRIPT_DIR/filter_output.sh\"|g" "$script_file"
+    sed -i "s|bash \"scripts/filter_output.sh\"|bash \"\$SCRIPT_DIR/filter_output.sh\"|g" "$script_file"
+    
+    # Adiciona cd para project root antes do openjml se não existir
+    if ! grep -q "cd \"\$PROJECT_ROOT\"" "$script_file"; then
+        sed -i '/openjml --esc/i\
+cd "$PROJECT_ROOT"' "$script_file"
+    fi
+    
+    # Corrige contagem de erros
+    sed -i 's/ERRORS=$(grep -c "error:"/ERRORS=$(grep -c "error:" \/tmp\/jml_output_${CLASS_NAME}.log 2>\/dev\/null | head -1 || echo "0")/g' "$script_file"
+    sed -i 's/WARNINGS=$(grep -c "warning:"/WARNINGS=$(grep -c "warning:" \/tmp\/jml_output_${CLASS_NAME}.log 2>\/dev\/null | head -1 || echo "0")/g' "$script_file"
+    sed -i 's/VERIFY_ISSUES=$(grep -c "verify:"/VERIFY_ISSUES=$(grep -c "verify:" \/tmp\/jml_output_${CLASS_NAME}.log 2>\/dev\/null | head -1 || echo "0")/g' "$script_file"
+    
+    # Adiciona limpeza de espaços antes da comparação
+    if grep -q "if \[ \"\$ERRORS\"" "$script_file" && ! grep -q "ERRORS=\$(echo" "$script_file"; then
+        sed -i '/if \[ "\$ERRORS"/i\
+# Remove espaços e quebras de linha\
+ERRORS=$(echo "$ERRORS" | tr -d " \\n")\
+WARNINGS=$(echo "$WARNINGS" | tr -d " \\n")\
+VERIFY_ISSUES=$(echo "$VERIFY_ISSUES" | tr -d " \\n")' "$script_file"
+        sed -i 's/if \[ "\$ERRORS"/if [ "${ERRORS:-0}"/g' "$script_file"
+        sed -i 's/&& \[ "\$VERIFY_ISSUES"/\&\& [ "${VERIFY_ISSUES:-0}"/g' "$script_file"
+    fi
 }
 
-# Atualiza todos os scripts
-for class in "${!classes[@]}"; do
-    generate_script "$class" "${classes[$class]}"
+# Lista de scripts para atualizar
+scripts=(
+    "verify_BoardException.sh:BoardException"
+    "verify_Board.sh:Board"
+    "verify_Piece.sh:Piece"
+    "verify_Color.sh:Color"
+    "verify_ChessException.sh:ChessException"
+    "verify_ChessPosition.sh:ChessPosition"
+    "verify_ChessPiece.sh:ChessPiece"
+    "verify_Bishop.sh:Bishop"
+    "verify_Queen.sh:Queen"
+    "verify_Knight.sh:Knight"
+    "verify_Rook.sh:Rook"
+    "verify_King.sh:King"
+    "verify_Pawn.sh:Pawn"
+    "verify_ChessMatch.sh:ChessMatch"
+    "verify_UI.sh:UI"
+    "verify_Main.sh:Main"
+)
+
+for entry in "${scripts[@]}"; do
+    script="${entry%%:*}"
+    class="${entry##*:}"
+    if [ -f "$SCRIPT_DIR/$script" ]; then
+        echo "Atualizando $script..."
+        update_script "$SCRIPT_DIR/$script" "$class"
+    fi
 done
 
-echo ""
-echo "✨ Todos os scripts foram atualizados com indicadores visuais!"
-
+echo "Todos os scripts foram atualizados!"

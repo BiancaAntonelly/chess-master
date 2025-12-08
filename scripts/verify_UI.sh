@@ -1,8 +1,15 @@
 #!/bin/bash
 # Script para verificar UI.java com OpenJML
 
-echo "=== Verificando UI.java ==="
+# Obtém o diretório do script
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+CLASS_NAME="UI"
+echo "=== Verificando ${CLASS_NAME}.java ==="
 echo ""
+
+cd "$PROJECT_ROOT"
 
 openjml --esc --progress -classpath src/main/java \
     src/main/java/boardgame/Position.java \
@@ -21,7 +28,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/pieces/Queen.java \
     src/main/java/chess/pieces/Rook.java \
     src/main/java/app/UI.java 2>&1 | \
-    bash scripts/filter_output.sh "UI"
+    bash "$SCRIPT_DIR/filter_output.sh" "${CLASS_NAME}" || true
 
 echo ""
 echo "=== Fim da verificação de UI.java ==="
