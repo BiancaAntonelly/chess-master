@@ -61,9 +61,10 @@ public class Position {
 
     /*@ public normal_behavior
       @   ensures \result != null;
+      @   ensures \result.length() > 0;
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ String getString() {
+    public /*@ pure non_null @*/ String getString() {
         return r + ", " + c;
     }
 }

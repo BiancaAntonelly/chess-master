@@ -29,6 +29,9 @@ public class Queen extends ChessPiece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @   requires getBoard() != null;
+      @   requires getBoard().getRows() == 8;
+      @   requires getBoard().getCols() == 8;
       @
       @   ensures \result != null;
       @   ensures \result.length == 8;
@@ -45,61 +48,6 @@ public class Queen extends ChessPiece {
       @               c == position.getCol() ||                           // vertical
       @               java.lang.Math.abs(r - position.getRow())
       @                   == java.lang.Math.abs(c - position.getCol())); // diagonal
-      @
-      @   // --- Movimentos verticais (mesma coluna) ---
-      @   // Para cima: r < position.getRow() && c == position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               r < position.getRow() && c == position.getCol();
-      @               c == position.getCol());
-      @
-      @   // Para baixo: r > position.getRow() && c == position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               r > position.getRow() && c == position.getCol();
-      @               c == position.getCol());
-      @
-      @   // --- Movimentos horizontais (mesma linha) ---
-      @   // Para esquerda: c < position.getCol() && r == position.getRow()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               c < position.getCol() && r == position.getRow();
-      @               r == position.getRow());
-      @
-      @   // Para direita: c > position.getCol() && r == position.getRow()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               c > position.getCol() && r == position.getRow();
-      @               r == position.getRow());
-      @
-      @   // --- Movimentos diagonais ---
-      @   // Noroeste: r < position.getRow() && c < position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               r < position.getRow() && c < position.getCol();
-      @               (r - position.getRow() == c - position.getCol()) ||
-      @               r == position.getRow() || c == position.getCol());
-      @
-      @   // Nordeste: r < position.getRow() && c > position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               r < position.getRow() && c > position.getCol();
-      @               (position.getRow() - r == c - position.getCol()) ||
-      @               r == position.getRow() || c == position.getCol());
-      @
-      @   // Sudeste: r > position.getRow() && c > position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               r > position.getRow() && c > position.getCol();
-      @               (r - position.getRow() == c - position.getCol()) ||
-      @               r == position.getRow() || c == position.getCol());
-      @
-      @   // Sudoeste: r > position.getRow() && c < position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
-      @               r > position.getRow() && c < position.getCol();
-      @               (r - position.getRow() == position.getCol() - c) ||
-      @               r == position.getRow() || c == position.getCol());
       @
       @   assignable \nothing;
       @*/

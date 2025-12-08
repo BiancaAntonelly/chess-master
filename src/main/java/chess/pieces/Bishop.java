@@ -28,6 +28,9 @@ public class Bishop extends ChessPiece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @   requires getBoard() != null;
+      @   requires getBoard().getRows() == 8;
+      @   requires getBoard().getCols() == 8;
       @
       @   ensures \result != null;
       @   ensures \result.length == 8;
@@ -42,30 +45,6 @@ public class Bishop extends ChessPiece {
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
       @               java.lang.Math.abs(r - position.getRow()) ==
       @               java.lang.Math.abs(c - position.getCol()));
-      @
-      @   // Direção Noroeste: r < position.getRow() && c < position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
-      @               \result[r][c] && r < position.getRow() && c < position.getCol();
-      @               r - position.getRow() == c - position.getCol());
-      @
-      @   // Direção Nordeste: r < position.getRow() && c > position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
-      @               \result[r][c] && r < position.getRow() && c > position.getCol();
-      @               position.getRow() - r == c - position.getCol());
-      @
-      @   // Direção Sudeste: r > position.getRow() && c > position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
-      @               \result[r][c] && r > position.getRow() && c > position.getCol();
-      @               r - position.getRow() == c - position.getCol());
-      @
-      @   // Direção Sudoeste: r > position.getRow() && c < position.getCol()
-      @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
-      @               \result[r][c] && r > position.getRow() && c < position.getCol();
-      @               r - position.getRow() == position.getCol() - c);
       @
       @   assignable \nothing;
       @*/

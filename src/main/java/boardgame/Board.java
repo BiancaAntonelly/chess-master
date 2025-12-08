@@ -52,7 +52,17 @@ public class Board {
         return cols;
     }
 
-    /*@ assignable \nothing; @*/
+    /*@ public normal_behavior
+      @   requires row >= 0 && row < rows;
+      @   requires col >= 0 && col < cols;
+      @   ensures \result == pieces[row][col];
+      @   assignable \nothing;
+      @ also public exceptional_behavior
+      @   requires row < 0 || row >= rows || col < 0 || col >= cols;
+      @   assignable \nothing;
+      @   signals_only BoardException;
+      @   signals (BoardException e) true;
+      @*/
     public /*@ pure @*/ /*@ nullable @*/ Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");
@@ -99,6 +109,17 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
+      @   ensures piece(pos) == null;
+      @   ensures \old(piece(pos)) == null ==> \result == null;
+      @   ensures \old(piece(pos)) != null ==> \result != null;
+      @   ensures \old(piece(pos)) != null ==> \result.position == null;
+      @   assignable pieces[pos.getRow()][pos.getCol()], \old(piece(pos)) == null ? \nothing : \old(piece(pos)).position;
+      @ also public exceptional_behavior
+      @   requires pos != null;
+      @   requires !positionExists(pos);
+      @   assignable \nothing;
+      @   signals_only BoardException;
+      @   signals (BoardException e) true;
       @*/
     public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {

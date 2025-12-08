@@ -38,12 +38,34 @@ public class King extends ChessPiece {
         return "K";
     }
 
+    /*@ private normal_behavior
+      @   requires position != null;
+      @   requires getBoard().positionExists(position);
+      @   ensures \result == true ==> (getBoard().piece(position) == null || 
+      @           ((ChessPiece)getBoard().piece(position)).getColor() != getColor());
+      @   ensures \result == false ==> (getBoard().piece(position) != null && 
+      @           ((ChessPiece)getBoard().piece(position)).getColor() == getColor());
+      @   assignable \nothing;
+      @*/
     //@ spec_public
     private /*@ pure @*/ boolean canMove(/*@ non_null @*/ Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
         return p == null || p.getColor() != getColor();
     }
 
+    /*@ private normal_behavior
+      @   requires position != null;
+      @   requires getBoard().positionExists(position);
+      @   ensures \result == true ==> (getBoard().piece(position) != null && 
+      @           getBoard().piece(position) instanceof Rook &&
+      @           ((ChessPiece)getBoard().piece(position)).getColor() == getColor() &&
+      @           ((ChessPiece)getBoard().piece(position)).getMoveCount() == 0);
+      @   ensures \result == false ==> (getBoard().piece(position) == null || 
+      @           !(getBoard().piece(position) instanceof Rook) ||
+      @           ((ChessPiece)getBoard().piece(position)).getColor() != getColor() ||
+      @           ((ChessPiece)getBoard().piece(position)).getMoveCount() != 0);
+      @   assignable \nothing;
+      @*/
     //@ spec_public
     private /*@ pure @*/ boolean testRookCastling(/*@ non_null @*/ Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
@@ -57,6 +79,9 @@ public class King extends ChessPiece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @   requires getBoard() != null;
+      @   requires getBoard().getRows() == 8;
+      @   requires getBoard().getCols() == 8;
       @
       @   ensures \result != null;
       @   ensures \result.length == 8;

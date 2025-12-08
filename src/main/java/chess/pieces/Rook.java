@@ -37,6 +37,9 @@ public class Rook extends ChessPiece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @   requires getBoard() != null;
+      @   requires getBoard().getRows() == 8;
+      @   requires getBoard().getCols() == 8;
       @
       @   ensures \result != null;
       @   ensures \result.length == 8;
