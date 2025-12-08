@@ -79,12 +79,7 @@ public abstract class ChessPiece extends Piece {
         if (!getBoard().positionExists(position)) {
             return false;
         }
-        Piece p;
-        try {
-            p = getBoard().piece(position);
-        } catch (Exception e) {
-            return false;
-        }
+        Piece p = getBoard().piece(position);
         if (p == null) {
             return false;
         }
@@ -92,15 +87,7 @@ public abstract class ChessPiece extends Piece {
             return false;
         }
         ChessPiece cp = (ChessPiece) p;
-        if (cp == null) {
-            return false;
-        }
-        Color cpColor;
-        try {
-            cpColor = cp.getColor();
-        } catch (Exception e) {
-            return false;
-        }
+        Color cpColor = cp.getColor();
         if (cpColor == null) {
             return false;
         }
