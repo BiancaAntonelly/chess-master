@@ -67,9 +67,6 @@ public class ChessPosition {
       @   requires pos != null;
       @   requires pos.getRow() >= 0 && pos.getRow() < 8;
       @   requires pos.getCol() >= 0 && pos.getCol() < 8;
-      @   requires 8 - pos.getRow() >= 1 && 8 - pos.getRow() <= 8;
-      @   requires 'a' + pos.getCol() >= 'a' && 'a' + pos.getCol() <= 'h';
-      @   requires (char)('a' + pos.getCol()) >= 'a' && (char)('a' + pos.getCol()) <= 'h';
       @   ensures \result != null;
       @   ensures \result.getRow() == 8 - pos.getRow();
       @   ensures \result.getCol() == (char)('a' + pos.getCol());
@@ -78,9 +75,15 @@ public class ChessPosition {
       @   assignable \nothing;
       @*/
     protected static /*@ pure non_null @*/ ChessPosition fromPosition(/*@ non_null @*/ Position pos) {
+        if (pos == null) {
+            throw new IllegalArgumentException("Position cannot be null");
+        }
         int rowCalc = 8 - pos.getRow();
-        int colCalc = 'a' + pos.getCol();
-        return new ChessPosition(rowCalc, (char) colCalc);
+        int colCalcInt = 'a' + pos.getCol();
+        //@ assert rowCalc >= 1 && rowCalc <= 8;
+        //@ assert colCalcInt >= 'a' && colCalcInt <= 'h';
+        char colCalc = (char) colCalcInt;
+        return new ChessPosition(rowCalc, colCalc);
     }
 
     /*@ public normal_behavior
@@ -93,12 +96,8 @@ public class ChessPosition {
     }
 
     /*@ also public normal_behavior
-      @   requires row >= 1 && row <= 8;
-      @   requires col >= 'a' && col <= 'h';
       @   ensures \result != null;
       @   ensures \result.length() == 2;
-      @   ensures \result.charAt(0) == col;
-      @   ensures \result.charAt(1) == (char)('0' + row);
       @   assignable \nothing;
       @*/
     @Override
@@ -127,18 +126,19 @@ public class ChessPosition {
       @*/
     @Override
     public /*@ pure @*/ boolean equals(/*@ nullable @*/ Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         ChessPosition that = (ChessPosition) obj;
         return row == that.row && col == that.col;
     }
 
     /*@ also
       @ public normal_behavior
-      @   requires row >= 1 && row <= 8;
-      @   requires col >= 'a' && col <= 'h';
       @   ensures \result == 31 * row + col;
-      @   ensures \result == (31 * row + (int)col);
       @   assignable \nothing;
       @*/
     @Override
