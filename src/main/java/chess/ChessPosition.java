@@ -81,11 +81,8 @@ public class ChessPosition {
         return row + ", " + col;
     }
 
-    /*@ also public normal_behavior
-      @   ensures \result != null;
-      @*/
     @Override
-    public /*@ non_null @*/ String toString() {
+    public String toString() {
         return "" + col + row;
     }
 
@@ -104,8 +101,6 @@ public class ChessPosition {
         return row == that.row && col == that.col;
     }
 
-    /*@ also public normal_behavior
-      @*/
     @Override
     public int hashCode() {
         return 31 * row + col;
