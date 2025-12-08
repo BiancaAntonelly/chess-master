@@ -6,7 +6,7 @@ public abstract class Piece {
     protected /*@ nullable @*/ Position position; //@ in modelPosition;
     //@ spec_public
     private final Board board;
-                    //@ in modelBoard;
+    //@ in modelBoard;
 
     //@ public model Board modelBoard;
     //@ private represents modelBoard = board;
@@ -15,36 +15,35 @@ public abstract class Piece {
     //@ private represents modelPosition = position;
 
     //@ public invariant modelBoard != null;
-    //@ public invariant modelPosition == null
-    //@        || (modelPosition.getRow() >= 0 && modelPosition.getRow() < 8
-    //@            && modelPosition.getCol() >= 0 && modelPosition.getCol() < 8);
 
     /*@ public normal_behavior
       @   requires board != null;
       @   ensures modelBoard == board;
       @   ensures modelPosition == null;
+      @   ensures getBoard() == board;
       @*/
     public Piece(Board board) {
         this.board = board;
         this.position = null;
     }
 
-    /*@ pure @*/
-    protected Board getBoard() { return board; }
-
     /*@ public normal_behavior
+      @   ensures \result == board;
       @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < \result.length;
-      @               \result[i] != null && \result[i].length == \result.length);
       @   assignable \nothing;
       @*/
+    public /*@ pure non_null @*/ Board getBoard() { return board; }
+
     public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires pos.getRow() >= 0 && pos.getRow() < 8;
       @   requires pos.getCol() >= 0 && pos.getCol() < 8;
+      @   requires possibleMoves() != null;
+      @   requires possibleMoves().length == 8;
+      @   requires possibleMoves()[pos.getRow()] != null;
+      @   requires possibleMoves()[pos.getRow()].length == 8;
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean possibleMove(Position pos) {
@@ -52,14 +51,22 @@ public abstract class Piece {
     }
 
     /*@ public normal_behavior
+      @   requires possibleMoves() != null;
+      @   requires possibleMoves().length == 8;
+      @   requires (\forall int i; 0 <= i && i < 8; possibleMoves()[i] != null && possibleMoves()[i].length == 8);
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
-        for (boolean[] booleans : mat) {
-            /*@ loop_invariant 0 <= j && j <= mat.length;
+        /*@ loop_invariant 0 <= i && i <= 8;
+          @ decreases 8 - i;
+          @*/
+        for (int i = 0; i < 8; i++) {
+            boolean[] booleans = mat[i];
+            /*@ loop_invariant 0 <= j && j <= 8;
+              @ decreases 8 - j;
               @*/
-            for (int j = 0; j < mat.length; j++) {
+            for (int j = 0; j < 8; j++) {
                 if (booleans[j]) {
                     return true;
                 }
@@ -72,5 +79,4 @@ public abstract class Piece {
     public /*@ nullable @*/ Position getPosition() {
         return position;
     }
-
 }

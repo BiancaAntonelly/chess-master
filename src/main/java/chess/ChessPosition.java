@@ -4,8 +4,8 @@ import boardgame.Position;
 
 public class ChessPosition {
 
-    //@ public invariant 1 <= row && row <= 8;
-    //@ public invariant 'a' <= col && col <= 'h';
+    //@ public invariant row >= 1 && row <= 8;
+    //@ public invariant col >= 'a' && col <= 'h';
 
     //@ spec_public
     private final int row;
@@ -13,11 +13,15 @@ public class ChessPosition {
     //@ spec_public
     private final char col;
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   requires col >= 'a' && col <= 'h';
       @   requires row >= 1 && row <= 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
+      @ also public exceptional_behavior
+      @   requires col < 'a' || col > 'h' || row < 1 || row > 8;
+      @   signals_only ChessException;
+      @   signals (ChessException e) true;
       @*/
     public ChessPosition(int row, char col) {
         if (col < 'a'|| col > 'h' || row < 1 || row > 8) {
@@ -27,42 +31,88 @@ public class ChessPosition {
         this.col = col;
     }
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   ensures \result == row;
-      @   pure
+      @   ensures \result >= 1 && \result <= 8;
+      @   assignable \nothing;
       @*/
-    public int getRow() { return row; }
+    public /*@ pure @*/ int getRow() {
+        return row;
+    }
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   ensures \result == col;
-      @   pure
+      @   ensures \result >= 'a' && \result <= 'h';
+      @   assignable \nothing;
       @*/
-    public char getCol() { return col; }
+    public /*@ pure @*/ char getCol() {
+        return col;
+    }
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   ensures \result != null;
       @*/
-    protected Position toPosition() {
+    protected /*@ non_null @*/ Position toPosition() {
         return new Position(8 - row, col - 'a');
     }
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   requires pos != null;
-      @   requires 0 <= pos.getRow() && pos.getRow() < 8;
-      @   requires 0 <= pos.getCol() && pos.getCol() < 8;
+      @   requires pos.getRow() >= 0 && pos.getRow() < 8;
+      @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   ensures \result != null;
       @*/
-    protected static ChessPosition fromPosition(Position pos) {
+    protected static /*@ non_null @*/ ChessPosition fromPosition(/*@ non_null @*/ Position pos) {
+        if (pos == null) {
+            throw new IllegalArgumentException("Position cannot be null");
+        }
         int rowCalc = 8 - pos.getRow();
-        int colCalc = 'a' + pos.getCol();
-        return new ChessPosition(rowCalc, (char) colCalc);
+        int colCalcInt = 'a' + pos.getCol();
+        char colCalc = (char) colCalcInt;
+        return new ChessPosition(rowCalc, colCalc);
     }
 
-    /*@ normal_behavior
+    /*@ public normal_behavior
       @   ensures \result != null;
-      @   pure
+      @   ensures \result.length() > 0;
+      @   assignable \nothing;
       @*/
-    public String getString() {
+    public /*@ pure non_null @*/ String getString() {
         return row + ", " + col;
+    }
+
+    /*@ also
+      @ public normal_behavior
+      @   ensures \result != null;
+      @   assignable \everything;
+      @*/
+    @Override
+    public String toString() {
+        return "" + col + row;
+    }
+
+    /*@ also public normal_behavior
+      @   assignable \nothing;
+      @*/
+    @Override
+    public /*@ pure @*/ boolean equals(/*@ nullable @*/ Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ChessPosition that = (ChessPosition) obj;
+        return row == that.row && col == that.col;
+    }
+
+    /*@ also
+      @ public normal_behavior
+      @   ensures true;
+      @   assignable \everything;
+      @*/
+    @Override
+    public int hashCode() {
+        return 31 * row + col;
     }
 }

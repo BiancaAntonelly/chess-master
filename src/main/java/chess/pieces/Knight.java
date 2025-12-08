@@ -10,71 +10,146 @@ public class Knight extends ChessPiece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   ensures getMoveCount() == 0;
+      @   ensures getBoard() == board;
       @*/
-    public Knight(Board board, Color color) {
+    public Knight(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
     }
 
-    /*@ private normal_behavior
-      @   requires position != null;
-      @   assignable \nothing;
-      @*/
-    private boolean canMove(Position position) {
+    private boolean canMove(/*@ non_null @*/ Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
         return p == null || p.getColor() != getColor();
     }
 
-    /*@ also
-      @   public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
-      @   assignable \nothing;
-      @*/
     @Override
     public boolean[][] possibleMoves() {
-        boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
+        if (position == null || getBoard() == null) {
+            return new boolean[8][8];
+        }
+        
+        Position currentPos = position;
+        Board board = getBoard();
+        if (currentPos == null || board == null) {
+            return new boolean[8][8];
+        }
 
+        int rows = board.getRows();
+        int cols = board.getCols();
+        boolean[][] mat = new boolean[rows][cols];
         Position p = new Position(0, 0);
 
-        p.setValues(position.getRow() - 1, position.getCol() - 2);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        // Movimento em L: 8 direções possíveis
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol() - 2);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() - 2, position.getCol() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() - 2, currentPos.getCol() - 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() - 2, position.getCol() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() - 2, currentPos.getCol() + 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() - 1, position.getCol() + 2);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol() + 2);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() + 1, position.getCol() + 2);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol() + 2);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() + 2, position.getCol() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 2, currentPos.getCol() + 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() + 2, position.getCol() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 2, currentPos.getCol() - 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
-        p.setValues(position.getRow() + 1, position.getCol() - 2);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol() - 2);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
+                }
+            }
         }
 
         return mat;
@@ -84,10 +159,10 @@ public class Knight extends ChessPiece {
       @ public normal_behavior
       @   ensures \result != null;
       @   ensures \result.equals("N");
-      @   pure
+      @   assignable \nothing;
       @*/
     @Override
-    public String toString() {
+    public /*@ pure non_null @*/ String toString() {
         return "N";
     }
 }

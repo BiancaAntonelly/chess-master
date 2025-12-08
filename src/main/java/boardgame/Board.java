@@ -13,6 +13,10 @@ public class Board {
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
     //@ public invariant \typeof(pieces) == \type(Piece[][]);
+    //@ public invariant (\forall int i, j;
+    //@                      0 <= i && i < rows && 0 <= j && j < cols;
+    //@                      pieces[i][j] == null ||
+    //@                      pieces[i][j] instanceof chess.ChessPiece);
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
@@ -36,7 +40,7 @@ public class Board {
       @   ensures \result == rows;
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ int getRows() {
+    public /*@ pure helper @*/ int getRows() {
         return rows;
     }
 
@@ -44,11 +48,21 @@ public class Board {
       @   ensures \result == cols;
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ int getCols() {
+    public /*@ pure helper @*/ int getCols() {
         return cols;
     }
 
-    /*@ assignable \nothing; @*/
+    /*@ public normal_behavior
+      @   requires row >= 0 && row < rows;
+      @   requires col >= 0 && col < cols;
+      @   ensures \result == pieces[row][col];
+      @   assignable \nothing;
+      @ also public exceptional_behavior
+      @   requires row < 0 || row >= rows || col < 0 || col >= cols;
+      @   assignable \nothing;
+      @   signals_only BoardException;
+      @   signals (BoardException e) true;
+      @*/
     public /*@ pure @*/ /*@ nullable @*/ Piece piece(int row, int col) {
         if (!positionExists(row, col)) {
             throw new BoardException("A posição solicitada não existe.");
@@ -73,6 +87,7 @@ public class Board {
 
     /*@ public behavior
       @   requires piece != null;
+      @   requires piece instanceof chess.ChessPiece;
       @   requires pos != null;
       @   requires positionExists(pos);
       @   requires !isPiecePlaced(pos);
@@ -81,6 +96,10 @@ public class Board {
       @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
+      @   ensures (\forall int i, j;
+      @               0 <= i && i < rows && 0 <= j && j < cols;
+      @               pieces[i][j] == null ||
+      @               pieces[i][j] instanceof chess.ChessPiece);
       @   signals (BoardException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
@@ -95,6 +114,24 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
+      @   requires piece(pos) == null;
+      @   ensures piece(pos) == null;
+      @   ensures \result == null;
+      @   assignable \nothing;
+      @ also public normal_behavior
+      @   requires pos != null;
+      @   requires positionExists(pos);
+      @   requires piece(pos) != null;
+      @   ensures piece(pos) == null;
+      @   ensures \result != null;
+      @   ensures \result.position == null;
+      @   assignable pieces[pos.getRow()][pos.getCol()], piece(pos).position;
+      @ also public exceptional_behavior
+      @   requires pos != null;
+      @   requires !positionExists(pos);
+      @   assignable \nothing;
+      @   signals_only BoardException;
+      @   signals (BoardException e) true;
       @*/
     public /*@ nullable @*/ Piece removePiece(Position pos) {
         if (!positionExists(pos)) {

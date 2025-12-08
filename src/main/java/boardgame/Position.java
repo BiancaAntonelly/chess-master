@@ -1,72 +1,70 @@
 package boardgame;
 
 public class Position {
+
     //@ spec_public
-    private int row;
+    private int r;
+
     //@ spec_public
-    private int col;
+    private int c;
 
     /*@ public normal_behavior
-      @   ensures this.row == row;
-      @   ensures this.col == col;
+      @   ensures this.r == row;
+      @   ensures this.c == col;
       @*/
     public Position(int row, int col) {
-        this.row = row;
-        this.col = col;
+        this.r = row;
+        this.c = col;
     }
 
     /*@ public normal_behavior
-      @   ensures \result == row;
+      @   ensures \result == r;
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ int getRow() {
-        return row;
+        return r;
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= row && row < 8;
-      @   ensures this.row == row;
-      @   assignable this.row;
+      @   ensures this.r == row;
+      @   assignable r;
       @*/
     public void setRow(int row) {
-        this.row = row;
+        this.r = row;
     }
 
     /*@ public normal_behavior
-      @   ensures \result == col;
+      @   ensures \result == c;
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ int getCol() {
-        return col;
+        return c;
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= col && col < 8;
-      @   ensures this.col == col;
-      @   assignable this.col;
+      @   ensures this.c == col;
+      @   assignable c;
       @*/
     public void setCol(int col) {
-        this.col = col;
+        this.c = col;
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= row && row < 8;
-      @   requires 0 <= col && col < 8;
-      @   ensures this.row == row;
-      @   ensures this.col == col;
-      @   assignable this.row, this.col;
+      @   ensures this.r == row;
+      @   ensures this.c == col;
+      @   assignable r, c;
       @*/
     public void setValues(int row, int col) {
-        this.row = row;
-        this.col = col;
+        this.r = row;
+        this.c = col;
     }
 
     /*@ public normal_behavior
       @   ensures \result != null;
+      @   ensures \result.length() > 0;
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ String getString() {
-        return row + ", " + col;
+    public /*@ pure non_null @*/ String getString() {
+        return r + ", " + c;
     }
-
 }

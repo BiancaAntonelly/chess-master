@@ -6,11 +6,8 @@ import boardgame.Position;
 
 public abstract class ChessPiece extends Piece {
 
-    //@ public invariant color != null;
-    //@ public invariant moveCount >= 0;
-
     //@ spec_public
-    private final Color color;
+    private /*@ nullable @*/ Color color;
 
     //@ spec_public
     private int moveCount;
@@ -18,32 +15,28 @@ public abstract class ChessPiece extends Piece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
-      @   ensures this.color == color;
-      @   ensures moveCount == 0;
+      @   ensures getBoard() == board;
+      @   ensures getMoveCount() == 0;
+      @   ensures position == null;
       @*/
-    public ChessPiece(Board board, Color color) {
+    public ChessPiece(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board);
         this.color = color;
         this.moveCount = 0;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result == color;
-      @   ensures \result != null;
-      @   assignable \nothing;
-      @   pure
-      @*/
     public Color getColor() {
+        if (color == null) {
+            throw new IllegalStateException("Color is null");
+        }
         return color;
     }
 
     /*@ public normal_behavior
       @   ensures \result == moveCount;
-      @   ensures \result >= 0;
       @   assignable \nothing;
-      @   pure
       @*/
-    public int getMoveCount() {
+    public /*@ pure @*/ int getMoveCount() {
         return moveCount;
     }
 
@@ -52,7 +45,7 @@ public abstract class ChessPiece extends Piece {
       @   ensures moveCount == \old(moveCount) + 1;
       @   assignable moveCount;
       @*/
-    public void increaseMoveCount() {
+    protected void increaseMoveCount() {
         moveCount++;
     }
 
@@ -61,31 +54,95 @@ public abstract class ChessPiece extends Piece {
       @   ensures moveCount == \old(moveCount) - 1;
       @   assignable moveCount;
       @*/
-    public void decreaseMoveCount() {
+    protected void decreaseMoveCount() {
         moveCount--;
     }
 
-    /*@ public normal_behavior
-      @   requires position != null;
-      @   requires position.getRow() >= 0 && position.getRow() < 8;
-      @   requires position.getCol() >= 0 && position.getCol() < 8;
-      @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - position.getRow();
-      @   ensures \result.getCol() == (char)('a' + position.getCol());
-      @   assignable \nothing;
-      @   pure
-      @*/
     public ChessPosition getChessPosition() {
-        return ChessPosition.fromPosition(position);
+        if (position == null || color == null) {
+            throw new IllegalStateException("Invalid state");
+        }
+        if (position.getRow() < 0 || position.getRow() >= 8 || 
+            position.getCol() < 0 || position.getCol() >= 8) {
+            throw new IllegalStateException("Invalid position");
+        }
+        int rowCalc = 8 - position.getRow();
+        int colCalcInt = 'a' + position.getCol();
+        char colCalc = (char) colCalcInt;
+        return new ChessPosition(rowCalc, colCalc);
     }
 
-    /*@ public normal_behavior
-      @   requires pos != null;
+    protected boolean isThereOpponentPiece(Position position) {
+        if (position == null || getBoard() == null || this.color == null) {
+            return false;
+        }
+        if (!getBoard().positionExists(position)) {
+            return false;
+        }
+        /*@ nullable @*/ Piece p = getBoard().piece(position);
+        if (p == null) {
+            return false;
+        }
+        if (!(p instanceof ChessPiece)) {
+            return false;
+        }
+        ChessPiece cp = (ChessPiece) p;
+        Color cpColor = cp.getColor();
+        if (cpColor == null) {
+            return false;
+        }
+        return cpColor != this.color;
+    }
+
+    public abstract boolean[][] possibleMoves();
+
+    /*@ also
+      @ public normal_behavior
+      @   requires position != null;
+      @   requires this.position != null;
+      @   requires getBoard() != null;
+      @   requires position.getRow() >= 0 && position.getRow() < getBoard().getRows();
+      @   requires position.getCol() >= 0 && position.getCol() < getBoard().getCols();
+      @   requires possibleMoves() != null;
+      @   requires possibleMoves().length == getBoard().getRows();
+      @   requires possibleMoves().length > position.getRow();
+      @   requires possibleMoves()[position.getRow()] != null;
+      @   requires possibleMoves()[position.getRow()].length == getBoard().getCols();
+      @   requires possibleMoves()[position.getRow()].length > position.getCol();
       @   assignable \nothing;
       @*/
-    public boolean isThereOpponentPiece(Position pos) {
-        ChessPiece p = (ChessPiece) getBoard().piece(pos);
-        return p != null && p.getColor() != color;
+    public /*@ pure @*/ boolean possibleMove(/*@ non_null @*/ Position position) {
+        boolean[][] moves = possibleMoves();
+        return moves[position.getRow()][position.getCol()];
     }
 
+    public boolean isThereAnyPossibleMove() {
+        if (position == null || getBoard() == null) {
+            return false;
+        }
+        boolean[][] mat = possibleMoves();
+        if (mat == null) {
+            return false;
+        }
+        int rows = getBoard().getRows();
+        int cols = getBoard().getCols();
+        if (rows <= 0 || cols <= 0 || rows > mat.length) {
+            return false;
+        }
+        for (int i = 0; i < rows && i < mat.length && i >= 0; i++) {
+            if (mat[i] == null || mat[i].length != cols) {
+                continue;
+            }
+            boolean[] row = mat[i];
+            if (row == null) {
+                continue;
+            }
+            for (int j = 0; j < cols && j < row.length && j >= 0; j++) {
+                if (row[j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

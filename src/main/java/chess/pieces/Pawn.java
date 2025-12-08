@@ -8,109 +8,229 @@ import chess.Color;
 
 public class Pawn extends ChessPiece {
 
+    //@ public invariant match != null;
+
     //@ spec_public
-    private final ChessMatch match;
+    private final /*@ non_null @*/ ChessMatch match;
 
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
+      @   ensures getMoveCount() == 0;
+      @   ensures getBoard() == board;
+      @   ensures this.match == match;
       @*/
-    public Pawn(Board board, Color color, ChessMatch match) {
+    public Pawn(/*@ non_null @*/ Board board,
+            /*@ non_null @*/ Color color,
+            /*@ non_null @*/ ChessMatch match) {
         super(board, color);
         this.match = match;
     }
 
-    /*@ also
-      @   public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
-      @   assignable \nothing;
-      @*/
     @Override
     public boolean[][] possibleMoves() {
-        boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
+        if (position == null || getBoard() == null) {
+            return new boolean[8][8];
+        }
+        
+        Position currentPos = position;
+        Board board = getBoard();
+        if (currentPos == null || board == null) {
+            return new boolean[8][8];
+        }
+
+        int rows = board.getRows();
+        int cols = board.getCols();
+        boolean[][] mat = new boolean[rows][cols];
         Position p = new Position(0, 0);
 
         if (getColor() == Color.WHITE) {
-            // Um para frente
-            p.setValues(position.getRow() - 1, position.getCol());
-            if (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-                mat[p.getRow()][p.getCol()] = true;
+            // Um para frente (brancas sobem - row decresce)
+            p.setValues(currentPos.getRow() - 1, currentPos.getCol());
+            if (board.positionExists(p) && !board.isPiecePlaced(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
+                    }
+                }
 
                 // Dois para frente (primeiro movimento)
-                p.setValues(position.getRow() - 2, position.getCol());
-                if (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p) && getMoveCount() == 0) {
-                    mat[p.getRow()][p.getCol()] = true;
+                p.setValues(currentPos.getRow() - 2, currentPos.getCol());
+                if (board.positionExists(p) && !board.isPiecePlaced(p) && getMoveCount() == 0) {
+                    r = p.getRow();
+                    c = p.getCol();
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
+                    }
                 }
             }
 
-            // Diagonal esquerda
-            p.setValues(position.getRow() - 1, position.getCol() - 1);
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-                mat[p.getRow()][p.getCol()] = true;
+            // Captura diagonal esquerda
+            p.setValues(currentPos.getRow() - 1, currentPos.getCol() - 1);
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
+                    }
+                }
             }
 
-            // Diagonal direita
-            p.setValues(position.getRow() - 1, position.getCol() + 1);
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-                mat[p.getRow()][p.getCol()] = true;
+            // Captura diagonal direita
+            p.setValues(currentPos.getRow() - 1, currentPos.getCol() + 1);
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
+                    }
+                }
             }
 
-            // En Passant Brancas
-            if (position.getRow() == 3) {
-                Position left = new Position(position.getRow(), position.getCol() - 1);
-                if (getBoard().positionExists(left)
+            // En Passant (brancas)
+            if (currentPos.getRow() == 3) {
+                Position left = new Position(currentPos.getRow(), currentPos.getCol() - 1);
+                if (board.positionExists(left)
                         && isThereOpponentPiece(left)
-                        && getBoard().piece(left) == match.getEnPassantVulnerable()) {
-                    mat[left.getRow() - 1][left.getCol()] = true;
+                        && board.piece(left) == match.getEnPassantVulnerable()) {
+                    int r = left.getRow() - 1;
+                    int c = left.getCol();
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
+                    }
                 }
-                Position right = new Position(position.getRow(), position.getCol() + 1);
-                if (getBoard().positionExists(right)
+                Position right = new Position(currentPos.getRow(), currentPos.getCol() + 1);
+                if (board.positionExists(right)
                         && isThereOpponentPiece(right)
-                        && getBoard().piece(right) == match.getEnPassantVulnerable()) {
-                    mat[right.getRow() - 1][right.getCol()] = true;
+                        && board.piece(right) == match.getEnPassantVulnerable()) {
+                    int r = right.getRow() - 1;
+                    int c = right.getCol();
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
+                    }
                 }
             }
         } else {
-            // Um para frente (pretas descem)
-            p.setValues(position.getRow() + 1, position.getCol());
-            if (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-                mat[p.getRow()][p.getCol()] = true;
+            // Um para frente (pretas descem - row aumenta)
+            p.setValues(currentPos.getRow() + 1, currentPos.getCol());
+            if (board.positionExists(p) && !board.isPiecePlaced(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
+                    }
+                }
 
                 // Dois para frente (primeiro movimento)
-                p.setValues(position.getRow() + 2, position.getCol());
-                if (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p) && getMoveCount() == 0) {
-                    mat[p.getRow()][p.getCol()] = true;
+                p.setValues(currentPos.getRow() + 2, currentPos.getCol());
+                if (board.positionExists(p) && !board.isPiecePlaced(p) && getMoveCount() == 0) {
+                    r = p.getRow();
+                    c = p.getCol();
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
+                    }
                 }
             }
 
-            // Diagonal esquerda (do ponto de vista das pretas)
-            p.setValues(position.getRow() + 1, position.getCol() - 1);
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-                mat[p.getRow()][p.getCol()] = true;
+            // Captura diagonal esquerda (pretas)
+            p.setValues(currentPos.getRow() + 1, currentPos.getCol() - 1);
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
+                    }
+                }
             }
 
-            // Diagonal direita (do ponto de vista das pretas)
-            p.setValues(position.getRow() + 1, position.getCol() + 1);
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-                mat[p.getRow()][p.getCol()] = true;
+            // Captura diagonal direita (pretas)
+            p.setValues(currentPos.getRow() + 1, currentPos.getCol() + 1);
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
+                    }
+                }
             }
 
-            // En Passant Pretas
-            if (position.getRow() == 4) {
-                Position left = new Position(position.getRow(), position.getCol() - 1);
-                if (getBoard().positionExists(left)
+            // En Passant (pretas)
+            if (currentPos.getRow() == 4) {
+                Position left = new Position(currentPos.getRow(), currentPos.getCol() - 1);
+                if (board.positionExists(left)
                         && isThereOpponentPiece(left)
-                        && getBoard().piece(left) == match.getEnPassantVulnerable()) {
-                    mat[left.getRow() + 1][left.getCol()] = true;
+                        && board.piece(left) == match.getEnPassantVulnerable()) {
+                    int r = left.getRow() + 1;
+                    int c = left.getCol();
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
+                    }
                 }
-                Position right = new Position(position.getRow(), position.getCol() + 1);
-                if (getBoard().positionExists(right)
+                Position right = new Position(currentPos.getRow(), currentPos.getCol() + 1);
+                if (board.positionExists(right)
                         && isThereOpponentPiece(right)
-                        && getBoard().piece(right) == match.getEnPassantVulnerable()) {
-                    mat[right.getRow() + 1][right.getCol()] = true;
+                        && board.piece(right) == match.getEnPassantVulnerable()) {
+                    int r = right.getRow() + 1;
+                    int c = right.getCol();
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -122,10 +242,10 @@ public class Pawn extends ChessPiece {
       @ public normal_behavior
       @   ensures \result != null;
       @   ensures \result.equals("P");
-      @   pure
+      @   assignable \nothing;
       @*/
     @Override
-    public String toString() {
+    public /*@ pure non_null @*/ String toString() {
         return "P";
     }
 }

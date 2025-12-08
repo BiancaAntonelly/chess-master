@@ -29,11 +29,20 @@ public class UI {
       @   requires sc != null;
       @   assignable \everything;
       @   ensures \result != null;
+      @   ensures \result.getRow() >= 1 && \result.getRow() <= 8;
+      @   ensures \result.getCol() >= 'a' && \result.getCol() <= 'h';
+      @ also public exceptional_behavior
+      @   requires sc != null;
+      @   assignable \everything;
+      @   signals_only InputMismatchException;
       @   signals (InputMismatchException e) true;
       @*/
     public static ChessPosition readChessPosition(Scanner sc) {
         try {
             String s = sc.nextLine();
+            if (s == null || s.length() < 2) {
+                throw new InputMismatchException("Posição inválida. Valores válidos estão entre a1 e h8.");
+            }
             char column = s.charAt(0);
             int row = Integer.parseInt(s.substring(1));
             return new ChessPosition(row, column);
@@ -149,6 +158,10 @@ public class UI {
         List<ChessPiece> white = new java.util.ArrayList<>();
         List<ChessPiece> black = new java.util.ArrayList<>();
 
+        /*@ loop_invariant 0 <= i && i <= captured.size();
+          @ loop_invariant white != null && black != null;
+          @ decreases captured.size() - i;
+          @*/
         for (int i = 0; i < captured.size(); i++) {
             ChessPiece piece = captured.get(i);
             if (piece != null) {
