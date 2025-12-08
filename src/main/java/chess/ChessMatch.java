@@ -10,7 +10,6 @@ import java.util.List;
 
 public class ChessMatch {
 
-    //@ public invariant board != null;
     //@ public invariant turn >= 1;
     //@ public invariant currentPlayer != null;
     //@ public invariant piecesOnTheBoard != null;
