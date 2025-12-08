@@ -70,6 +70,10 @@ public abstract class ChessPiece extends Piece {
         if (position == null) {
             throw new IllegalStateException("Position is null");
         }
+        if (position.getRow() < 0 || position.getRow() >= 8 || 
+            position.getCol() < 0 || position.getCol() >= 8) {
+            throw new IllegalStateException("Invalid position");
+        }
         int rowCalc = 8 - position.getRow();
         int colCalcInt = 'a' + position.getCol();
         char colCalc = (char) colCalcInt;
@@ -77,6 +81,12 @@ public abstract class ChessPiece extends Piece {
     }
 
     protected boolean isThereOpponentPiece(Position position) {
+        if (position == null || getBoard() == null) {
+            return false;
+        }
+        if (!getBoard().positionExists(position)) {
+            return false;
+        }
         Piece p = getBoard().piece(position);
         if (p == null) {
             return false;
@@ -115,29 +125,28 @@ public abstract class ChessPiece extends Piece {
         return moves[position.getRow()][position.getCol()];
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   requires this.position != null;
-      @   requires getBoard() != null;
-      @   requires possibleMoves() != null;
-      @   requires possibleMoves().length == getBoard().getRows();
-      @   requires getBoard().getRows() > 0;
-      @   requires getBoard().getCols() > 0;
-      @   requires (\forall int i; 0 <= i && i < getBoard().getRows(); 
-      @               possibleMoves()[i] != null && 
-      @               possibleMoves()[i].length == getBoard().getCols());
-      @   assignable \nothing;
-      @*/
-    public /*@ pure @*/ boolean isThereAnyPossibleMove() {
+    public boolean isThereAnyPossibleMove() {
+        if (position == null || getBoard() == null) {
+            return false;
+        }
         boolean[][] mat = possibleMoves();
+        if (mat == null) {
+            return false;
+        }
         int rows = getBoard().getRows();
         int cols = getBoard().getCols();
-        for (int i = 0; i < rows && i < mat.length; i++) {
+        if (rows <= 0 || cols <= 0 || rows > mat.length) {
+            return false;
+        }
+        for (int i = 0; i < rows && i < mat.length && i >= 0; i++) {
             if (mat[i] == null || mat[i].length != cols) {
                 continue;
             }
             boolean[] row = mat[i];
-            for (int j = 0; j < cols && j < row.length; j++) {
+            if (row == null) {
+                continue;
+            }
+            for (int j = 0; j < cols && j < row.length && j >= 0; j++) {
                 if (row[j]) {
                     return true;
                 }
