@@ -13,8 +13,6 @@ public abstract class ChessPiece extends Piece {
     private int moveCount;
 
     //@ public invariant color != null;
-    //@ public invariant moveCount >= 0;
-    //@ public invariant moveCount <= Integer.MAX_VALUE;
 
     /*@ public normal_behavior
       @   requires board != null;

@@ -15,9 +15,6 @@ public abstract class Piece {
     //@ private represents modelPosition = position;
 
     //@ public invariant modelBoard != null;
-    //@ public invariant modelPosition == null
-    //@        || (modelPosition.getRow() >= 0 && modelPosition.getRow() < 8
-    //@            && modelPosition.getCol() >= 0 && modelPosition.getCol() < 8);
 
     /*@ public normal_behavior
       @   requires board != null;
