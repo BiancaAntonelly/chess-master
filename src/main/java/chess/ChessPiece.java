@@ -4,9 +4,6 @@ import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
 
-/**
- * Classe base para peças de xadrez.
- */
 public abstract class ChessPiece extends Piece {
 
     //@ spec_public
@@ -73,6 +70,8 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires position.getRow() >= 0 && position.getRow() < 8;
       @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @   requires 8 - position.getRow() >= 1 && 8 - position.getRow() <= 8;
+      @   requires 'a' + position.getCol() >= 'a' && 'a' + position.getCol() <= 'h';
       @   ensures \result != null;
       @   ensures \result.getRow() == 8 - position.getRow();
       @   ensures \result.getCol() == (char)('a' + position.getCol());
@@ -89,6 +88,8 @@ public abstract class ChessPiece extends Piece {
     /*@ public normal_behavior
       @   requires position != null;
       @   requires getBoard().positionExists(position);
+      @   requires color != null;
+      @   requires moveCount >= 0;
       @   ensures \result ==> (
       @              getBoard().piece(position) != null
       @          &&  getBoard().piece(position) instanceof ChessPiece
@@ -114,8 +115,10 @@ public abstract class ChessPiece extends Piece {
       @   requires position.getCol() >= 0 && position.getCol() < getBoard().getCols();
       @   requires this.position != null;
       @   requires possibleMoves() != null;
+      @   requires possibleMoves().length == getBoard().getRows();
       @   requires possibleMoves().length > position.getRow();
       @   requires possibleMoves()[position.getRow()] != null;
+      @   requires possibleMoves()[position.getRow()].length == getBoard().getCols();
       @   requires possibleMoves()[position.getRow()].length > position.getCol();
       @   ensures \result == possibleMoves()[position.getRow()][position.getCol()];
       @   assignable \nothing;
@@ -129,7 +132,11 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires possibleMoves() != null;
       @   requires possibleMoves().length == getBoard().getRows();
-      @   requires (\forall int i; 0 <= i && i < getBoard().getRows(); possibleMoves()[i] != null && possibleMoves()[i].length == getBoard().getCols());
+      @   requires getBoard().getRows() > 0;
+      @   requires getBoard().getCols() > 0;
+      @   requires (\forall int i; 0 <= i && i < getBoard().getRows(); 
+      @               possibleMoves()[i] != null && 
+      @               possibleMoves()[i].length == getBoard().getCols());
       @   ensures \result == true ==> (\exists int i, j;
       @                  0 <= i && i < getBoard().getRows() &&
       @                  0 <= j && j < getBoard().getCols();
@@ -144,12 +151,16 @@ public abstract class ChessPiece extends Piece {
         boolean[][] mat = possibleMoves();
         /*@ loop_invariant 0 <= i && i <= getBoard().getRows();
           @ loop_invariant mat != null;
+          @ loop_invariant mat.length == getBoard().getRows();
+          @ loop_invariant (\forall int k; 0 <= k && k < i; 
+          @                   mat[k] != null && mat[k].length == getBoard().getCols());
           @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < getBoard().getCols(); !mat[k][l]);
           @ decreases getBoard().getRows() - i;
           @*/
         for (int i = 0; i < getBoard().getRows(); i++) {
             /*@ loop_invariant 0 <= j && j <= getBoard().getCols();
               @ loop_invariant mat[i] != null;
+              @ loop_invariant mat[i].length == getBoard().getCols();
               @ loop_invariant (\forall int l; 0 <= l && l < j; !mat[i][l]);
               @ decreases getBoard().getCols() - j;
               @*/

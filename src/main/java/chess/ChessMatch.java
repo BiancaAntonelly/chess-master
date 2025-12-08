@@ -8,11 +8,6 @@ import chess.pieces.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe que gerencia uma partida de xadrez completa.
- * Controla o tabuleiro, turnos, jogador atual, verificação de xeque e xeque-mate,
- * movimentos especiais (roque, en passant, promoção) e captura de peças.
- */
 public class ChessMatch {
 
     //@ public invariant turn >= 1;

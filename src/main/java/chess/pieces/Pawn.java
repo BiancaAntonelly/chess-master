@@ -6,9 +6,6 @@ import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
 
-/**
- * Classe que representa um Peão no jogo de xadrez.
- */
 public class Pawn extends ChessPiece {
 
     //@ public invariant match != null;

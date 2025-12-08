@@ -5,11 +5,6 @@ import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
-/**
- * Classe que representa um Bispo no jogo de xadrez.
- * O bispo move-se diagonalmente em qualquer direção,
- * quantas casas quiser, desde que não haja peças bloqueando.
- */
 public class Bishop extends ChessPiece {
 
     /*@ public normal_behavior

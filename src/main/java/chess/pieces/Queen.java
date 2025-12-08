@@ -5,12 +5,6 @@ import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
-/**
- * Classe que representa uma Rainha no jogo de xadrez.
- * A rainha é a peça mais poderosa, combinando os movimentos
- * da torre (horizontal/vertical) e do bispo (diagonal).
- * Pode mover-se quantas casas quiser em qualquer uma das 8 direções.
- */
 public class Queen extends ChessPiece {
 
     /*@ public normal_behavior

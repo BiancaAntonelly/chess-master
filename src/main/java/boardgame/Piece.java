@@ -51,8 +51,10 @@ public abstract class Piece {
       @   requires pos.getRow() >= 0 && pos.getRow() < 8;
       @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   requires possibleMoves() != null;
+      @   requires possibleMoves().length == 8;
       @   requires possibleMoves().length > pos.getRow();
       @   requires possibleMoves()[pos.getRow()] != null;
+      @   requires possibleMoves()[pos.getRow()].length == 8;
       @   requires possibleMoves()[pos.getRow()].length > pos.getCol();
       @   ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
@@ -73,8 +75,11 @@ public abstract class Piece {
         boolean[][] mat = possibleMoves();
 
         /*@ loop_invariant mat != null;
+          @ loop_invariant mat.length == 8;
           @ loop_invariant 0 <= i && i <= mat.length;
-          @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < mat[k].length; !mat[k][l]);
+          @ loop_invariant (\forall int k; 0 <= k && k < i; 
+          @                   mat[k] != null && mat[k].length == 8);
+          @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < 8; !mat[k][l]);
           @ decreases mat.length - i;
           @*/
         for (int i = 0; i < mat.length; i++) {
@@ -82,6 +87,7 @@ public abstract class Piece {
             boolean[] booleans = mat[i];
 
             /*@ loop_invariant booleans != null;
+              @ loop_invariant booleans.length == 8;
               @ loop_invariant 0 <= j && j <= booleans.length;
               @ loop_invariant (\forall int l; 0 <= l && l < j; !booleans[l]);
               @ decreases booleans.length - j;

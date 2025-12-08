@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe563b80-354c-4958-8264-68392936897e" name="Changes" comment="" />
+    <list default="true" id="fe563b80-354c-4958-8264-68392936897e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/ChessMatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/ChessMatch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/ChessPiece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/ChessPiece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/ChessPosition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/ChessPosition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/pieces/Bishop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/pieces/Bishop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/pieces/Pawn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/pieces/Pawn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/pieces/Queen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/pieces/Queen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chess/pieces/Rook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chess/pieces/Rook.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,7 +82,7 @@
       <workItem from="1763916445532" duration="16270000" />
       <workItem from="1764961606950" duration="11092000" />
       <workItem from="1765123204532" duration="20622000" />
-      <workItem from="1765159036144" duration="13585000" />
+      <workItem from="1765159036144" duration="13896000" />
     </task>
     <servers />
   </component>

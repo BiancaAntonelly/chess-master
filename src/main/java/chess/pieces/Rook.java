@@ -5,9 +5,6 @@ import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
-/**
- * Classe que representa uma Torre no jogo de xadrez.
- */
 public class Rook extends ChessPiece {
 
     /*@ public normal_behavior
