@@ -100,7 +100,7 @@ public abstract class ChessPiece extends Piece {
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean isThereOpponentPiece(/*@ non_null @*/ Position pos) {
-        ChessPiece p = (ChessPiece) getBoard().piece(pos);
+        /*@ nullable @*/ ChessPiece p = (ChessPiece) getBoard().piece(pos);
         return p != null && p.getColor() != color;
     }
 
@@ -116,7 +116,7 @@ public abstract class ChessPiece extends Piece {
       @   assignable \nothing;
       @*/
     protected /*@ pure @*/ boolean canMoveTo(/*@ non_null @*/ Position pos) {
-        ChessPiece p = (ChessPiece) getBoard().piece(pos);
+        /*@ nullable @*/ ChessPiece p = (ChessPiece) getBoard().piece(pos);
         return p == null || p.getColor() != color;
     }
 

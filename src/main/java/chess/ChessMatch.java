@@ -306,12 +306,15 @@ public class ChessMatch {
       @*/
     private /*@ pure non_null @*/ ChessPiece newPiece(/*@ non_null @*/ String type,
             /*@ non_null @*/ Color color) {
-        return switch (type) {
-            case "B" -> new Bishop(board, color);
-            case "N" -> new Knight(board, color);
-            case "Q" -> new Queen(board, color);
-            default -> new Rook(board, color);
-        };
+        if (type.equals("B")) {
+            return new Bishop(board, color);
+        } else if (type.equals("N")) {
+            return new Knight(board, color);
+        } else if (type.equals("Q")) {
+            return new Queen(board, color);
+        } else {
+            return new Rook(board, color);
+        }
     }
 
     /*@ private normal_behavior

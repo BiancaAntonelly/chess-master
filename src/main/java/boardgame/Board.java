@@ -13,6 +13,10 @@ public class Board {
     //@ public invariant (\forall int i; 0 <= i && i < rows;
     //@                       pieces[i] != null && pieces[i].length == cols);
     //@ public invariant \typeof(pieces) == \type(Piece[][]);
+    //@ public invariant (\forall int i, j;
+    //@                      0 <= i && i < rows && 0 <= j && j < cols;
+    //@                      pieces[i][j] == null ||
+    //@                      pieces[i][j] instanceof chess.ChessPiece);
 
     /*@ public normal_behavior
       @   requires rows >= 1 && cols >= 1;
