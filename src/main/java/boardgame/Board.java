@@ -40,7 +40,7 @@ public class Board {
       @   ensures \result == rows;
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ int getRows() {
+    public /*@ pure helper @*/ int getRows() {
         return rows;
     }
 
@@ -48,7 +48,7 @@ public class Board {
       @   ensures \result == cols;
       @   assignable \nothing;
       @*/
-    public /*@ pure @*/ int getCols() {
+    public /*@ pure helper @*/ int getCols() {
         return cols;
     }
 

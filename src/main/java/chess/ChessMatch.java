@@ -65,6 +65,9 @@ public class ChessMatch {
       @   ensures capturedPieces != null;
       @   ensures piecesOnTheBoard.size() == 32;
       @   ensures capturedPieces.size() == 0;
+      @ also
+      @ public exceptional_behavior
+      @   signals_only RuntimeException;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
@@ -600,7 +603,12 @@ public class ChessMatch {
         piecesOnTheBoard.add(piece);
     }
 
-    /*@ skipesc @*/
+    /*@ skipesc
+      @   private normal_behavior
+      @     ensures piecesOnTheBoard.size() == 32;
+      @     ensures capturedPieces.isEmpty();
+      @     assignable board, piecesOnTheBoard, capturedPieces;
+      @*/
     private void initialSetup() {
         // Peças brancas - primeira fileira
         placeNewPiece('a', 1, new Rook(board, Color.WHITE));
