@@ -7,12 +7,10 @@ import boardgame.Position;
 public abstract class ChessPiece extends Piece {
 
     //@ spec_public
-    private /*@ non_null @*/ Color color;
+    private /*@ nullable @*/ Color color;
 
     //@ spec_public
     private int moveCount;
-
-    //@ public invariant color != null;
 
     /*@ public normal_behavior
       @   requires board != null;
@@ -28,12 +26,10 @@ public abstract class ChessPiece extends Piece {
         this.moveCount = 0;
     }
 
-    /*@ public normal_behavior
-      @   ensures \result != null;
-      @   ensures \result == color;
-      @   assignable \nothing;
-      @*/
-    public /*@ pure non_null @*/ Color getColor() {
+    public Color getColor() {
+        if (color == null) {
+            throw new IllegalStateException("Color is null");
+        }
         return color;
     }
 
@@ -84,7 +80,12 @@ public abstract class ChessPiece extends Piece {
         if (!getBoard().positionExists(position)) {
             return false;
         }
-        Piece p = getBoard().piece(position);
+        Piece p = null;
+        try {
+            p = getBoard().piece(position);
+        } catch (Exception e) {
+            return false;
+        }
         if (p == null) {
             return false;
         }
@@ -92,7 +93,15 @@ public abstract class ChessPiece extends Piece {
             return false;
         }
         ChessPiece cp = (ChessPiece) p;
-        Color cpColor = cp.getColor();
+        if (cp == null) {
+            return false;
+        }
+        Color cpColor = null;
+        try {
+            cpColor = cp.getColor();
+        } catch (Exception e) {
+            return false;
+        }
         if (cpColor == null) {
             return false;
         }
