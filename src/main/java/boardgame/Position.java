@@ -1,14 +1,17 @@
 package boardgame;
 
 public class Position {
+
     //@ spec_public
     private int row;
+
     //@ spec_public
     private int col;
 
     /*@ public normal_behavior
       @   ensures this.row == row;
       @   ensures this.col == col;
+      @   assignable this.row, this.col;
       @*/
     public Position(int row, int col) {
         this.row = row;
@@ -24,7 +27,6 @@ public class Position {
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= row && row < 8;
       @   ensures this.row == row;
       @   assignable this.row;
       @*/
@@ -41,7 +43,6 @@ public class Position {
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= col && col < 8;
       @   ensures this.col == col;
       @   assignable this.col;
       @*/
@@ -50,8 +51,6 @@ public class Position {
     }
 
     /*@ public normal_behavior
-      @   requires 0 <= row && row < 8;
-      @   requires 0 <= col && col < 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
       @   assignable this.row, this.col;
@@ -68,5 +67,4 @@ public class Position {
     public /*@ pure @*/ String getString() {
         return row + ", " + col;
     }
-
 }
