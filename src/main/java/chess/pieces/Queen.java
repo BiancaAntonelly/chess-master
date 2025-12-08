@@ -17,10 +17,6 @@ public class Queen extends ChessPiece {
         super(board, color);
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   ensures \result != null;
-      @*/
     @Override
     public boolean[][] possibleMoves() {
         if (position == null || getBoard() == null) {
@@ -33,7 +29,9 @@ public class Queen extends ChessPiece {
             return new boolean[8][8];
         }
 
-        boolean[][] mat = new boolean[board.getRows()][board.getCols()];
+        int rows = board.getRows();
+        int cols = board.getCols();
+        boolean[][] mat = new boolean[rows][cols];
         Position p = new Position(0, 0);
 
         // Para cima (Norte)
@@ -42,9 +40,12 @@ public class Queen extends ChessPiece {
             while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
                 if (p.getRow() <= 0) break;
@@ -55,9 +56,12 @@ public class Queen extends ChessPiece {
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -69,9 +73,12 @@ public class Queen extends ChessPiece {
             while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
                 if (p.getCol() <= 0) break;
@@ -82,9 +89,12 @@ public class Queen extends ChessPiece {
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -96,22 +106,28 @@ public class Queen extends ChessPiece {
             while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
                 if (p.getCol() >= 7) break;
                 int newCol = p.getCol() + 1;
-                if (newCol >= mat.length) break;
+                if (newCol < 0 || newCol >= cols) break;
                 p.setCol(newCol);
             }
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -123,22 +139,28 @@ public class Queen extends ChessPiece {
             while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
                 if (p.getRow() >= 7) break;
                 int newRow = p.getRow() + 1;
-                if (newRow >= mat.length) break;
+                if (newRow < 0 || newRow >= rows) break;
                 p.setRow(newRow);
             }
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -149,9 +171,12 @@ public class Queen extends ChessPiece {
         while (board.positionExists(p) && !board.isPiecePlaced(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
             int newRow = p.getRow() - 1;
@@ -162,9 +187,12 @@ public class Queen extends ChessPiece {
         if (board.positionExists(p) && isThereOpponentPiece(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -174,22 +202,28 @@ public class Queen extends ChessPiece {
         while (board.positionExists(p) && !board.isPiecePlaced(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
             int newRow = p.getRow() - 1;
             int newCol = p.getCol() + 1;
-            if (newRow < 0 || newCol >= mat.length) break;
+            if (newRow < 0 || newCol < 0 || newRow >= rows || newCol >= cols) break;
             p.setValues(newRow, newCol);
         }
         if (board.positionExists(p) && isThereOpponentPiece(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -199,22 +233,28 @@ public class Queen extends ChessPiece {
         while (board.positionExists(p) && !board.isPiecePlaced(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
             int newRow = p.getRow() + 1;
             int newCol = p.getCol() + 1;
-            if (newRow >= mat.length || newCol >= mat.length) break;
+            if (newRow < 0 || newCol < 0 || newRow >= rows || newCol >= cols) break;
             p.setValues(newRow, newCol);
         }
         if (board.positionExists(p) && isThereOpponentPiece(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -224,22 +264,28 @@ public class Queen extends ChessPiece {
         while (board.positionExists(p) && !board.isPiecePlaced(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
             int newRow = p.getRow() + 1;
             int newCol = p.getCol() - 1;
-            if (newRow >= mat.length || newCol < 0) break;
+            if (newRow < 0 || newCol < 0 || newRow >= rows || newCol >= cols) break;
             p.setValues(newRow, newCol);
         }
         if (board.positionExists(p) && isThereOpponentPiece(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }

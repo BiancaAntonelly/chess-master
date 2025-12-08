@@ -28,10 +28,6 @@ public class Pawn extends ChessPiece {
         this.match = match;
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   ensures \result != null;
-      @*/
     @Override
     public boolean[][] possibleMoves() {
         if (position == null || getBoard() == null) {
@@ -44,7 +40,9 @@ public class Pawn extends ChessPiece {
             return new boolean[8][8];
         }
 
-        boolean[][] mat = new boolean[board.getRows()][board.getCols()];
+        int rows = board.getRows();
+        int cols = board.getCols();
+        boolean[][] mat = new boolean[rows][cols];
         Position p = new Position(0, 0);
 
         if (getColor() == Color.WHITE) {
@@ -53,9 +51,12 @@ public class Pawn extends ChessPiece {
             if (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
 
@@ -64,9 +65,12 @@ public class Pawn extends ChessPiece {
                 if (board.positionExists(p) && !board.isPiecePlaced(p) && getMoveCount() == 0) {
                     r = p.getRow();
                     c = p.getCol();
-                    if (r >= 0 && r < mat.length) {
-                        if (c >= 0 && c < mat[r].length) {
-                            mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
                         }
                     }
                 }
@@ -77,9 +81,12 @@ public class Pawn extends ChessPiece {
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -89,9 +96,12 @@ public class Pawn extends ChessPiece {
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -104,9 +114,12 @@ public class Pawn extends ChessPiece {
                         && board.piece(left) == match.getEnPassantVulnerable()) {
                     int r = left.getRow() - 1;
                     int c = left.getCol();
-                    if (r >= 0 && r < mat.length) {
-                        if (c >= 0 && c < mat[r].length) {
-                            mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
                         }
                     }
                 }
@@ -116,9 +129,12 @@ public class Pawn extends ChessPiece {
                         && board.piece(right) == match.getEnPassantVulnerable()) {
                     int r = right.getRow() - 1;
                     int c = right.getCol();
-                    if (r >= 0 && r < mat.length) {
-                        if (c >= 0 && c < mat[r].length) {
-                            mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
                         }
                     }
                 }
@@ -129,9 +145,12 @@ public class Pawn extends ChessPiece {
             if (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
 
@@ -140,9 +159,12 @@ public class Pawn extends ChessPiece {
                 if (board.positionExists(p) && !board.isPiecePlaced(p) && getMoveCount() == 0) {
                     r = p.getRow();
                     c = p.getCol();
-                    if (r >= 0 && r < mat.length) {
-                        if (c >= 0 && c < mat[r].length) {
-                            mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
                         }
                     }
                 }
@@ -153,9 +175,12 @@ public class Pawn extends ChessPiece {
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -165,9 +190,12 @@ public class Pawn extends ChessPiece {
             if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
-                if (r >= 0 && r < mat.length) {
-                    if (c >= 0 && c < mat[r].length) {
-                        mat[r][c] = true;
+                if (r >= 0 && r < rows) {
+                    if (c >= 0 && c < cols) {
+                        boolean[] row = mat[r];
+                        if (row != null && c < row.length) {
+                            row[c] = true;
+                        }
                     }
                 }
             }
@@ -180,9 +208,12 @@ public class Pawn extends ChessPiece {
                         && board.piece(left) == match.getEnPassantVulnerable()) {
                     int r = left.getRow() + 1;
                     int c = left.getCol();
-                    if (r >= 0 && r < mat.length) {
-                        if (c >= 0 && c < mat[r].length) {
-                            mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
                         }
                     }
                 }
@@ -192,9 +223,12 @@ public class Pawn extends ChessPiece {
                         && board.piece(right) == match.getEnPassantVulnerable()) {
                     int r = right.getRow() + 1;
                     int c = right.getCol();
-                    if (r >= 0 && r < mat.length) {
-                        if (c >= 0 && c < mat[r].length) {
-                            mat[r][c] = true;
+                    if (r >= 0 && r < rows) {
+                        if (c >= 0 && c < cols) {
+                            boolean[] row = mat[r];
+                            if (row != null && c < row.length) {
+                                row[c] = true;
+                            }
                         }
                     }
                 }

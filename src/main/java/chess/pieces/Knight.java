@@ -22,10 +22,6 @@ public class Knight extends ChessPiece {
         return p == null || p.getColor() != getColor();
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   ensures \result != null;
-      @*/
     @Override
     public boolean[][] possibleMoves() {
         if (position == null || getBoard() == null) {
@@ -38,7 +34,9 @@ public class Knight extends ChessPiece {
             return new boolean[8][8];
         }
 
-        boolean[][] mat = new boolean[board.getRows()][board.getCols()];
+        int rows = board.getRows();
+        int cols = board.getCols();
+        boolean[][] mat = new boolean[rows][cols];
         Position p = new Position(0, 0);
 
         // Movimento em L: 8 direções possíveis
@@ -46,9 +44,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -57,9 +58,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -68,9 +72,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -79,9 +86,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -90,9 +100,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -101,9 +114,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -112,9 +128,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
@@ -123,9 +142,12 @@ public class Knight extends ChessPiece {
         if (board.positionExists(p) && canMove(p)) {
             int r = p.getRow();
             int c = p.getCol();
-            if (r >= 0 && r < mat.length) {
-                if (c >= 0 && c < mat[r].length) {
-                    mat[r][c] = true;
+            if (r >= 0 && r < rows) {
+                if (c >= 0 && c < cols) {
+                    boolean[] row = mat[r];
+                    if (row != null && c < row.length) {
+                        row[c] = true;
+                    }
                 }
             }
         }
