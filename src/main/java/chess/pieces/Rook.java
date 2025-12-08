@@ -60,7 +60,7 @@ public class Rook extends ChessPiece {
       @
       @   ensures !\result[position.getRow()][position.getCol()];
       @
-      @   assignable \nothing;
+      @   assignable \everything;
       @*/
     @Override
     public boolean[][] possibleMoves() {
@@ -71,84 +71,65 @@ public class Rook extends ChessPiece {
         // ============================
         // PARA CIMA
         // ============================
-        p.setValues(position.getRow() - 1, position.getCol());
+        if (position.getRow() > 0) {
+            p.setValues(position.getRow() - 1, position.getCol());
 
-        /*@ loop_invariant getBoard().positionExists(p) ==> p.getCol() == position.getCol();
-          @ loop_invariant p.getRow() <= position.getRow() - 1;
-          @ loop_invariant (\forall int rr, cc;
-          @        rr <= position.getRow() - 1 && rr > p.getRow() && cc == position.getCol();
-          @        mat[rr][cc] == true);
-          @ decreases p.getRow();
-         @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setRow(p.getRow() - 1);
+            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+                if (p.getRow() == 0) break;
+                p.setRow(p.getRow() - 1);
+            }
+            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+            }
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-        }
-
 
         // ============================
         // PARA ESQUERDA
         // ============================
-        p.setValues(position.getRow(), position.getCol() - 1);
+        if (position.getCol() > 0) {
+            p.setValues(position.getRow(), position.getCol() - 1);
 
-        /*@ loop_invariant getBoard().positionExists(p) ==> p.getRow() == position.getRow();
-          @ loop_invariant p.getCol() <= position.getCol() - 1;
-          @ loop_invariant (\forall int rr, cc;
-          @        rr == position.getRow() && cc < position.getCol() && cc > p.getCol();
-          @        mat[rr][cc] == true);
-          @ decreases p.getCol();
-         @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setCol(p.getCol() - 1);
+            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+                if (p.getCol() == 0) break;
+                p.setCol(p.getCol() - 1);
+            }
+            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+            }
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-        }
-
 
         // ============================
         // PARA DIREITA
         // ============================
-        p.setValues(position.getRow(), position.getCol() + 1);
+        if (position.getCol() < 7) {
+            p.setValues(position.getRow(), position.getCol() + 1);
 
-        /*@ loop_invariant getBoard().positionExists(p) ==> p.getRow() == position.getRow();
-          @ loop_invariant p.getCol() >= position.getCol() + 1;
-          @ loop_invariant (\forall int rr, cc;
-          @        rr == position.getRow() && cc > position.getCol() && cc < p.getCol();
-          @        mat[rr][cc] == true);
-          @ decreases (8 - p.getCol());
-         @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setCol(p.getCol() + 1);
+            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+                if (p.getCol() == 7) break;
+                p.setCol(p.getCol() + 1);
+            }
+            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+            }
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-        }
-
 
         // ============================
         // PARA BAIXO
         // ============================
-        p.setValues(position.getRow() + 1, position.getCol());
+        if (position.getRow() < 7) {
+            p.setValues(position.getRow() + 1, position.getCol());
 
-        /*@ loop_invariant getBoard().positionExists(p) ==> p.getCol() == position.getCol();
-          @ loop_invariant p.getRow() >= position.getRow() + 1;
-          @ loop_invariant (\forall int rr, cc;
-          @        rr > position.getRow() && rr < p.getRow() && cc == position.getCol();
-          @        mat[rr][cc] == true);
-          @ decreases (8 - p.getRow());
-         @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setRow(p.getRow() + 1);
-        }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+                if (p.getRow() == 7) break;
+                p.setRow(p.getRow() + 1);
+            }
+            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+                mat[p.getRow()][p.getCol()] = true;
+            }
         }
 
         return mat;
