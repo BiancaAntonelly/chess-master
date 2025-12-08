@@ -23,14 +23,19 @@ public abstract class Piece {
       @   requires board != null;
       @   ensures modelBoard == board;
       @   ensures modelPosition == null;
+      @   ensures getBoard() == board;
       @*/
     public Piece(Board board) {
         this.board = board;
         this.position = null;
     }
 
-    /*@ pure @*/
-    public Board getBoard() { return board; }
+    /*@ public normal_behavior
+      @   ensures \result == board;
+      @   ensures \result != null;
+      @   assignable \nothing;
+      @*/
+    public /*@ pure non_null @*/ Board getBoard() { return board; }
 
     /*@ public normal_behavior
       @   ensures \result != null;
