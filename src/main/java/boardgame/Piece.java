@@ -29,7 +29,7 @@ public abstract class Piece {
         this.position = null;
     }
 
-    /*@ public pure @*/
+    /*@ pure @*/
     public Board getBoard() { return board; }
 
     /*@ public normal_behavior
