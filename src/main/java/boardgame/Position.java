@@ -11,7 +11,7 @@ public class Position {
     /*@ public normal_behavior
       @   ensures this.row == row;
       @   ensures this.col == col;
-      @   assignable row, col;
+      @   assignable \this.row, \this.col;
       @*/
     public Position(int row, int col) {
         this.row = row;
@@ -28,7 +28,7 @@ public class Position {
 
     /*@ public normal_behavior
       @   ensures this.row == row;
-      @   assignable row;
+      @   assignable \this.row;
       @*/
     public void setRow(int row) {
         this.row = row;
@@ -44,7 +44,7 @@ public class Position {
 
     /*@ public normal_behavior
       @   ensures this.col == col;
-      @   assignable col;
+      @   assignable \this.col;
       @*/
     public void setCol(int col) {
         this.col = col;
@@ -53,7 +53,7 @@ public class Position {
     /*@ public normal_behavior
       @   ensures this.row == row;
       @   ensures this.col == col;
-      @   assignable row, col;
+      @   assignable \this.row, \this.col;
       @*/
     public void setValues(int row, int col) {
         this.row = row;
