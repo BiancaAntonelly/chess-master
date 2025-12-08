@@ -5,21 +5,103 @@ import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
+/**
+ * Classe que representa uma Rainha no jogo de xadrez.
+ * A rainha é a peça mais poderosa, combinando os movimentos
+ * da torre (horizontal/vertical) e do bispo (diagonal).
+ * Pode mover-se quantas casas quiser em qualquer uma das 8 direções.
+ */
 public class Queen extends ChessPiece {
 
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
+      @   ensures getColor() == color;
+      @   ensures getMoveCount() == 0;
+      @   ensures getBoard() == board;
+      @   assignable color, moveCount;
       @*/
-    public Queen(Board board, Color color) {
+    public Queen(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
     }
 
     /*@ also
-      @   public normal_behavior
+      @ public normal_behavior
+      @   requires position != null;
+      @   requires position.getRow() >= 0 && position.getRow() < 8;
+      @   requires position.getCol() >= 0 && position.getCol() < 8;
+      @
       @   ensures \result != null;
       @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8; \result[i] != null && \result[i].length == 8);
+      @   ensures (\forall int i; 0 <= i && i < 8;
+      @               \result[i] != null && \result[i].length == 8);
+      @
+      @   // A posição atual da rainha não é um movimento válido
+      @   ensures !\result[position.getRow()][position.getCol()];
+      @
+      @   // Movimentos apenas em linha reta (horizontal, vertical ou diagonal)
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
+      @               r == position.getRow() ||                           // horizontal
+      @               c == position.getCol() ||                           // vertical
+      @               java.lang.Math.abs(r - position.getRow())
+      @                   == java.lang.Math.abs(c - position.getCol())); // diagonal
+      @
+      @   // --- Movimentos verticais (mesma coluna) ---
+      @   // Para cima: r < position.getRow() && c == position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               r < position.getRow() && c == position.getCol();
+      @               c == position.getCol());
+      @
+      @   // Para baixo: r > position.getRow() && c == position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               r > position.getRow() && c == position.getCol();
+      @               c == position.getCol());
+      @
+      @   // --- Movimentos horizontais (mesma linha) ---
+      @   // Para esquerda: c < position.getCol() && r == position.getRow()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               c < position.getCol() && r == position.getRow();
+      @               r == position.getRow());
+      @
+      @   // Para direita: c > position.getCol() && r == position.getRow()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               c > position.getCol() && r == position.getRow();
+      @               r == position.getRow());
+      @
+      @   // --- Movimentos diagonais ---
+      @   // Noroeste: r < position.getRow() && c < position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               r < position.getRow() && c < position.getCol();
+      @               (r - position.getRow() == c - position.getCol()) ||
+      @               r == position.getRow() || c == position.getCol());
+      @
+      @   // Nordeste: r < position.getRow() && c > position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               r < position.getRow() && c > position.getCol();
+      @               (position.getRow() - r == c - position.getCol()) ||
+      @               r == position.getRow() || c == position.getCol());
+      @
+      @   // Sudeste: r > position.getRow() && c > position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               r > position.getRow() && c > position.getCol();
+      @               (r - position.getRow() == c - position.getCol()) ||
+      @               r == position.getRow() || c == position.getCol());
+      @
+      @   // Sudoeste: r > position.getRow() && c < position.getCol()
+      @   ensures (\forall int r, c;
+      @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c] &&
+      @               r > position.getRow() && c < position.getCol();
+      @               (r - position.getRow() == position.getCol() - c) ||
+      @               r == position.getRow() || c == position.getCol());
+      @
       @   assignable \nothing;
       @*/
     @Override
@@ -28,8 +110,17 @@ public class Queen extends ChessPiece {
 
         Position p = new Position(0, 0);
 
-        // above
+        // ========================================
+        // MOVIMENTOS ORTOGONAIS (como Torre)
+        // ========================================
+
+        // Para cima (Norte)
         p.setValues(position.getRow() - 1, position.getCol());
+        /*@ loop_invariant p.getRow() >= -1;
+          @ loop_invariant (\forall int r; 0 <= r && r < 8 && mat[r][position.getCol()] &&
+          @                     r < position.getRow(); true);
+          @ decreases p.getRow() + 1;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setRow(p.getRow() - 1);
@@ -38,8 +129,11 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // left
+        // Para esquerda (Oeste)
         p.setValues(position.getRow(), position.getCol() - 1);
+        /*@ loop_invariant p.getCol() >= -1;
+          @ decreases p.getCol() + 1;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setCol(p.getCol() - 1);
@@ -48,8 +142,11 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // right
+        // Para direita (Leste)
         p.setValues(position.getRow(), position.getCol() + 1);
+        /*@ loop_invariant p.getCol() <= 8;
+          @ decreases 8 - p.getCol();
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setCol(p.getCol() + 1);
@@ -58,8 +155,11 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // below
+        // Para baixo (Sul)
         p.setValues(position.getRow() + 1, position.getCol());
+        /*@ loop_invariant p.getRow() <= 8;
+          @ decreases 8 - p.getRow();
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setRow(p.getRow() + 1);
@@ -68,8 +168,15 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // nw
+        // ========================================
+        // MOVIMENTOS DIAGONAIS (como Bispo)
+        // ========================================
+
+        // Noroeste (NW)
         p.setValues(position.getRow() - 1, position.getCol() - 1);
+        /*@ loop_invariant p.getRow() >= -1 && p.getCol() >= -1;
+          @ decreases p.getRow() + p.getCol() + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() - 1, p.getCol() - 1);
@@ -78,8 +185,11 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // ne
+        // Nordeste (NE)
         p.setValues(position.getRow() - 1, position.getCol() + 1);
+        /*@ loop_invariant p.getRow() >= -1 && p.getCol() <= 8;
+          @ decreases p.getRow() + (8 - p.getCol()) + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() - 1, p.getCol() + 1);
@@ -88,8 +198,11 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // se
+        // Sudeste (SE)
         p.setValues(position.getRow() + 1, position.getCol() + 1);
+        /*@ loop_invariant p.getRow() <= 8 && p.getCol() <= 8;
+          @ decreases (8 - p.getRow()) + (8 - p.getCol()) + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() + 1, p.getCol() + 1);
@@ -98,8 +211,11 @@ public class Queen extends ChessPiece {
             mat[p.getRow()][p.getCol()] = true;
         }
 
-        // sw
+        // Sudoeste (SW)
         p.setValues(position.getRow() + 1, position.getCol() - 1);
+        /*@ loop_invariant p.getRow() <= 8 && p.getCol() >= -1;
+          @ decreases (8 - p.getRow()) + p.getCol() + 2;
+          @*/
         while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
             mat[p.getRow()][p.getCol()] = true;
             p.setValues(p.getRow() + 1, p.getCol() - 1);
@@ -115,10 +231,10 @@ public class Queen extends ChessPiece {
       @ public normal_behavior
       @   ensures \result != null;
       @   ensures \result.equals("Q");
-      @   pure
+      @   assignable \nothing;
       @*/
     @Override
-    public String toString() {
+    public /*@ pure non_null @*/ String toString() {
         return "Q";
     }
 }
