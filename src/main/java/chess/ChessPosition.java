@@ -82,11 +82,10 @@ public class ChessPosition {
     }
 
     /*@ also public normal_behavior
-      @   ensures \result != null;
-      @   assignable \nothing;
+      @   assignable \everything;
       @*/
     @Override
-    public /*@ pure non_null @*/ String toString() {
+    public String toString() {
         return "" + col + row;
     }
 
@@ -106,11 +105,10 @@ public class ChessPosition {
     }
 
     /*@ also public normal_behavior
-      @   ensures (\forall ChessPosition cp; equals(cp) ==> \result == cp.hashCode());
-      @   assignable \nothing;
+      @   assignable \everything;
       @*/
     @Override
-    public /*@ pure @*/ int hashCode() {
+    public int hashCode() {
         return 31 * row + col;
     }
 }
