@@ -23,7 +23,6 @@ public class ChessPosition {
       @   requires row >= 1 && row <= 8;
       @   ensures this.row == row;
       @   ensures this.col == col;
-      @   assignable this.row, this.col;
       @ also public exceptional_behavior
       @   requires col < 'a' || col > 'h' || row < 1 || row > 8;
       @   signals_only ChessException;
@@ -41,7 +40,6 @@ public class ChessPosition {
       @   ensures \result == row;
       @   ensures \result >= 1 && \result <= 8;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ int getRow() {
         return row;
@@ -51,7 +49,6 @@ public class ChessPosition {
       @   ensures \result == col;
       @   ensures \result >= 'a' && \result <= 'h';
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ char getCol() {
         return col;
@@ -64,7 +61,6 @@ public class ChessPosition {
       @   ensures \result.getRow() >= 0 && \result.getRow() < 8;
       @   ensures \result.getCol() >= 0 && \result.getCol() < 8;
       @   assignable \nothing;
-      @   pure
       @*/
     protected /*@ pure non_null @*/ Position toPosition() {
         return new Position(8 - row, col - 'a');
@@ -78,7 +74,6 @@ public class ChessPosition {
       @   ensures \result.getRow() == 8 - pos.getRow();
       @   ensures \result.getCol() == (char)('a' + pos.getCol());
       @   assignable \nothing;
-      @   pure
       @*/
     protected static /*@ pure non_null @*/ ChessPosition fromPosition(/*@ non_null @*/ Position pos) {
         int rowCalc = 8 - pos.getRow();
@@ -90,7 +85,6 @@ public class ChessPosition {
       @   ensures \result != null;
       @   ensures \result.length() > 0;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure non_null @*/ String getString() {
         return row + ", " + col;
@@ -100,7 +94,6 @@ public class ChessPosition {
       @   ensures \result != null;
       @   ensures \result.length() == 2;
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ pure non_null @*/ String toString() {
@@ -116,7 +109,6 @@ public class ChessPosition {
       @   requires obj == null;
       @   ensures \result == false;
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ pure @*/ boolean equals(/*@ nullable @*/ Object obj) {
@@ -129,7 +121,6 @@ public class ChessPosition {
     /*@ public normal_behavior
       @   ensures \result == 31 * row + col;
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ pure @*/ int hashCode() {

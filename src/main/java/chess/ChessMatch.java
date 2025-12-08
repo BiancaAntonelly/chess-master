@@ -65,8 +65,6 @@ public class ChessMatch {
       @   ensures capturedPieces != null;
       @   ensures piecesOnTheBoard.size() == 32;
       @   ensures capturedPieces.size() == 0;
-      @   assignable board, turn, currentPlayer, check, checkMate,
-      @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
@@ -87,7 +85,6 @@ public class ChessMatch {
       @   ensures (\forall int i; 0 <= i && i < 8;
       @               \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure non_null @*/ ChessPiece[][] getPieces() {
         final int rows = board.getRows();
@@ -126,7 +123,6 @@ public class ChessMatch {
       @   ensures \result == turn;
       @   ensures \result >= 1;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ int getTurn() {
         return turn;
@@ -137,7 +133,6 @@ public class ChessMatch {
       @   ensures \result != null;
       @   ensures \result == Color.WHITE || \result == Color.BLACK;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure non_null @*/ Color getCurrentPlayer() {
         return currentPlayer;
@@ -146,7 +141,6 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   ensures \result == check;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ boolean getCheck() {
         return check;
@@ -155,7 +149,6 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   ensures \result == !checkMate;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ boolean getNotCheckMate() {
         return !checkMate;
@@ -164,7 +157,6 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   ensures \result == checkMate;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ boolean isCheckMate() {
         return checkMate;
@@ -173,7 +165,6 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   ensures \result == enPassantVulnerable;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure nullable @*/ ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
@@ -182,7 +173,6 @@ public class ChessMatch {
     /*@ public normal_behavior
       @   ensures \result == promoted;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure nullable @*/ ChessPiece getPromoted() {
         return promoted;
@@ -313,7 +303,6 @@ public class ChessMatch {
       @   ensures type.equals("Q") ==> \result instanceof Queen;
       @   ensures type.equals("R") ==> \result instanceof Rook;
       @   assignable \nothing;
-      @   pure
       @*/
     private /*@ pure non_null @*/ ChessPiece newPiece(/*@ non_null @*/ String type,
             /*@ non_null @*/ Color color) {
@@ -505,7 +494,6 @@ public class ChessMatch {
       @   ensures \result == (color == Color.WHITE ? Color.BLACK : Color.WHITE);
       @   ensures \result != color;
       @   assignable \nothing;
-      @   pure
       @*/
     private /*@ pure non_null @*/ Color opponent(/*@ non_null @*/ Color color) {
         return color == Color.WHITE ? Color.BLACK : Color.WHITE;
@@ -543,7 +531,6 @@ public class ChessMatch {
       @               opp.possibleMoves()[king(color).getChessPosition().toPosition().getRow()]
       @                                  [king(color).getChessPosition().toPosition().getCol()]);
       @   assignable \nothing;
-      @   pure
       @*/
     private /*@ pure @*/ boolean testCheck(/*@ non_null @*/ Color color) {
         Position kingPos = king(color).getChessPosition().toPosition();
@@ -602,7 +589,7 @@ public class ChessMatch {
       @   requires col >= 'a' && col <= 'h';
       @   requires row >= 1 && row <= 8;
       @   ensures piecesOnTheBoard.contains(piece);
-      @   ensures board.isPiecePlaced(new ChessPosition(row, col).toPosition());
+      @   ensures board.piece(8 - row, col - 'a') == piece;
       @   assignable board, piecesOnTheBoard;
       @*/
     private void placeNewPiece(char col, int row, /*@ non_null @*/ ChessPiece piece) {
