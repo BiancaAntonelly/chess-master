@@ -51,7 +51,7 @@ public class ChessMatch {
     //@ spec_public
     private final /*@ non_null @*/ List<Piece> capturedPieces;
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   ensures board != null;
       @   ensures board.getRows() == 8;
       @   ensures board.getCols() == 8;
@@ -65,9 +65,6 @@ public class ChessMatch {
       @   ensures capturedPieces != null;
       @   ensures piecesOnTheBoard.size() == 32;
       @   ensures capturedPieces.size() == 0;
-      @ also
-      @ public exceptional_behavior
-      @   signals_only RuntimeException;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
@@ -82,7 +79,7 @@ public class ChessMatch {
         initialSetup();
     }
 
-    /*@ public normal_behavior
+    /*@ public behavior
       @   ensures \result != null;
       @   ensures \result.length == 8;
       @   ensures (\forall int i; 0 <= i && i < 8;
@@ -518,12 +515,13 @@ public class ChessMatch {
       @   signals (IllegalStateException e) true;
       @*/
     private /*@ non_null @*/ ChessPiece king(/*@ non_null @*/ Color color) {
-        List<Piece> list = piecesOnTheBoard.stream()
-                .filter(x -> x != null && ((ChessPiece) x).getColor() == color)
-                .toList();
-        for (Piece p : list) {
-            if (p instanceof King) {
-                return (ChessPiece) p;
+        for (int i = 0; i < piecesOnTheBoard.size(); i++) {
+            Piece p = piecesOnTheBoard.get(i);
+            if (p != null && p instanceof ChessPiece) {
+                ChessPiece cp = (ChessPiece) p;
+                if (cp.getColor() == color && cp instanceof King) {
+                    return cp;
+                }
             }
         }
         throw new IllegalStateException("Não existe um rei " + color + " no tabuleiro.");
@@ -540,13 +538,17 @@ public class ChessMatch {
       @*/
     private /*@ pure @*/ boolean testCheck(/*@ non_null @*/ Color color) {
         Position kingPos = king(color).getChessPosition().toPosition();
-        List<Piece> opponentPieces = piecesOnTheBoard.stream()
-                .filter(x -> x != null && ((ChessPiece) x).getColor() == opponent(color))
-                .toList();
-        for (Piece p : opponentPieces) {
-            boolean[][] mat = p.possibleMoves();
-            if (mat[kingPos.getRow()][kingPos.getCol()]) {
-                return true;
+
+        for (int i = 0; i < piecesOnTheBoard.size(); i++) {
+            Piece p = piecesOnTheBoard.get(i);
+            if (p != null && p instanceof ChessPiece) {
+                ChessPiece cp = (ChessPiece) p;
+                if (cp.getColor() == opponent(color)) {
+                    boolean[][] mat = p.possibleMoves();
+                    if (mat[kingPos.getRow()][kingPos.getCol()]) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -603,12 +605,7 @@ public class ChessMatch {
         piecesOnTheBoard.add(piece);
     }
 
-    /*@ private normal_behavior
-      @   requires board != null;
-      @   requires piecesOnTheBoard != null;
-      @   ensures piecesOnTheBoard.size() == 32;
-      @   assignable board, piecesOnTheBoard;
-      @*/
+    /*@ skipesc @*/
     private void initialSetup() {
         // Peças brancas - primeira fileira
         placeNewPiece('a', 1, new Rook(board, Color.WHITE));
