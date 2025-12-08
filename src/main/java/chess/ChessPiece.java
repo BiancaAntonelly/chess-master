@@ -27,7 +27,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures this.color == color;
       @   ensures this.moveCount == 0;
       @   ensures getBoard() == board;
-      @   assignable color, moveCount;
       @*/
     public ChessPiece(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board);
@@ -40,7 +39,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result != null;
       @   ensures \result == Color.WHITE || \result == Color.BLACK;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure non_null @*/ Color getColor() {
         return color;
@@ -50,7 +48,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result == moveCount;
       @   ensures \result >= 0;
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ int getMoveCount() {
         return moveCount;
@@ -86,7 +83,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result.getRow() >= 1 && \result.getRow() <= 8;
       @   ensures \result.getCol() >= 'a' && \result.getCol() <= 'h';
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure non_null @*/ ChessPosition getChessPosition() {
         return ChessPosition.fromPosition(position);
@@ -102,7 +98,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result == false ==> (getBoard().piece(pos) == null ||
       @           ((ChessPiece)getBoard().piece(pos)).getColor() == this.color);
       @   assignable \nothing;
-      @   pure
       @*/
     public /*@ pure @*/ boolean isThereOpponentPiece(/*@ non_null @*/ Position pos) {
         ChessPiece p = (ChessPiece) getBoard().piece(pos);
@@ -119,7 +114,6 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result == false ==> (getBoard().piece(pos) != null &&
       @           ((ChessPiece)getBoard().piece(pos)).getColor() == this.color);
       @   assignable \nothing;
-      @   pure
       @*/
     protected /*@ pure @*/ boolean canMoveTo(/*@ non_null @*/ Position pos) {
         ChessPiece p = (ChessPiece) getBoard().piece(pos);

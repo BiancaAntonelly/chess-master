@@ -5,12 +5,6 @@ import boardgame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
-/**
- * Classe que representa um Cavalo no jogo de xadrez.
- * O cavalo move-se em forma de "L": duas casas em uma direção
- * e uma casa perpendicular, ou vice-versa.
- * O cavalo pode saltar sobre outras peças.
- */
 public class Knight extends ChessPiece {
 
     /*@ public normal_behavior
@@ -19,7 +13,6 @@ public class Knight extends ChessPiece {
       @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures getBoard() == board;
-      @   assignable this.color, this.moveCount;
       @*/
     public Knight(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
@@ -35,7 +28,6 @@ public class Knight extends ChessPiece {
       @   ensures \result == false ==> (getBoard().piece(position) != null &&
       @           ((ChessPiece)getBoard().piece(position)).getColor() == getColor());
       @   assignable \nothing;
-      @   pure
       @*/
     private /*@ pure @*/ boolean canMove(/*@ non_null @*/ Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
@@ -53,66 +45,30 @@ public class Knight extends ChessPiece {
       @   ensures (\forall int i; 0 <= i && i < 8;
       @               \result[i] != null && \result[i].length == 8);
       @
-      @   // A posição atual do cavalo não é um movimento válido
       @   ensures !\result[position.getRow()][position.getCol()];
       @
-      @   // Movimentos em "L": (2,1) ou (1,2) de distância
+      @   // Sempre que uma casa é verdadeira, ela está em um padrão de movimento em L do cavalo
       @   ensures (\forall int r, c;
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
-      @               (java.lang.Math.abs(r - position.getRow()) == 2
-      @                    && java.lang.Math.abs(c - position.getCol()) == 1)
-      @            || (java.lang.Math.abs(r - position.getRow()) == 1
-      @                    && java.lang.Math.abs(c - position.getCol()) == 2));
-      @
-      @   // Movimento 1: (-1, -2) - uma acima, duas esquerda
-      @   ensures position.getRow() >= 1 && position.getCol() >= 2 &&
-      @           canMove(new Position(position.getRow() - 1, position.getCol() - 2))
-      @               ==> \result[position.getRow() - 1][position.getCol() - 2];
-      @
-      @   // Movimento 2: (-2, -1) - duas acima, uma esquerda
-      @   ensures position.getRow() >= 2 && position.getCol() >= 1 &&
-      @           canMove(new Position(position.getRow() - 2, position.getCol() - 1))
-      @               ==> \result[position.getRow() - 2][position.getCol() - 1];
-      @
-      @   // Movimento 3: (-2, +1) - duas acima, uma direita
-      @   ensures position.getRow() >= 2 && position.getCol() <= 6 &&
-      @           canMove(new Position(position.getRow() - 2, position.getCol() + 1))
-      @               ==> \result[position.getRow() - 2][position.getCol() + 1];
-      @
-      @   // Movimento 4: (-1, +2) - uma acima, duas direita
-      @   ensures position.getRow() >= 1 && position.getCol() <= 5 &&
-      @           canMove(new Position(position.getRow() - 1, position.getCol() + 2))
-      @               ==> \result[position.getRow() - 1][position.getCol() + 2];
-      @
-      @   // Movimento 5: (+1, +2) - uma abaixo, duas direita
-      @   ensures position.getRow() <= 6 && position.getCol() <= 5 &&
-      @           canMove(new Position(position.getRow() + 1, position.getCol() + 2))
-      @               ==> \result[position.getRow() + 1][position.getCol() + 2];
-      @
-      @   // Movimento 6: (+2, +1) - duas abaixo, uma direita
-      @   ensures position.getRow() <= 5 && position.getCol() <= 6 &&
-      @           canMove(new Position(position.getRow() + 2, position.getCol() + 1))
-      @               ==> \result[position.getRow() + 2][position.getCol() + 1];
-      @
-      @   // Movimento 7: (+2, -1) - duas abaixo, uma esquerda
-      @   ensures position.getRow() <= 5 && position.getCol() >= 1 &&
-      @           canMove(new Position(position.getRow() + 2, position.getCol() - 1))
-      @               ==> \result[position.getRow() + 2][position.getCol() - 1];
-      @
-      @   // Movimento 8: (+1, -2) - uma abaixo, duas esquerda
-      @   ensures position.getRow() <= 6 && position.getCol() >= 2 &&
-      @           canMove(new Position(position.getRow() + 1, position.getCol() - 2))
-      @               ==> \result[position.getRow() + 1][position.getCol() - 2];
+      @               ((r == position.getRow() - 2 && c == position.getCol() - 1) ||
+      @                (r == position.getRow() - 2 && c == position.getCol() + 1) ||
+      @                (r == position.getRow() - 1 && c == position.getCol() - 2) ||
+      @                (r == position.getRow() - 1 && c == position.getCol() + 2) ||
+      @                (r == position.getRow() + 1 && c == position.getCol() - 2) ||
+      @                (r == position.getRow() + 1 && c == position.getCol() + 2) ||
+      @                (r == position.getRow() + 2 && c == position.getCol() - 1) ||
+      @                (r == position.getRow() + 2 && c == position.getCol() + 1)));
       @
       @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
+
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
 
         Position p = new Position(0, 0);
 
-        // Movimento 1: uma acima, duas esquerda (-1, -2)
+        // Movimento em L: 8 direções possíveis
         p.setValues(position.getRow() - 1, position.getCol() - 2);
         if (getBoard().positionExists(p) && canMove(p)) {
             mat[p.getRow()][p.getCol()] = true;
@@ -168,7 +124,6 @@ public class Knight extends ChessPiece {
       @   ensures \result != null;
       @   ensures \result.equals("N");
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ pure non_null @*/ String toString() {

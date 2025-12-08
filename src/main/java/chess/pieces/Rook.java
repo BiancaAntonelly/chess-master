@@ -7,9 +7,6 @@ import chess.Color;
 
 /**
  * Classe que representa uma Torre no jogo de xadrez.
- * A torre move-se em linha reta, horizontal ou verticalmente,
- * quantas casas quiser, desde que não haja peças bloqueando.
- * Também participa do roque (castling) junto com o Rei.
  */
 public class Rook extends ChessPiece {
 
@@ -19,7 +16,6 @@ public class Rook extends ChessPiece {
       @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures getBoard() == board;
-      @   assignable color, moveCount;
       @*/
     public Rook(/*@ non_null @*/ Board board, /*@ non_null @*/ Color color) {
         super(board, color);
@@ -59,18 +55,16 @@ public class Rook extends ChessPiece {
     public boolean[][] possibleMoves() {
 
         boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
-
         Position p = new Position(0, 0);
 
-        // PARA CIMA (Norte)
+        // PARA CIMA
         if (position.getRow() > 0) {
             p.setValues(position.getRow() - 1, position.getCol());
 
             /*@ loop_invariant p.getRow() >= -1;
               @ loop_invariant p.getCol() == position.getCol();
-              @ loop_invariant (\forall int r; 0 <= r && r < 8 &&
-              @                     mat[r][position.getCol()] && r < position.getRow();
-              @                     true);
+              @ loop_invariant (\forall int r; 0 <= r && r < 8;
+              @                     mat[r][position.getCol()] ==> r < position.getRow());
               @ decreases p.getRow() + 1;
               @*/
             while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
@@ -83,15 +77,14 @@ public class Rook extends ChessPiece {
             }
         }
 
-        // PARA ESQUERDA (Oeste)
+        // PARA ESQUERDA
         if (position.getCol() > 0) {
             p.setValues(position.getRow(), position.getCol() - 1);
 
             /*@ loop_invariant p.getCol() >= -1;
               @ loop_invariant p.getRow() == position.getRow();
-              @ loop_invariant (\forall int c; 0 <= c && c < 8 &&
-              @                     mat[position.getRow()][c] && c < position.getCol();
-              @                     true);
+              @ loop_invariant (\forall int c; 0 <= c && c < 8;
+              @                     mat[position.getRow()][c] ==> c < position.getCol());
               @ decreases p.getCol() + 1;
               @*/
             while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
@@ -104,15 +97,14 @@ public class Rook extends ChessPiece {
             }
         }
 
-        // PARA DIREITA (Leste)
+        // PARA DIREITA
         if (position.getCol() < 7) {
             p.setValues(position.getRow(), position.getCol() + 1);
 
             /*@ loop_invariant p.getCol() <= 8;
               @ loop_invariant p.getRow() == position.getRow();
-              @ loop_invariant (\forall int c; 0 <= c && c < 8 &&
-              @                     mat[position.getRow()][c] && c > position.getCol();
-              @                     true);
+              @ loop_invariant (\forall int c; 0 <= c && c < 8;
+              @                     mat[position.getRow()][c] ==> c > position.getCol());
               @ decreases 8 - p.getCol();
               @*/
             while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
@@ -125,15 +117,14 @@ public class Rook extends ChessPiece {
             }
         }
 
-        // PARA BAIXO (Sul)
+        // PARA BAIXO
         if (position.getRow() < 7) {
             p.setValues(position.getRow() + 1, position.getCol());
 
             /*@ loop_invariant p.getRow() <= 8;
               @ loop_invariant p.getCol() == position.getCol();
-              @ loop_invariant (\forall int r; 0 <= r && r < 8 &&
-              @                     mat[r][position.getCol()] && r > position.getRow();
-              @                     true);
+              @ loop_invariant (\forall int r; 0 <= r && r < 8;
+              @                     mat[r][position.getCol()] ==> r > position.getRow());
               @ decreases 8 - p.getRow();
               @*/
             while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
