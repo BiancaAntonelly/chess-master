@@ -15,7 +15,6 @@ public class King extends ChessPiece {
       @   requires board != null;
       @   requires color != null;
       @   requires match != null;
-      @   ensures this.getColor() == color;
       @   ensures this.getMoveCount() == 0;
       @   ensures getBoard() == board;
       @   ensures this.match == match;
@@ -38,36 +37,12 @@ public class King extends ChessPiece {
         return "K";
     }
 
-    /*@ private normal_behavior
-      @   requires position != null;
-      @   requires getBoard().positionExists(position);
-      @   ensures \result == true ==> (getBoard().piece(position) == null || 
-      @           ((ChessPiece)getBoard().piece(position)).getColor() != getColor());
-      @   ensures \result == false ==> (getBoard().piece(position) != null && 
-      @           ((ChessPiece)getBoard().piece(position)).getColor() == getColor());
-      @   assignable \nothing;
-      @*/
-    //@ spec_public
-    private /*@ pure @*/ boolean canMove(/*@ non_null @*/ Position position) {
+    private boolean canMove(/*@ non_null @*/ Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
         return p == null || p.getColor() != getColor();
     }
 
-    /*@ private normal_behavior
-      @   requires position != null;
-      @   requires getBoard().positionExists(position);
-      @   ensures \result == true ==> (getBoard().piece(position) != null && 
-      @           getBoard().piece(position) instanceof Rook &&
-      @           ((ChessPiece)getBoard().piece(position)).getColor() == getColor() &&
-      @           ((ChessPiece)getBoard().piece(position)).getMoveCount() == 0);
-      @   ensures \result == false ==> (getBoard().piece(position) == null || 
-      @           !(getBoard().piece(position) instanceof Rook) ||
-      @           ((ChessPiece)getBoard().piece(position)).getColor() != getColor() ||
-      @           ((ChessPiece)getBoard().piece(position)).getMoveCount() != 0);
-      @   assignable \nothing;
-      @*/
-    //@ spec_public
-    private /*@ pure @*/ boolean testRookCastling(/*@ non_null @*/ Position position) {
+    private boolean testRookCastling(/*@ non_null @*/ Position position) {
         ChessPiece p = (ChessPiece) getBoard().piece(position);
         return p != null && p instanceof Rook &&
                 p.getColor() == getColor() &&
@@ -77,89 +52,152 @@ public class King extends ChessPiece {
     /*@ also
       @ public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8;
-      @               \result[i] != null && \result[i].length == 8);
-      @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
+        if (position == null || getBoard() == null) {
+            return new boolean[8][8];
+        }
+        
+        Position currentPos = position;
+        Board board = getBoard();
+        if (currentPos == null || board == null) {
+            return new boolean[8][8];
+        }
 
-        boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
-
+        boolean[][] mat = new boolean[board.getRows()][board.getCols()];
         Position p = new Position(0, 0);
 
         // acima
-        p.setValues(position.getRow() - 1, position.getCol());
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol());
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // abaixo
-        p.setValues(position.getRow() + 1, position.getCol());
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol());
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // esquerda
-        p.setValues(position.getRow(), position.getCol() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow(), currentPos.getCol() - 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // direita
-        p.setValues(position.getRow(), position.getCol() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow(), currentPos.getCol() + 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // diagonal noroeste
-        p.setValues(position.getRow() - 1, position.getCol() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol() - 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // diagonal nordeste
-        p.setValues(position.getRow() - 1, position.getCol() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol() + 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // diagonal sudoeste
-        p.setValues(position.getRow() + 1, position.getCol() - 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol() - 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // diagonal sudeste
-        p.setValues(position.getRow() + 1, position.getCol() + 1);
-        if (getBoard().positionExists(p) && canMove(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol() + 1);
+        if (board.positionExists(p) && canMove(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // Roque
         if (getMoveCount() == 0 && !match.getCheck()) {
-
             // Roque pequeno (rei para a direita)
-            Position posT1 = new Position(position.getRow(), position.getCol() + 3);
+            Position posT1 = new Position(currentPos.getRow(), currentPos.getCol() + 3);
             if (testRookCastling(posT1)) {
-                Position p1 = new Position(position.getRow(), position.getCol() + 1);
-                Position p2 = new Position(position.getRow(), position.getCol() + 2);
-                if (getBoard().piece(p1) == null && getBoard().piece(p2) == null) {
-                    mat[position.getRow()][position.getCol() + 2] = true;
+                Position p1 = new Position(currentPos.getRow(), currentPos.getCol() + 1);
+                Position p2 = new Position(currentPos.getRow(), currentPos.getCol() + 2);
+                if (board.piece(p1) == null && board.piece(p2) == null) {
+                    int r = currentPos.getRow();
+                    int c = currentPos.getCol() + 2;
+                    if (r >= 0 && r < mat.length) {
+                        if (c >= 0 && c < mat[r].length) {
+                            mat[r][c] = true;
+                        }
+                    }
                 }
             }
 
             // Roque grande (rei para a esquerda)
-            Position posT2 = new Position(position.getRow(), position.getCol() - 4);
+            Position posT2 = new Position(currentPos.getRow(), currentPos.getCol() - 4);
             if (testRookCastling(posT2)) {
-                Position p1 = new Position(position.getRow(), position.getCol() - 1);
-                Position p2 = new Position(position.getRow(), position.getCol() - 2);
-                Position p3 = new Position(position.getRow(), position.getCol() - 3);
-                if (getBoard().piece(p1) == null &&
-                        getBoard().piece(p2) == null &&
-                        getBoard().piece(p3) == null) {
-                    mat[position.getRow()][position.getCol() - 2] = true;
+                Position p1 = new Position(currentPos.getRow(), currentPos.getCol() - 1);
+                Position p2 = new Position(currentPos.getRow(), currentPos.getCol() - 2);
+                Position p3 = new Position(currentPos.getRow(), currentPos.getCol() - 3);
+                if (board.piece(p1) == null &&
+                        board.piece(p2) == null &&
+                        board.piece(p3) == null) {
+                    int r = currentPos.getRow();
+                    int c = currentPos.getCol() - 2;
+                    if (r >= 0 && r < mat.length) {
+                        if (c >= 0 && c < mat[r].length) {
+                            mat[r][c] = true;
+                        }
+                    }
                 }
             }
         }

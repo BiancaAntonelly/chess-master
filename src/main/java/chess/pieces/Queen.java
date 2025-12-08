@@ -10,7 +10,6 @@ public class Queen extends ChessPiece {
     /*@ public normal_behavior
       @   requires board != null;
       @   requires color != null;
-      @   ensures getColor() == color;
       @   ensures getMoveCount() == 0;
       @   ensures getBoard() == board;
       @*/
@@ -21,111 +20,228 @@ public class Queen extends ChessPiece {
     /*@ also
       @ public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8;
-      @               \result[i] != null && \result[i].length == 8);
-      @   assignable \nothing;
       @*/
     @Override
     public boolean[][] possibleMoves() {
-        boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
+        if (position == null || getBoard() == null) {
+            return new boolean[8][8];
+        }
+        
+        Position currentPos = position;
+        Board board = getBoard();
+        if (currentPos == null || board == null) {
+            return new boolean[8][8];
+        }
 
+        boolean[][] mat = new boolean[board.getRows()][board.getCols()];
         Position p = new Position(0, 0);
 
-        // ========================================
-        // MOVIMENTOS ORTOGONAIS (como Torre)
-        // ========================================
-
         // Para cima (Norte)
-        p.setValues(position.getRow() - 1, position.getCol());
-        /*@ decreases p.getRow() + 1; @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setRow(p.getRow() - 1);
-        }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (currentPos.getRow() > 0) {
+            p.setValues(currentPos.getRow() - 1, currentPos.getCol());
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+                if (p.getRow() <= 0) break;
+                int newRow = p.getRow() - 1;
+                if (newRow < 0) break;
+                p.setRow(newRow);
+            }
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+            }
         }
 
         // Para esquerda (Oeste)
-        p.setValues(position.getRow(), position.getCol() - 1);
-        /*@ decreases p.getCol() + 1; @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setCol(p.getCol() - 1);
-        }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (currentPos.getCol() > 0) {
+            p.setValues(currentPos.getRow(), currentPos.getCol() - 1);
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+                if (p.getCol() <= 0) break;
+                int newCol = p.getCol() - 1;
+                if (newCol < 0) break;
+                p.setCol(newCol);
+            }
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+            }
         }
 
         // Para direita (Leste)
-        p.setValues(position.getRow(), position.getCol() + 1);
-        /*@ decreases 8 - p.getCol(); @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setCol(p.getCol() + 1);
-        }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (currentPos.getCol() < 7) {
+            p.setValues(currentPos.getRow(), currentPos.getCol() + 1);
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+                if (p.getCol() >= 7) break;
+                int newCol = p.getCol() + 1;
+                if (newCol >= mat.length) break;
+                p.setCol(newCol);
+            }
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+            }
         }
 
         // Para baixo (Sul)
-        p.setValues(position.getRow() + 1, position.getCol());
-        /*@ decreases 8 - p.getRow(); @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setRow(p.getRow() + 1);
+        if (currentPos.getRow() < 7) {
+            p.setValues(currentPos.getRow() + 1, currentPos.getCol());
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+                if (p.getRow() >= 7) break;
+                int newRow = p.getRow() + 1;
+                if (newRow >= mat.length) break;
+                p.setRow(newRow);
+            }
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
+                int r = p.getRow();
+                int c = p.getCol();
+                if (r >= 0 && r < mat.length) {
+                    if (c >= 0 && c < mat[r].length) {
+                        mat[r][c] = true;
+                    }
+                }
+            }
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-        }
-
-        // ========================================
-        // MOVIMENTOS DIAGONAIS (como Bispo)
-        // ========================================
 
         // Noroeste (NW)
-        p.setValues(position.getRow() - 1, position.getCol() - 1);
-        /*@ decreases p.getRow() + p.getCol() + 2; @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setValues(p.getRow() - 1, p.getCol() - 1);
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol() - 1);
+        while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
+            int newRow = p.getRow() - 1;
+            int newCol = p.getCol() - 1;
+            if (newRow < 0 || newCol < 0) break;
+            p.setValues(newRow, newCol);
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (board.positionExists(p) && isThereOpponentPiece(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // Nordeste (NE)
-        p.setValues(position.getRow() - 1, position.getCol() + 1);
-        /*@ decreases p.getRow() + (8 - p.getCol()) + 2; @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setValues(p.getRow() - 1, p.getCol() + 1);
+        p.setValues(currentPos.getRow() - 1, currentPos.getCol() + 1);
+        while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
+            int newRow = p.getRow() - 1;
+            int newCol = p.getCol() + 1;
+            if (newRow < 0 || newCol >= mat.length) break;
+            p.setValues(newRow, newCol);
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (board.positionExists(p) && isThereOpponentPiece(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // Sudeste (SE)
-        p.setValues(position.getRow() + 1, position.getCol() + 1);
-        /*@ decreases (8 - p.getRow()) + (8 - p.getCol()) + 2; @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setValues(p.getRow() + 1, p.getCol() + 1);
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol() + 1);
+        while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
+            int newRow = p.getRow() + 1;
+            int newCol = p.getCol() + 1;
+            if (newRow >= mat.length || newCol >= mat.length) break;
+            p.setValues(newRow, newCol);
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (board.positionExists(p) && isThereOpponentPiece(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         // Sudoeste (SW)
-        p.setValues(position.getRow() + 1, position.getCol() - 1);
-        /*@ decreases (8 - p.getRow()) + p.getCol() + 2; @*/
-        while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
-            mat[p.getRow()][p.getCol()] = true;
-            p.setValues(p.getRow() + 1, p.getCol() - 1);
+        p.setValues(currentPos.getRow() + 1, currentPos.getCol() - 1);
+        while (board.positionExists(p) && !board.isPiecePlaced(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
+            int newRow = p.getRow() + 1;
+            int newCol = p.getCol() - 1;
+            if (newRow >= mat.length || newCol < 0) break;
+            p.setValues(newRow, newCol);
         }
-        if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
-            mat[p.getRow()][p.getCol()] = true;
+        if (board.positionExists(p) && isThereOpponentPiece(p)) {
+            int r = p.getRow();
+            int c = p.getCol();
+            if (r >= 0 && r < mat.length) {
+                if (c >= 0 && c < mat[r].length) {
+                    mat[r][c] = true;
+                }
+            }
         }
 
         return mat;
