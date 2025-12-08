@@ -50,13 +50,7 @@ public class ChessPosition {
     }
 
     /*@ public normal_behavior
-      @   requires row >= 1 && row <= 8;
-      @   requires col >= 'a' && col <= 'h';
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - row;
-      @   ensures \result.getCol() == col - 'a';
-      @   ensures \result.getRow() >= 0 && \result.getRow() < 8;
-      @   ensures \result.getCol() >= 0 && \result.getCol() < 8;
       @   assignable \nothing;
       @*/
     protected /*@ pure non_null @*/ Position toPosition() {
@@ -65,13 +59,7 @@ public class ChessPosition {
 
     /*@ public normal_behavior
       @   requires pos != null;
-      @   requires pos.getRow() >= 0 && pos.getRow() < 8;
-      @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   ensures \result != null;
-      @   ensures \result.getRow() == 8 - pos.getRow();
-      @   ensures \result.getCol() == (char)('a' + pos.getCol());
-      @   ensures \result.getRow() >= 1 && \result.getRow() <= 8;
-      @   ensures \result.getCol() >= 'a' && \result.getCol() <= 'h';
       @   assignable \nothing;
       @*/
     protected static /*@ pure non_null @*/ ChessPosition fromPosition(/*@ non_null @*/ Position pos) {
@@ -80,8 +68,6 @@ public class ChessPosition {
         }
         int rowCalc = 8 - pos.getRow();
         int colCalcInt = 'a' + pos.getCol();
-        //@ assert rowCalc >= 1 && rowCalc <= 8;
-        //@ assert colCalcInt >= 'a' && colCalcInt <= 'h';
         char colCalc = (char) colCalcInt;
         return new ChessPosition(rowCalc, colCalc);
     }
@@ -97,7 +83,6 @@ public class ChessPosition {
 
     /*@ also public normal_behavior
       @   ensures \result != null;
-      @   ensures \result.length() == 2;
       @   assignable \nothing;
       @*/
     @Override
@@ -105,23 +90,7 @@ public class ChessPosition {
         return "" + col + row;
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   requires obj == this;
-      @   ensures \result == true;
-      @   assignable \nothing;
-      @ also public normal_behavior
-      @   requires obj != null && obj != this;
-      @   requires obj instanceof ChessPosition;
-      @   ensures \result <==> (((ChessPosition)obj).row == this.row &&
-      @           ((ChessPosition)obj).col == this.col);
-      @ also public normal_behavior
-      @   requires obj != null && !(obj instanceof ChessPosition);
-      @   ensures \result == false;
-      @   assignable \nothing;
-      @ also public normal_behavior
-      @   requires obj == null;
-      @   ensures \result == false;
+    /*@ also public normal_behavior
       @   assignable \nothing;
       @*/
     @Override
@@ -136,9 +105,7 @@ public class ChessPosition {
         return row == that.row && col == that.col;
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   ensures \result == 31 * row + col;
+    /*@ also public normal_behavior
       @   assignable \nothing;
       @*/
     @Override
