@@ -70,10 +70,7 @@ public abstract class ChessPiece extends Piece {
       @   requires this.position != null;
       @   requires this.position.getRow() >= 0 && this.position.getRow() < 8;
       @   requires this.position.getCol() >= 0 && this.position.getCol() < 8;
-      @   requires this.color != null;
-      @   requires this.moveCount >= 0;
       @   ensures \result != null;
-      @   assignable \nothing;
       @*/
     public /*@ non_null @*/ ChessPosition getChessPosition() {
         if (position == null) {
@@ -89,11 +86,9 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires getBoard() != null;
       @   requires getBoard().positionExists(position);
-      @   requires this.color != null;
-      @   requires this.moveCount >= 0;
       @   assignable \nothing;
       @*/
-    protected /*@ pure @*/ boolean isThereOpponentPiece(/*@ non_null @*/ Position position) {
+    protected boolean isThereOpponentPiece(/*@ non_null @*/ Position position) {
         Piece p = getBoard().piece(position);
         if (p == null) {
             return false;
@@ -103,6 +98,9 @@ public abstract class ChessPiece extends Piece {
         }
         ChessPiece cp = (ChessPiece) p;
         Color cpColor = cp.getColor();
+        if (cpColor == null || this.color == null) {
+            return false;
+        }
         return cpColor != this.color;
     }
 
@@ -147,20 +145,19 @@ public abstract class ChessPiece extends Piece {
         int rows = getBoard().getRows();
         int cols = getBoard().getCols();
         /*@ loop_invariant 0 <= i && i <= rows;
-          @ loop_invariant (\forall int k; 0 <= k && k < i; 
-          @                   mat[k] != null && mat[k].length == cols);
           @ decreases rows - i;
           @*/
         for (int i = 0; i < rows; i++) {
             if (mat[i] == null || mat[i].length != cols) {
                 continue;
             }
+            boolean[] row = mat[i];
             /*@ loop_invariant 0 <= j && j <= cols;
-              @ loop_invariant mat[i] != null && mat[i].length == cols;
+              @ loop_invariant row != null && row.length == cols;
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
-                if (mat[i][j]) {
+                if (row[j]) {
                     return true;
                 }
             }
