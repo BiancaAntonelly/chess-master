@@ -109,11 +109,18 @@ public class Board {
     /*@ public normal_behavior
       @   requires pos != null;
       @   requires positionExists(pos);
+      @   requires piece(pos) == null;
       @   ensures piece(pos) == null;
-      @   ensures \old(piece(pos)) == null ==> \result == null;
-      @   ensures \old(piece(pos)) != null ==> \result != null;
-      @   ensures \old(piece(pos)) != null ==> \result.position == null;
-      @   assignable pieces[pos.getRow()][pos.getCol()], \old(piece(pos)) == null ? \nothing : \old(piece(pos)).position;
+      @   ensures \result == null;
+      @   assignable \nothing;
+      @ also public normal_behavior
+      @   requires pos != null;
+      @   requires positionExists(pos);
+      @   requires piece(pos) != null;
+      @   ensures piece(pos) == null;
+      @   ensures \result != null;
+      @   ensures \result.position == null;
+      @   assignable pieces[pos.getRow()][pos.getCol()], piece(pos).position;
       @ also public exceptional_behavior
       @   requires pos != null;
       @   requires !positionExists(pos);
