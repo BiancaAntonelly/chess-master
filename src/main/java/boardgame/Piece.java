@@ -56,13 +56,29 @@ public abstract class Piece {
       @*/
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
-        for (boolean[] booleans : mat) {
-            for (int j = 0; j < mat.length; j++) {
+
+        /*@ loop_invariant mat != null;
+          @ loop_invariant 0 <= i && i <= mat.length;
+          @ loop_invariant (\forall int k; 0 <= k && k < i;
+          @        (\forall int j; 0 <= j && j < mat[k].length; !mat[k][j]));
+          @ decreases mat.length - i;
+          @*/
+        for (int i = 0; i < mat.length; i++) {
+
+            boolean[] booleans = mat[i];
+
+            /*@ loop_invariant booleans != null;
+              @ loop_invariant 0 <= j && j <= booleans.length;
+              @ loop_invariant (\forall int t; 0 <= t && t < j; !booleans[t]);
+              @ decreases booleans.length - j;
+              @*/
+            for (int j = 0; j < booleans.length; j++) {
                 if (booleans[j]) {
                     return true;
                 }
             }
         }
+
         return false;
     }
 
