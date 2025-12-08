@@ -13,8 +13,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessPosition.java \
     src/main/java/chess/ChessException.java \
     src/main/java/chess/ChessPiece.java 2>&1 | \
-    grep -E "(ChessPiece\.java|verify:|error:|warning:)" | \
-    grep -A 5 "ChessPiece\.java"
+    bash scripts/filter_output.sh "ChessPiece"
 
 echo ""
 echo "=== Fim da verificação de ChessPiece.java ==="

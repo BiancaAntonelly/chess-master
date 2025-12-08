@@ -22,8 +22,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/pieces/Rook.java \
     src/main/java/app/UI.java \
     src/main/java/app/Main.java 2>&1 | \
-    grep -E "(Main\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Main\.java"
+    bash scripts/filter_output.sh "Main"
 
 echo ""
 echo "=== Fim da verificação de Main.java ==="

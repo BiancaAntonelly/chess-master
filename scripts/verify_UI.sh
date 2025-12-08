@@ -21,8 +21,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/pieces/Queen.java \
     src/main/java/chess/pieces/Rook.java \
     src/main/java/app/UI.java 2>&1 | \
-    grep -E "(UI\.java|verify:|error:|warning:)" | \
-    grep -A 5 "UI\.java"
+    bash scripts/filter_output.sh "UI"
 
 echo ""
 echo "=== Fim da verificação de UI.java ==="

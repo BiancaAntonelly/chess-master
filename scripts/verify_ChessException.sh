@@ -7,8 +7,7 @@ echo ""
 openjml --esc --progress -classpath src/main/java \
     src/main/java/boardgame/BoardException.java \
     src/main/java/chess/ChessException.java 2>&1 | \
-    grep -E "(ChessException\.java|verify:|error:|warning:)" | \
-    grep -A 5 "ChessException\.java"
+    bash scripts/filter_output.sh "ChessException"
 
 echo ""
 echo "=== Fim da verificação de ChessException.java ==="

@@ -8,8 +8,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/boardgame/Position.java \
     src/main/java/boardgame/BoardException.java \
     src/main/java/boardgame/Board.java 2>&1 | \
-    grep -E "(Board\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Board\.java"
+    bash scripts/filter_output.sh "Board"
 
 echo ""
 echo "=== Fim da verificação de Board.java ==="

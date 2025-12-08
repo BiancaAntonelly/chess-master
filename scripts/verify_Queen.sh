@@ -14,8 +14,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessException.java \
     src/main/java/chess/ChessPiece.java \
     src/main/java/chess/pieces/Queen.java 2>&1 | \
-    grep -E "(Queen\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Queen\.java"
+    bash scripts/filter_output.sh "Queen"
 
 echo ""
 echo "=== Fim da verificação de Queen.java ==="

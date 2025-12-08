@@ -14,8 +14,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessException.java \
     src/main/java/chess/ChessPiece.java \
     src/main/java/chess/pieces/Rook.java 2>&1 | \
-    grep -E "(Rook\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Rook\.java"
+    bash scripts/filter_output.sh "Rook"
 
 echo ""
 echo "=== Fim da verificação de Rook.java ==="

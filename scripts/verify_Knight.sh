@@ -14,8 +14,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessException.java \
     src/main/java/chess/ChessPiece.java \
     src/main/java/chess/pieces/Knight.java 2>&1 | \
-    grep -E "(Knight\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Knight\.java"
+    bash scripts/filter_output.sh "Knight"
 
 echo ""
 echo "=== Fim da verificação de Knight.java ==="

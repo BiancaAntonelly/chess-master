@@ -6,8 +6,7 @@ echo ""
 
 openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/Color.java 2>&1 | \
-    grep -E "(Color\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Color\.java"
+    bash scripts/filter_output.sh "Color"
 
 echo ""
 echo "=== Fim da verificação de Color.java ==="

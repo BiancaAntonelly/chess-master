@@ -15,8 +15,7 @@ openjml --esc --progress -classpath src/main/java \
     src/main/java/chess/ChessPiece.java \
     src/main/java/chess/ChessMatch.java \
     src/main/java/chess/pieces/Pawn.java 2>&1 | \
-    grep -E "(Pawn\.java|verify:|error:|warning:)" | \
-    grep -A 5 "Pawn\.java"
+    bash scripts/filter_output.sh "Pawn"
 
 echo ""
 echo "=== Fim da verificação de Pawn.java ==="
