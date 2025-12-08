@@ -22,7 +22,7 @@ public class ChessMatch {
     //@ public invariant piecesOnTheBoard != null;
     //@ public invariant capturedPieces != null;
     //@ public invariant !checkMate ==> (currentPlayer == Color.WHITE || currentPlayer == Color.BLACK);
-    //@ public invariant board.getRows() == 8 && board.getCols() == 8;
+    //@ public invariant board.rows == 8 && board.cols == 8;
 
     //@ spec_public
     protected /*@ non_null @*/ Board board;
@@ -65,9 +65,6 @@ public class ChessMatch {
       @   ensures capturedPieces != null;
       @   ensures piecesOnTheBoard.size() == 32;
       @   ensures capturedPieces.size() == 0;
-      @ also
-      @ public exceptional_behavior
-      @   signals_only RuntimeException;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
@@ -603,12 +600,6 @@ public class ChessMatch {
         piecesOnTheBoard.add(piece);
     }
 
-    /*@ skipesc
-      @   private normal_behavior
-      @     ensures piecesOnTheBoard.size() == 32;
-      @     ensures capturedPieces.isEmpty();
-      @     assignable board, piecesOnTheBoard, capturedPieces;
-      @*/
     private void initialSetup() {
         // Peças brancas - primeira fileira
         placeNewPiece('a', 1, new Rook(board, Color.WHITE));
