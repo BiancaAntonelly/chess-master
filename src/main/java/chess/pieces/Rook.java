@@ -28,28 +28,27 @@ public class Rook extends ChessPiece {
         return "R";
     }
 
-    /*@ also
-      @ public normal_behavior
-      @   requires position != null;
-      @   ensures \result != null;
-      @   ensures \result.length == 8;
-      @   ensures (\forall int i; 0 <= i && i < 8;
-      @               \result[i] != null && \result[i].length == 8);
-      @*/
     @Override
     public boolean[][] possibleMoves() {
         if (position == null || getBoard() == null) {
             return new boolean[8][8];
         }
+        
+        Position currentPos = position;
+        Board board = getBoard();
+        if (currentPos == null || board == null) {
+            return new boolean[8][8];
+        }
 
-        boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getCols()];
+        boolean[][] mat = new boolean[board.getRows()][board.getCols()];
         Position p = new Position(0, 0);
 
         // PARA CIMA
-        if (position.getRow() > 0) {
+        if (currentPos.getRow() > 0) {
+            p.setValues(currentPos.getRow() - 1, currentPos.getCol());
             p.setValues(position.getRow() - 1, position.getCol());
 
-            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -58,7 +57,7 @@ public class Rook extends ChessPiece {
                 if (p.getRow() == 0) break;
                 p.setRow(p.getRow() - 1);
             }
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -68,10 +67,10 @@ public class Rook extends ChessPiece {
         }
 
         // PARA ESQUERDA
-        if (position.getCol() > 0) {
-            p.setValues(position.getRow(), position.getCol() - 1);
+        if (currentPos.getCol() > 0) {
+            p.setValues(currentPos.getRow(), currentPos.getCol() - 1);
 
-            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -80,7 +79,7 @@ public class Rook extends ChessPiece {
                 if (p.getCol() == 0) break;
                 p.setCol(p.getCol() - 1);
             }
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -90,10 +89,10 @@ public class Rook extends ChessPiece {
         }
 
         // PARA DIREITA
-        if (position.getCol() < 7) {
-            p.setValues(position.getRow(), position.getCol() + 1);
+        if (currentPos.getCol() < 7) {
+            p.setValues(currentPos.getRow(), currentPos.getCol() + 1);
 
-            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -102,7 +101,7 @@ public class Rook extends ChessPiece {
                 if (p.getCol() == 7) break;
                 p.setCol(p.getCol() + 1);
             }
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -112,10 +111,10 @@ public class Rook extends ChessPiece {
         }
 
         // PARA BAIXO
-        if (position.getRow() < 7) {
-            p.setValues(position.getRow() + 1, position.getCol());
+        if (currentPos.getRow() < 7) {
+            p.setValues(currentPos.getRow() + 1, currentPos.getCol());
 
-            while (getBoard().positionExists(p) && !getBoard().isPiecePlaced(p)) {
+            while (board.positionExists(p) && !board.isPiecePlaced(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
@@ -124,7 +123,7 @@ public class Rook extends ChessPiece {
                 if (p.getRow() == 7) break;
                 p.setRow(p.getRow() + 1);
             }
-            if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
+            if (board.positionExists(p) && isThereOpponentPiece(p)) {
                 int r = p.getRow();
                 int c = p.getCol();
                 if (r >= 0 && r < mat.length && c >= 0 && c < mat[r].length) {
