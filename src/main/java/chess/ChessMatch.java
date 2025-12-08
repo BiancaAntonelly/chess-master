@@ -65,8 +65,6 @@ public class ChessMatch {
       @   ensures capturedPieces != null;
       @   ensures piecesOnTheBoard.size() == 32;
       @   ensures capturedPieces.size() == 0;
-      @   assignable board, turn, currentPlayer, check, checkMate,
-      @              enPassantVulnerable, promoted, piecesOnTheBoard, capturedPieces;
       @ also
       @ public exceptional_behavior
       @   signals_only RuntimeException;
