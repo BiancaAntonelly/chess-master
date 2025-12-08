@@ -81,7 +81,8 @@ public class ChessPosition {
         return row + ", " + col;
     }
 
-    /*@ also public normal_behavior
+    /*@ public normal_behavior
+      @   ensures \result != null;
       @   assignable \everything;
       @*/
     @Override
@@ -104,7 +105,8 @@ public class ChessPosition {
         return row == that.row && col == that.col;
     }
 
-    /*@ also public normal_behavior
+    /*@ public normal_behavior
+      @   ensures (\forall ChessPosition other; equals(other) ==> \result == other.hashCode());
       @   assignable \everything;
       @*/
     @Override
