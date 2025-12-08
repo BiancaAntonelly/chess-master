@@ -11,7 +11,7 @@ public class Position {
     /*@ public normal_behavior
       @   ensures this.r == row;
       @   ensures this.c == col;
-      @   assignable this.r, this.c;
+      @   assignable r, c;
       @*/
     public Position(int row, int col) {
         this.r = row;
