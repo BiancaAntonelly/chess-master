@@ -39,7 +39,7 @@ public abstract class Piece {
       @               \result[i] != null && \result[i].length == 8);
       @   assignable \nothing;
       @*/
-    public abstract /*@ pure @*/ boolean[][] possibleMoves();
+    public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior
       @   requires pos != null;
@@ -59,8 +59,6 @@ public abstract class Piece {
 
         /*@ loop_invariant mat != null;
           @ loop_invariant 0 <= i && i <= mat.length;
-          @ loop_invariant (\forall int k; 0 <= k && k < i;
-          @        (\forall int j; 0 <= j && j < mat[k].length; !mat[k][j]));
           @ decreases mat.length - i;
           @*/
         for (int i = 0; i < mat.length; i++) {
@@ -69,7 +67,6 @@ public abstract class Piece {
 
             /*@ loop_invariant booleans != null;
               @ loop_invariant 0 <= j && j <= booleans.length;
-              @ loop_invariant (\forall int t; 0 <= t && t < j; !booleans[t]);
               @ decreases booleans.length - j;
               @*/
             for (int j = 0; j < booleans.length; j++) {
@@ -86,5 +83,4 @@ public abstract class Piece {
     public /*@ nullable @*/ Position getPosition() {
         return position;
     }
-
 }

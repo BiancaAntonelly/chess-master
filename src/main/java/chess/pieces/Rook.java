@@ -48,44 +48,29 @@ public class Rook extends ChessPiece {
       @   ensures (\forall int i; 0 <= i && i < 8;
       @               \result[i] != null && \result[i].length == 8);
       @
-      @   // A posição atual da torre não é um movimento válido
       @   ensures !\result[position.getRow()][position.getCol()];
       @
-      @   // Movimentos apenas em linha reta (horizontal ou vertical)
       @   ensures (\forall int r, c;
       @               0 <= r && r < 8 && 0 <= c && c < 8 && \result[r][c];
       @               r == position.getRow() || c == position.getCol());
       @
-      @   // --- Direção para CIMA ---
-      @   // Todos os movimentos para cima estão na mesma coluna
       @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
       @               \result[r][c] && r < position.getRow();
       @               c == position.getCol());
       @
-      @   // --- Direção para BAIXO ---
-      @   // Todos os movimentos para baixo estão na mesma coluna
       @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
       @               \result[r][c] && r > position.getRow();
       @               c == position.getCol());
       @
-      @   // --- Direção para ESQUERDA ---
-      @   // Todos os movimentos para esquerda estão na mesma linha
       @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
       @               \result[r][c] && c < position.getCol();
       @               r == position.getRow());
       @
-      @   // --- Direção para DIREITA ---
-      @   // Todos os movimentos para direita estão na mesma linha
       @   ensures (\forall int r, c;
-      @               0 <= r && r < 8 && 0 <= c && c < 8 &&
       @               \result[r][c] && c > position.getCol();
       @               r == position.getRow());
       @
       @   assignable \nothing;
-      @   pure
       @*/
     @Override
     public /*@ non_null @*/ boolean[][] possibleMoves() {
