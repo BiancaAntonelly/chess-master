@@ -87,6 +87,7 @@ public class Board {
 
     /*@ public behavior
       @   requires piece != null;
+      @   requires piece instanceof chess.ChessPiece;
       @   requires pos != null;
       @   requires positionExists(pos);
       @   requires !isPiecePlaced(pos);
@@ -95,6 +96,10 @@ public class Board {
       @   assignable pieces[pos.getRow()][pos.getCol()], piece.position;
       @   ensures pieces[pos.getRow()][pos.getCol()] == piece;
       @   ensures piece.position == pos;
+      @   ensures (\forall int i, j;
+      @               0 <= i && i < rows && 0 <= j && j < cols;
+      @               pieces[i][j] == null ||
+      @               pieces[i][j] instanceof chess.ChessPiece);
       @   signals (BoardException e) true;
       @*/
     public void placePiece(Piece piece, Position pos) {
