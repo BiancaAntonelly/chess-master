@@ -52,20 +52,13 @@ public abstract class Piece {
       @   requires pos.getCol() >= 0 && pos.getCol() < 8;
       @   requires possibleMoves() != null;
       @   requires possibleMoves().length == 8;
-      @   requires possibleMoves().length > pos.getRow();
       @   requires possibleMoves()[pos.getRow()] != null;
       @   requires possibleMoves()[pos.getRow()].length == 8;
-      @   requires possibleMoves()[pos.getRow()].length > pos.getCol();
       @   ensures \result == possibleMoves()[pos.getRow()][pos.getCol()];
       @   assignable \nothing;
       @*/
     public /*@ pure @*/ boolean possibleMove(Position pos) {
-        boolean[][] moves = possibleMoves();
-        //@ assert moves == possibleMoves();
-        //@ assert moves != null && moves.length == 8;
-        //@ assert moves[pos.getRow()] != null && moves[pos.getRow()].length == 8;
-        //@ assert moves[pos.getRow()][pos.getCol()] == possibleMoves()[pos.getRow()][pos.getCol()];
-        return moves[pos.getRow()][pos.getCol()];
+        return possibleMoves()[pos.getRow()][pos.getCol()];
     }
 
     /*@ public normal_behavior
@@ -78,42 +71,20 @@ public abstract class Piece {
       @*/
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
-        //@ assert mat == possibleMoves();
-        //@ assert mat != null && mat.length == 8;
-        /*@ loop_invariant mat != null && mat.length == 8;
-          @ loop_invariant mat == possibleMoves();
-          @ loop_invariant 0 <= i && i <= 8;
-          @ loop_invariant (\forall int k; 0 <= k && k < i; 
-          @                   mat[k] != null && mat[k].length == 8);
-          @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < 8; !mat[k][l]);
-          @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < 8; !possibleMoves()[k][l]);
+        /*@ loop_invariant 0 <= i && i <= 8;
           @ decreases 8 - i;
           @*/
         for (int i = 0; i < 8; i++) {
-            //@ assert mat[i] != null && mat[i].length == 8;
             boolean[] booleans = mat[i];
-            /*@ loop_invariant booleans != null && booleans.length == 8;
-              @ loop_invariant booleans == mat[i];
-              @ loop_invariant booleans == possibleMoves()[i];
-              @ loop_invariant 0 <= j && j <= 8;
-              @ loop_invariant (\forall int l; 0 <= l && l < j; !booleans[l]);
-              @ loop_invariant (\forall int l; 0 <= l && l < j; !mat[i][l]);
-              @ loop_invariant (\forall int l; 0 <= l && l < j; !possibleMoves()[i][l]);
+            /*@ loop_invariant 0 <= j && j <= 8;
               @ decreases 8 - j;
               @*/
             for (int j = 0; j < 8; j++) {
                 if (booleans[j]) {
-                    //@ assert booleans[j] == true;
-                    //@ assert mat[i][j] == true;
-                    //@ assert possibleMoves()[i][j] == true;
-                    //@ assert (\exists int k, l; 0 <= k && k < 8 && 0 <= l && l < 8; mat[k][l]);
-                    //@ assert (\exists int k, l; 0 <= k && k < 8 && 0 <= l && l < 8; possibleMoves()[k][l]);
                     return true;
                 }
             }
         }
-        //@ assert (\forall int k, l; 0 <= k && k < 8 && 0 <= l && l < 8; !mat[k][l]);
-        //@ assert (\forall int k, l; 0 <= k && k < 8 && 0 <= l && l < 8; !possibleMoves()[k][l]);
         return false;
     }
 

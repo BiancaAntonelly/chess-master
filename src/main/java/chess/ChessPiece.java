@@ -73,11 +73,8 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result != null;
       @   ensures \result.getRow() == 8 - this.position.getRow();
       @   ensures \result.getCol() == (char)('a' + this.position.getCol());
-      @   ensures \result.getRow() >= 1 && \result.getRow() <= 8;
-      @   ensures \result.getCol() >= 'a' && \result.getCol() <= 'h';
-      @   assignable \nothing;
       @*/
-    public /*@ pure non_null @*/ ChessPosition getChessPosition() {
+    public /*@ non_null @*/ ChessPosition getChessPosition() {
         if (position == null) {
             throw new IllegalStateException("Position is null");
         }
@@ -91,7 +88,6 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires getBoard() != null;
       @   requires getBoard().positionExists(position);
-      @   requires this.color != null;
       @   ensures \result ==> (
       @              getBoard().piece(position) != null
       @          &&  getBoard().piece(position) instanceof ChessPiece
@@ -164,16 +160,10 @@ public abstract class ChessPiece extends Piece {
         int rows = getBoard().getRows();
         int cols = getBoard().getCols();
         /*@ loop_invariant 0 <= i && i <= rows;
-          @ loop_invariant mat != null && mat.length == rows;
-          @ loop_invariant (\forall int k; 0 <= k && k < i; 
-          @                   mat[k] != null && mat[k].length == cols);
-          @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < cols; !mat[k][l]);
           @ decreases rows - i;
           @*/
         for (int i = 0; i < rows; i++) {
             /*@ loop_invariant 0 <= j && j <= cols;
-              @ loop_invariant mat[i] != null && mat[i].length == cols;
-              @ loop_invariant (\forall int l; 0 <= l && l < j; !mat[i][l]);
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
