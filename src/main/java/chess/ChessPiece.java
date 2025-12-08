@@ -104,16 +104,7 @@ public abstract class ChessPiece extends Piece {
         return p != null && p instanceof ChessPiece && ((ChessPiece) p).getColor() != color;
     }
 
-    /*@ public normal_behavior
-      @   requires getPosition() != null;
-      @   requires getPosition().getRow() >= 0 && getPosition().getRow() < getBoard().getRows();
-      @   requires getPosition().getCol() >= 0 && getPosition().getCol() < getBoard().getCols();
-      @   ensures \result != null;
-      @   ensures \result.length == getBoard().getRows();
-      @   ensures (\forall int i; 0 <= i && i < getBoard().getRows(); \result[i] != null && \result[i].length == getBoard().getCols());
-      @   ensures !\result[getPosition().getRow()][getPosition().getCol()];
-      @   assignable \nothing;
-      @*/
+    // Método abstrato - especificações estão nas implementações concretas
     public abstract boolean[][] possibleMoves();
 
     /*@ public normal_behavior
