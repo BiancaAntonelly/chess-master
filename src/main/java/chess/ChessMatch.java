@@ -51,7 +51,7 @@ public class ChessMatch {
     //@ spec_public
     private final /*@ non_null @*/ List<Piece> capturedPieces;
 
-    /*@ public behavior
+    /*@ public normal_behavior
       @   ensures board != null;
       @   ensures board.getRows() == 8;
       @   ensures board.getCols() == 8;
@@ -65,6 +65,9 @@ public class ChessMatch {
       @   ensures capturedPieces != null;
       @   ensures piecesOnTheBoard.size() == 32;
       @   ensures capturedPieces.size() == 0;
+      @ also
+      @ public exceptional_behavior
+      @   signals_only RuntimeException;
       @*/
     public ChessMatch() {
         board = new Board(8, 8);
