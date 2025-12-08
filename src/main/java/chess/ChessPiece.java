@@ -15,6 +15,7 @@ public abstract class ChessPiece extends Piece {
     //@ public invariant color != null;
     //@ public invariant moveCount >= 0;
     //@ public invariant moveCount <= Integer.MAX_VALUE;
+    //@ public invariant position != null; // ChessPiece sempre tem posição
 
     /*@ public normal_behavior
       @   requires board != null;
@@ -75,17 +76,15 @@ public abstract class ChessPiece extends Piece {
       @   ensures \result.getCol() == (char)('a' + position.getCol());
       @   ensures \result.getRow() >= 1 && \result.getRow() <= 8;
       @   ensures \result.getCol() >= 'a' && \result.getCol() <= 'h';
-      @   assignable \nothing;
       @*/
-    public /*@ pure non_null @*/ ChessPosition getChessPosition() {
-        if (position == null) {
-            throw new IllegalStateException("Position cannot be null");
-        }
+    public /*@ non_null @*/ ChessPosition getChessPosition() {
+        //@ assert position != null;
         int rowCalc = 8 - position.getRow();
         int colCalcInt = 'a' + position.getCol();
         //@ assert rowCalc >= 1 && rowCalc <= 8;
         //@ assert colCalcInt >= 'a' && colCalcInt <= 'h';
         char colCalc = (char) colCalcInt;
+        //@ assert colCalc >= 'a' && colCalc <= 'h';
         return new ChessPosition(rowCalc, colCalc);
     }
 
@@ -93,8 +92,6 @@ public abstract class ChessPiece extends Piece {
       @   requires position != null;
       @   requires getBoard() != null;
       @   requires getBoard().positionExists(position);
-      @   requires this.color != null;
-      @   requires this.moveCount >= 0;
       @   ensures \result ==> (
       @              getBoard().piece(position) != null
       @          &&  getBoard().piece(position) instanceof ChessPiece
@@ -105,10 +102,8 @@ public abstract class ChessPiece extends Piece {
       @          || ((ChessPiece)getBoard().piece(position)).getColor() == color);
       @   assignable \nothing;
       @*/
-    protected boolean isThereOpponentPiece(/*@ non_null @*/ Position position) {
-        if (position == null || getBoard() == null || color == null) {
-            throw new IllegalStateException("Invalid state for isThereOpponentPiece");
-        }
+    protected /*@ pure @*/ boolean isThereOpponentPiece(/*@ non_null @*/ Position position) {
+        //@ assert color != null;
         Piece p = getBoard().piece(position);
         if (p == null) {
             return false;
@@ -162,40 +157,37 @@ public abstract class ChessPiece extends Piece {
       @                  !possibleMoves()[i][j]);
       @   assignable \nothing;
       @*/
-    public boolean isThereAnyPossibleMove() {
-        if (position == null || getBoard() == null) {
-            throw new IllegalStateException("Invalid state for isThereAnyPossibleMove");
-        }
+    public /*@ pure @*/ boolean isThereAnyPossibleMove() {
+        //@ assert position != null;
+        //@ assert getBoard() != null;
         boolean[][] mat = possibleMoves();
-        if (mat == null || mat.length != getBoard().getRows()) {
-            return false;
-        }
+        //@ assert mat != null;
+        //@ assert mat.length == getBoard().getRows();
         int rows = getBoard().getRows();
         int cols = getBoard().getCols();
+        //@ assert rows > 0 && cols > 0;
         /*@ loop_invariant 0 <= i && i <= rows;
-          @ loop_invariant mat != null;
-          @ loop_invariant mat.length == rows;
+          @ loop_invariant mat != null && mat.length == rows;
           @ loop_invariant (\forall int k; 0 <= k && k < i; 
           @                   mat[k] != null && mat[k].length == cols);
           @ loop_invariant (\forall int k, l; 0 <= k && k < i && 0 <= l && l < cols; !mat[k][l]);
           @ decreases rows - i;
           @*/
         for (int i = 0; i < rows; i++) {
-            if (mat[i] == null || mat[i].length != cols) {
-                continue;
-            }
+            //@ assert mat[i] != null && mat[i].length == cols;
             /*@ loop_invariant 0 <= j && j <= cols;
-              @ loop_invariant mat[i] != null;
-              @ loop_invariant mat[i].length == cols;
+              @ loop_invariant mat[i] != null && mat[i].length == cols;
               @ loop_invariant (\forall int l; 0 <= l && l < j; !mat[i][l]);
               @ decreases cols - j;
               @*/
             for (int j = 0; j < cols; j++) {
                 if (mat[i][j]) {
+                    //@ assert (\exists int k, l; 0 <= k && k < rows && 0 <= l && l < cols; mat[k][l]);
                     return true;
                 }
             }
         }
+        //@ assert (\forall int k, l; 0 <= k && k < rows && 0 <= l && l < cols; !mat[k][l]);
         return false;
     }
 }

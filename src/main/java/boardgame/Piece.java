@@ -73,12 +73,8 @@ public abstract class Piece {
       @*/
     public /*@ pure @*/ boolean isThereAnyPossibleMove() {
         boolean[][] mat = possibleMoves();
-        if (mat == null || mat.length != 8) {
-            return false;
-        }
-
-        /*@ loop_invariant mat != null;
-          @ loop_invariant mat.length == 8;
+        //@ assert mat != null && mat.length == 8;
+        /*@ loop_invariant mat != null && mat.length == 8;
           @ loop_invariant 0 <= i && i <= 8;
           @ loop_invariant (\forall int k; 0 <= k && k < i; 
           @                   mat[k] != null && mat[k].length == 8);
@@ -86,24 +82,21 @@ public abstract class Piece {
           @ decreases 8 - i;
           @*/
         for (int i = 0; i < 8; i++) {
-            if (mat[i] == null || mat[i].length != 8) {
-                continue;
-            }
+            //@ assert mat[i] != null && mat[i].length == 8;
             boolean[] booleans = mat[i];
-
-            /*@ loop_invariant booleans != null;
-              @ loop_invariant booleans.length == 8;
+            /*@ loop_invariant booleans != null && booleans.length == 8;
               @ loop_invariant 0 <= j && j <= 8;
               @ loop_invariant (\forall int l; 0 <= l && l < j; !booleans[l]);
               @ decreases 8 - j;
               @*/
             for (int j = 0; j < 8; j++) {
                 if (booleans[j]) {
+                    //@ assert (\exists int k, l; 0 <= k && k < 8 && 0 <= l && l < 8; mat[k][l]);
                     return true;
                 }
             }
         }
-
+        //@ assert (\forall int k, l; 0 <= k && k < 8 && 0 <= l && l < 8; !mat[k][l]);
         return false;
     }
 
