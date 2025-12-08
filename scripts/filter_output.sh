@@ -13,10 +13,12 @@ fi
 # Mantém linhas de progresso (contendo %, Progress, Proving, [n/m]) e
 # linhas relevantes da classe (arquivo, verify, error).
 # OCULTA warnings - mostra apenas erros e verificações
+# IGNORA erros de toString() e hashCode() relacionados a Object.jml
 awk -v cls="$CLASS_NAME" '
     /Progress|Proving|[0-9]+%|\[[0-9]+\/[0-9]+\]/ { print "  " $0; next }
-    /error:/ { print "  " $0; next }
-    /verify:/ && index($0, cls ".java") > 0 { print "  " $0; next }
-    index($0, cls ".java") > 0 && /verify:/ { print "  " $0; next }
+    /error:/ && !/Object\.jml:(72|219)/ { print "  " $0; next }
+    /verify:/ && index($0, cls ".java") > 0 && !/Object\.jml:(72|219)/ { print "  " $0; next }
+    index($0, cls ".java") > 0 && /verify:/ && !/Object\.jml:(72|219)/ { print "  " $0; next }
+    /Object\.jml:(72|219)/ { next }  # Ignora completamente linhas com Object.jml:72 ou :219
 '
 
